@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SkillX</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+background:#EAEFEF;
+color:#25343F;
+}
+
+/* NAVBAR */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 50px;
+background:#25343F;
+}
+
+.logo{
+font-size:26px;
+font-weight:bold;
+color:#FF9B51;
+}
+
+.nav-links a{
+margin:0 15px;
+text-decoration:none;
+color:#EAEFEF;
+font-weight:500;
+}
+
+.nav-right{
+display:flex;
+align-items:center;
+gap:20px;
+}
+
+.search-bar{
+padding:8px 12px;
+border-radius:20px;
+border:none;
+background:#BFC9D1;
+}
+
+.profile-icon img{
+width:40px;
+height:40px;
+border-radius:50%;
+cursor:pointer;
+}
+
+/* HERO */
+
+.hero{
+text-align:center;
+padding:120px 20px;
+background:#BFC9D1;
+}
+
+.hero h1{
+font-size:48px;
+margin-bottom:20px;
+color:#25343F;
+}
+
+.hero p{
+font-size:20px;
+margin-bottom:30px;
+}
+
+.hero button{
+padding:12px 25px;
+font-size:16px;
+border:none;
+border-radius:25px;
+background:#FF9B51;
+color:white;
+cursor:pointer;
+}
+
+/* FEATURES */
+
+.features{
+display:flex;
+justify-content:center;
+gap:40px;
+padding:80px 40px;
+}
+
+.card{
+background:white;
+padding:30px;
+border-radius:12px;
+width:260px;
+text-align:center;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+.card h3{
+margin-bottom:15px;
+color:#25343F;
+}
+
+.card p{
+color:#555;
+}
+
+</style>
+</head>
+
+
+<body>
+
+<!-- NAVBAR -->
+
+<div class="navbar">
+
+<div class="logo">Nexora</div>
+
+<div class="nav-links">
+<a href="#">Dashboard</a>
+<a href="#">Skills</a>
+<a href="#">Community</a>
+<a href="#">About</a>
+</div>
+
+<div class="nav-right">
+<input type="text" placeholder="Search..." class="search-bar">
+
+<div class="profile-icon">
+<img src="https://cdn-icons-png.flaticon.com/512/9131/9131529.png">
+</div>
+</div>
+
+</div>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+<h1>Learn. Teach. Grow.</h1>
+
+<p>Exchange skills with people around the world</p>
+
+<button>Explore Skills</button>
+
+</section>
+
+
+<!-- FEATURES -->
+
+<section class="features">
+
+<div class="card">
+<h3>Skill Exchange</h3>
+<p>Teach what you know and learn something new.</p>
+</div>
+
+<div class="card">
+<h3>Community</h3>
+<p>Connect with passionate learners worldwide.</p>
+</div>
+
+<div class="card">
+<h3>Grow Together</h3>
+<p>Build real skills through collaboration.</p>
+</div>
+
+</section>
+
+</body>
+</html>

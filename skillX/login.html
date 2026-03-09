@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkillX — Enter</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*,*::before,*::after{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+:root{
+--primary:#25343F;
+--accent:#FF9B51;
+--soft:#BFC9D1;
+--bg:#EAEFEF;
+
+--surface:#ffffff;
+--surface2:#f5f7f8;
+
+--text:#25343F;
+--text-muted:#6b7b86;
+
+--border:rgba(37,52,63,0.15);
+}
+
+html,body{
+width:100%;
+height:100%;
+background:var(--bg);
+color:var(--text);
+font-family:'Inter',sans-serif;
+overflow:hidden;
+}
+
+#bg-canvas{
+position:fixed;
+inset:0;
+z-index:0;
+pointer-events:none;
+}
+
+.page{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:center;
+height:100vh;
+width:100%;
+}
+
+.left-panel{
+flex:1;
+max-width:520px;
+padding:60px;
+border-right:1px solid var(--border);
+display:flex;
+flex-direction:column;
+justify-content:center;
+}
+
+.brand{
+font-family:'Cormorant Garamond',serif;
+font-size:42px;
+font-weight:600;
+letter-spacing:6px;
+color:var(--accent);
+margin-bottom:8px;
+}
+
+.brand-tagline{
+font-size:12px;
+letter-spacing:4px;
+text-transform:uppercase;
+color:var(--text-muted);
+margin-bottom:40px;
+}
+
+.left-quote{
+font-family:'Cormorant Garamond',serif;
+font-size:22px;
+font-style:italic;
+color:var(--text-muted);
+border-left:2px solid var(--accent);
+padding-left:20px;
+margin-bottom:30px;
+}
+
+.left-features{
+display:flex;
+flex-direction:column;
+gap:16px;
+}
+
+.left-feature{
+display:flex;
+align-items:center;
+gap:14px;
+}
+
+.left-feature-dot{
+width:6px;
+height:6px;
+border-radius:50%;
+background:var(--accent);
+}
+
+.left-feature span{
+font-size:13px;
+color:var(--text-muted);
+}
+
+.right-panel{
+flex:1;
+max-width:520px;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:60px;
+}
+
+.form-container{
+width:100%;
+max-width:380px;
+}
+
+.tabs{
+display:flex;
+border-bottom:1px solid var(--border);
+margin-bottom:30px;
+}
+
+.tab-btn{
+flex:1;
+padding:14px 0;
+background:none;
+border:none;
+font-size:12px;
+letter-spacing:3px;
+text-transform:uppercase;
+color:var(--text-muted);
+cursor:pointer;
+position:relative;
+}
+
+.tab-btn.active{
+color:var(--accent);
+}
+
+.tab-btn.active::after{
+content:'';
+position:absolute;
+bottom:-1px;
+left:0;
+right:0;
+height:2px;
+background:var(--accent);
+}
+
+.form-title{
+font-family:'Cormorant Garamond',serif;
+font-size:32px;
+margin-bottom:6px;
+}
+
+.form-subtitle{
+font-size:13px;
+color:var(--text-muted);
+margin-bottom:30px;
+}
+
+.input-group{
+margin-bottom:18px;
+}
+
+.input-label{
+display:block;
+font-size:10px;
+letter-spacing:2px;
+text-transform:uppercase;
+color:var(--text-muted);
+margin-bottom:8px;
+}
+
+.input-field{
+width:100%;
+padding:14px 18px;
+background:var(--surface2);
+border:1px solid var(--border);
+border-radius:6px;
+font-size:14px;
+outline:none;
+}
+
+.input-field:focus{
+border-color:var(--accent);
+}
+
+.submit-btn{
+width:100%;
+padding:15px;
+background:var(--accent);
+border:none;
+border-radius:6px;
+font-size:13px;
+font-weight:600;
+letter-spacing:2px;
+text-transform:uppercase;
+color:white;
+cursor:pointer;
+margin-top:6px;
+}
+
+.outline-btn{
+width:100%;
+padding:13px;
+background:transparent;
+border:1px solid var(--border);
+border-radius:6px;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
+font-size:13px;
+color:var(--text-muted);
+cursor:pointer;
+margin-top:8px;
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<div class="page">
+
+<div class="left-panel">
+<div class="brand">Nexora</div>
+<div class="brand-tagline">Knowledge Exchanged</div>
+
+<div class="left-quote">
+"The only skill that matters is the one you share."
+</div>
+
+<div class="left-features">
+<div class="left-feature"><div class="left-feature-dot"></div><span>Earn credits by teaching what you know</span></div>
+<div class="left-feature"><div class="left-feature-dot"></div><span>Level up with XP, streaks & leaderboards</span></div>
+<div class="left-feature"><div class="left-feature-dot"></div><span>Connect with verified campus mentors</span></div>
+<div class="left-feature"><div class="left-feature-dot"></div><span>Book live 1-on-1 skill sessions instantly</span></div>
+</div>
+</div>
+
+<div class="right-panel">
+<div class="form-container">
+
+<div class="tabs">
+<button class="tab-btn active" id="loginTab">Login</button>
+<button class="tab-btn" id="registerTab">Register</button>
+</div>
+
+<!-- LOGIN -->
+
+<div id="loginForm">
+
+<div class="form-title">Welcome Back</div>
+<div class="form-subtitle">Sign in to continue your skill journey.</div>
+
+<div class="input-group">
+<label class="input-label">Email</label>
+<input id="loginEmail" class="input-field" type="email" placeholder="you@example.com">
+</div>
+
+<div class="input-group">
+<label class="input-label">Password</label>
+<input id="loginPassword" class="input-field" type="password" placeholder="••••••••">
+</div>
+
+<button class="submit-btn" id="loginBtn">Sign In</button>
+
+</div>
+
+<!-- REGISTER -->
+
+<div id="registerForm" style="display:none">
+
+<div class="form-title">Create Account</div>
+<div class="form-subtitle">Start your skill exchange journey.</div>
+
+<div class="input-group">
+<label class="input-label">Email</label>
+<input id="registerEmail" class="input-field" type="email" placeholder="you@example.com">
+</div>
+
+<div class="input-group">
+<label class="input-label">Password</label>
+<input id="registerPassword" class="input-field" type="password" placeholder="••••••••">
+</div>
+
+<button class="submit-btn" id="registerBtn">Register</button>
+
+</div>
+
+<div style="height:20px"></div>
+
+<button class="outline-btn">Continue with Google</button>
+<button class="outline-btn">Continue with Phone OTP</button>
+
+</div>
+</div>
+</div>
+
+<script>
+
+/* PARTICLES */
+
+const canvas=document.getElementById("bg-canvas")
+const ctx=canvas.getContext("2d")
+
+canvas.width=window.innerWidth
+canvas.height=window.innerHeight
+
+const particles=Array.from({length:60},()=>({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*1.5,
+dx:(Math.random()-0.5)*0.2,
+dy:(Math.random()-0.5)*0.1,
+o:Math.random()*0.5
+}))
+
+function animate(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height)
+
+particles.forEach(p=>{
+
+ctx.beginPath()
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2)
+ctx.fillStyle=`rgba(255,155,81,${p.o})`
+ctx.fill()
+
+p.x+=p.dx
+p.y+=p.dy
+
+if(p.x<0)p.x=canvas.width
+if(p.x>canvas.width)p.x=0
+if(p.y<0)p.y=canvas.height
+if(p.y>canvas.height)p.y=0
+
+})
+
+requestAnimationFrame(animate)
+
+}
+
+animate()
+
+/* LOGIN REGISTER LOGIC */
+
+const loginTab=document.getElementById("loginTab")
+const registerTab=document.getElementById("registerTab")
+const loginForm=document.getElementById("loginForm")
+const registerForm=document.getElementById("registerForm")
+
+loginTab.onclick=()=>{
+loginTab.classList.add("active")
+registerTab.classList.remove("active")
+loginForm.style.display="block"
+registerForm.style.display="none"
+}
+
+registerTab.onclick=()=>{
+registerTab.classList.add("active")
+loginTab.classList.remove("active")
+loginForm.style.display="none"
+registerForm.style.display="block"
+}
+
+document.getElementById("registerBtn").onclick=()=>{
+
+const email=document.getElementById("registerEmail").value
+const pass=document.getElementById("registerPassword").value
+
+localStorage.setItem("userEmail",email)
+localStorage.setItem("userPass",pass)
+
+alert("Account created!")
+
+window.location.href = "home2.html";
+
+}
+
+document.getElementById("loginBtn").onclick=()=>{
+
+const email=document.getElementById("loginEmail").value
+const pass=document.getElementById("loginPassword").value
+
+const savedEmail=localStorage.getItem("userEmail")
+const savedPass=localStorage.getItem("userPass")
+
+if(email===savedEmail && pass===savedPass){
+alert("Login successful!")
+window.location.href = "home2.html";
+}else{
+alert("Invalid credentials")
+}
+
+}
+
+</script>
+
+</body>
+</html>
