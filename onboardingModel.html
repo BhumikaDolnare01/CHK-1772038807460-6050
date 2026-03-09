@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Complete Your Profile - SkillX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #060606 0%, #0a0a0a 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Animated background gradient */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(
+        circle at 20% 50%,
+        rgba(201, 168, 76, 0.08) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 80%,
+        rgba(201, 168, 76, 0.05) 0%,
+        transparent 50%
+      );
+      animation: gradientShift 8s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Main container */
+    .onboarding-container {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 20px;
+      animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Card styling */
+    .onboarding-card {
+      background: linear-gradient(
+        135deg,
+        rgba(20, 20, 20, 0.95) 0%,
+        rgba(15, 15, 15, 0.95) 100%
+      );
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      border-radius: 16px;
+      padding: 48px 36px;
+      backdrop-filter: blur(12px);
+      box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(201, 168, 76, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative corner elements */
+    .onboarding-card::before,
+    .onboarding-card::after {
+      content: '';
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      border: 1px solid rgba(201, 168, 76, 0.1);
+      pointer-events: none;
+    }
+
+    .onboarding-card::before {
+      top: -50px;
+      right: -50px;
+      border-right: none;
+      border-bottom: none;
+    }
+
+    .onboarding-card::after {
+      bottom: -50px;
+      left: -50px;
+      border-left: none;
+      border-top: none;
+    }
+
+    /* Progress bar */
+    .progress-container {
+      margin-bottom: 32px;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .progress-label span:first-child {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #c9a84c;
+    }
+
+    .progress-label span:last-child {
+      font-size: 12px;
+      color: rgba(245, 240, 232, 0.4);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 3px;
+      background: rgba(201, 168, 76, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #c9a84c, #e8d282);
+      width: 0%;
+      transition: width 0.4s ease;
+      box-shadow: 0 0 12px rgba(201, 168, 76, 0.4);
+    }
+
+    /* Step content */
+    .step {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Step title */
+    .step-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 600;
+      color: #f5f0e8;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .step-subtitle {
+      font-size: 13px;
+      color: rgba(245, 240, 232, 0.5);
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    /* Form elements */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(245, 240, 232, 0.7);
+      margin-bottom: 8px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(201, 168, 76, 0.05);
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: #f5f0e8;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    .form-input::placeholder,
+    .form-select option,
+    .form-textarea::placeholder {
+      color: rgba(245, 240, 232, 0.3);
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      background: rgba(201, 168, 76, 0.08);
+      border-color: rgba(201, 168, 76, 0.4);
+      box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 80px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Photo upload */
+    .photo-upload-wrapper {
+      margin-bottom: 20px;
+    }
+
+    .photo-upload {
+      position: relative;
+      width: 100%;
+      height: 140px;
+      border: 2px dashed rgba(201, 168, 76, 0.3);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: rgba(201, 168, 76, 0.03);
+      overflow: hidden;
+    }
+
+    .photo-upload:hover {
+      border-color: rgba(201, 168, 76, 0.5);
+      background: rgba(201, 168, 76, 0.08);
+    }
+
+    .photo-upload input {
+      display: none;
+    }
+
+    .photo-upload-content {
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .photo-upload-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+      color: #c9a84c;
+    }
+
+    .photo-upload-text {
+      font-size: 12px;
+      color: rgba(245, 240, 232, 0.5);
+    }
+
+    .photo-preview {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .photo-preview.active {
+      display: block;
+    }
+
+    /* Certificate upload */
+    .certificate-list {
+      max-height: 120px;
+      overflow-y: auto;
+      border: 1px solid rgba(201, 168, 76, 0.1);
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 8px;
+    }
+
+    .certificate-item {
+      background: rgba(201, 168, 76, 0.05);
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: rgba(245, 240, 232, 0.7);
+    }
+
+    .certificate-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .remove-cert-btn {
+      background: none;
+      border: none;
+      color: #ff6b6b;
+      cursor: pointer;
+      font-size: 14px;
+      transition: color 0.2s ease;
+    }
+
+    .remove-cert-btn:hover {
+      color: #ff8787;
+    }
+
+    /* Button group */
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 14px 24px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      outline: none;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      color: rgba(245, 240, 232, 0.6);
+    }
+
+    .btn-secondary:hover {
+      border-color: rgba(201, 168, 76, 0.5);
+      color: #c9a84c;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #e8d282, #c9a84c);
+      color: #0a0a0a;
+      box-shadow: 0 4px 15px rgba(201, 168, 76, 0.2);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(201, 168, 76, 0.3);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn:first-child {
+      flex: 0 0 auto;
+      width: auto;
+      padding: 14px 20px;
+    }
+
+    /* Success state */
+    .success-state {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .success-icon {
+      font-size: 56px;
+      margin-bottom: 16px;
+      animation: bounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes bounceIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.3);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.05);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .success-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: #c9a84c;
+      margin-bottom: 8px;
+    }
+
+    .success-message {
+      font-size: 13px;
+      color: rgba(245, 240, 232, 0.6);
+      line-height: 1.6;
+    }
+
+    /* Error message */
+    .error-message {
+      background: rgba(255, 107, 107, 0.1);
+      border: 1px solid rgba(255, 107, 107, 0.3);
+      color: #ff8787;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .onboarding-card {
+        padding: 32px 24px;
+        border-radius: 12px;
+      }
+
+      .step-title {
+        font-size: 24px;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      .btn:first-child {
+        width: 100%;
+      }
+    }
+
+    /* Loading spinner */
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(201, 168, 76, 0.3);
+      border-top-color: #c9a84c;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-left: 8px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="onboarding-container">
+    <div class="onboarding-card">
+      <!-- Progress Bar -->
+      <div class="progress-container">
+        <div class="progress-label">
+          <span id="stepLabel">Step 1: Username</span>
+          <span id="stepCounter">1 of 5</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <div class="error-message" id="errorMessage"></div>
+
+      <!-- STEP 1: USERNAME -->
+      <div class="step active" id="step-1">
+        <h1 class="step-title">Choose Your Username</h1>
+        <p class="step-subtitle">This is how other users will identify you on SkillX</p>
+
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input
+            type="text"
+            class="form-input"
+            id="username"
+            placeholder="e.g., CodeMaster92"
+            maxlength="30"
+          />
+        </div>
+
+        <small style="color: rgba(245, 240, 232, 0.4); font-size: 11px; margin-top: 6px; display: block;">
+          3-30 characters. Letters, numbers, underscores only.
+        </small>
+
+        <div class="button-group" style="margin-top: 28px;">
+          <button class="btn btn-primary" onclick="nextStep(1)">Next</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: PROFILE PHOTO & BASIC INFO -->
+      <div class="step" id="step-2">
+        <h1 class="step-title">Profile Photo</h1>
+        <p class="step-subtitle">A picture helps people recognize you</p>
+
+        <div class="photo-upload-wrapper">
+          <label class="photo-upload" for="photoInput">
+            <img class="photo-preview" id="photoPreview" alt="Profile" />
+            <div class="photo-upload-content">
+              <div class="photo-upload-icon">📸</div>
+              <div class="photo-upload-text">Click to upload photo</div>
+            </div>
+          </label>
+          <input
+            type="file"
+            id="photoInput"
+            accept="image/*"
+            onchange="handlePhotoUpload(event)"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input
+            type="text"
+            class="form-input"
+            id="fullName"
+            placeholder="e.g., Rajesh Kumar"
+            maxlength="50"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input
+            type="email"
+            class="form-input"
+            id="email"
+            placeholder="your@email.com"
+            readonly
+            style="background: rgba(201, 168, 76, 0.02);"
+          />
+          <small style="color: rgba(245, 240, 232, 0.3); font-size: 11px; margin-top: 4px; display: block;">
+            Auto-filled from your account
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input
+            type="tel"
+            class="form-input"
+            id="phone"
+            placeholder="+91 98765 43210"
+            maxlength="20"
+          />
+        </div>
+
+        <div class="button-group">
+          <button class="btn btn-secondary" onclick="prevStep(2)">Back</button>
+          <button class="btn btn-primary" onclick="nextStep(2)">Next</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: BIO & INTERESTS -->
+      <div class="step" id="step-3">
+        <h1 class="step-title">About You</h1>
+        <p class="step-subtitle">Tell us about yourself and your interests</p>
+
+        <div class="form-group">
+          <label class="form-label">Bio</label>
+          <textarea
+            class="form-textarea"
+            id="bio"
+            placeholder="Write a short bio about yourself... (max 200 characters)"
+            maxlength="200"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">What do you want to learn?</label>
+          <select class="form-select" id="interests">
+            <option value="">Select your interests</option>
+            <option value="dsa">DSA & Coding</option>
+            <option value="web">Web Development</option>
+            <option value="ml">Machine Learning</option>
+            <option value="mobile">Mobile Development</option>
+            <option value="design">UI/UX Design</option>
+            <option value="devops">DevOps & Cloud</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Location</label>
+          <input
+            type="text"
+            class="form-input"
+            id="location"
+            placeholder="e.g., Pune, Maharashtra"
+            maxlength="50"
+          />
+        </div>
+
+        <div class="button-group">
+          <button class="btn btn-secondary" onclick="prevStep(3)">Back</button>
+          <button class="btn btn-primary" onclick="nextStep(3)">Next</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: EXPERIENCE & EXPERTISE -->
+      <div class="step" id="step-4">
+        <h1 class="step-title">Your Experience</h1>
+        <p class="step-subtitle">Share your professional background</p>
+
+        <div class="form-group">
+          <label class="form-label">Years of Experience</label>
+          <select class="form-select" id="experience">
+            <option value="">Select experience level</option>
+            <option value="0">Fresher (0 years)</option>
+            <option value="1-2">1-2 years</option>
+            <option value="3-5">3-5 years</option>
+            <option value="5-10">5-10 years</option>
+            <option value="10+">10+ years</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Current Role/Position</label>
+          <input
+            type="text"
+            class="form-input"
+            id="role"
+            placeholder="e.g., Software Engineer, Student, etc."
+            maxlength="50"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Company/Organization</label>
+          <input
+            type="text"
+            class="form-input"
+            id="company"
+            placeholder="e.g., Google, Personal Project, etc."
+            maxlength="50"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Key Skills (comma-separated)</label>
+          <textarea
+            class="form-textarea"
+            id="skills"
+            placeholder="e.g., JavaScript, React, Node.js, Python"
+            maxlength="200"
+            style="min-height: 60px;"
+          ></textarea>
+        </div>
+
+        <div class="button-group">
+          <button class="btn btn-secondary" onclick="prevStep(4)">Back</button>
+          <button class="btn btn-primary" onclick="nextStep(4)">Next</button>
+        </div>
+      </div>
+
+      <!-- STEP 5: CERTIFICATES & COMPLETION -->
+      <div class="step" id="step-5">
+        <h1 class="step-title">Certifications (Optional)</h1>
+        <p class="step-subtitle">Upload certificates to boost your credibility</p>
+
+        <div class="form-group">
+          <label class="form-label">Upload Certificate</label>
+          <label class="photo-upload" for="certificateInput" style="height: 100px;">
+            <div class="photo-upload-content">
+              <div class="photo-upload-icon">📄</div>
+              <div class="photo-upload-text">PDF or Image</div>
+            </div>
+          </label>
+          <input
+            type="file"
+            id="certificateInput"
+            accept=".pdf,image/*"
+            onchange="handleCertificateUpload(event)"
+          />
+        </div>
+
+        <div id="certificateList" class="certificate-list" style="display: none;"></div>
+
+        <div class="button-group" style="margin-top: 28px;">
+          <button class="btn btn-secondary" onclick="prevStep(5)">Back</button>
+          <button class="btn btn-primary" id="submitBtn" onclick="submitProfile()">
+            Complete Profile
+          </button>
+        </div>
+      </div>
+
+      <!-- SUCCESS STATE -->
+      <div class="step" id="step-success">
+        <div class="success-state">
+          <div class="success-icon">✨</div>
+          <h1 class="success-title">Profile Complete!</h1>
+          <p class="success-message">
+            Your profile has been saved. You're all set to start learning and sharing your skills on SkillX!
+          </p>
+          <button class="btn btn-primary" style="width: 100%; margin-top: 24px;" onclick="goToDashboard()">
+            Go to Dashboard
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentStep = 1;
+    const totalSteps = 5;
+    let uploadedFiles = {
+      photo: null,
+      certificates: []
+    };
+
+    // Get user email from localStorage (set during login)
+    const userEmail = localStorage.getItem('userEmail') || 'user@example.com';
+    document.getElementById('email').value = userEmail;
+
+    // Update progress bar
+    function updateProgress() {
+      const percentage = (currentStep / totalSteps) * 100;
+      document.getElementById('progressFill').style.width = percentage + '%';
+      document.getElementById('stepCounter').textContent = currentStep + ' of ' + totalSteps;
+      
+      const stepLabels = [
+        'Username',
+        'Profile Photo & Info',
+        'About You',
+        'Your Experience',
+        'Certifications'
+      ];
+      document.getElementById('stepLabel').textContent = 'Step ' + currentStep + ': ' + stepLabels[currentStep - 1];
+    }
+
+    // Show specific step
+    function showStep(step) {
+      document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+      document.getElementById('step-' + step)?.classList.add('active');
+      updateProgress();
+      window.scrollTo(0, 0);
+    }
+
+    // Navigation
+    function nextStep(from) {
+      if (!validateStep(from)) return;
+      currentStep++;
+      if (currentStep > totalSteps) {
+        showStep('success');
+      } else {
+        showStep(currentStep);
+      }
+    }
+
+    function prevStep(from) {
+      currentStep = from - 1;
+      showStep(currentStep);
+      clearError();
+    }
+
+    // Validation
+    function validateStep(step) {
+      clearError();
+
+      switch(step) {
+        case 1:
+          const username = document.getElementById('username').value.trim();
+          if (!username) {
+            showError('Please enter a username');
+            return false;
+          }
+          if (!/^[a-zA-Z0-9_]{3,30}$/.test(username)) {
+            showError('Username must be 3-30 characters (letters, numbers, underscores only)');
+            return false;
+          }
+          return true;
+
+        case 2:
+          const fullName = document.getElementById('fullName').value.trim();
+          const phone = document.getElementById('phone').value.trim();
+          if (!fullName) {
+            showError('Please enter your full name');
+            return false;
+          }
+          if (!phone) {
+            showError('Please enter your phone number');
+            return false;
+          }
+          return true;
+
+        case 3:
+          const interests = document.getElementById('interests').value;
+          if (!interests) {
+            showError('Please select your interests');
+            return false;
+          }
+          return true;
+
+        case 4:
+          const experience = document.getElementById('experience').value;
+          const role = document.getElementById('role').value.trim();
+          if (!experience) {
+            showError('Please select your experience level');
+            return false;
+          }
+          if (!role) {
+            showError('Please enter your current role');
+            return false;
+          }
+          return true;
+
+        default:
+          return true;
+      }
+    }
+
+    // Error handling
+    function showError(message) {
+      const errorEl = document.getElementById('errorMessage');
+      errorEl.textContent = message;
+      errorEl.classList.add('show');
+    }
+
+    function clearError() {
+      document.getElementById('errorMessage').classList.remove('show');
+    }
+
+    // Photo upload
+    function handlePhotoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const preview = document.getElementById('photoPreview');
+        preview.src = e.target.result;
+        preview.classList.add('active');
+        uploadedFiles.photo = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Certificate upload
+    function handleCertificateUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        uploadedFiles.certificates.push({
+          name: file.name,
+          data: e.target.result
+        });
+        renderCertificateList();
+        document.getElementById('certificateInput').value = '';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Render certificate list
+    function renderCertificateList() {
+      const list = document.getElementById('certificateList');
+      if (uploadedFiles.certificates.length === 0) {
+        list.style.display = 'none';
+        return;
+      }
+      
+      list.style.display = 'block';
+      list.innerHTML = uploadedFiles.certificates.map((cert, index) => `
+        <div class="certificate-item">
+          <span>📄 ${cert.name}</span>
+          <button class="remove-cert-btn" onclick="removeCertificate(${index})">✕</button>
+        </div>
+      `).join('');
+    }
+
+    // Remove certificate
+    function removeCertificate(index) {
+      uploadedFiles.certificates.splice(index, 1);
+      renderCertificateList();
+    }
+
+    // Collect form data
+    function getFormData() {
+      return {
+        username: document.getElementById('username').value.trim(),
+        fullName: document.getElementById('fullName').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        bio: document.getElementById('bio').value.trim(),
+        interests: document.getElementById('interests').value,
+        location: document.getElementById('location').value.trim(),
+        experience: document.getElementById('experience').value,
+        role: document.getElementById('role').value.trim(),
+        company: document.getElementById('company').value.trim(),
+        skills: document.getElementById('skills').value.trim(),
+        photo: uploadedFiles.photo,
+        certificates: uploadedFiles.certificates,
+        createdAt: new Date().toISOString()
+      };
+    }
+
+    // Submit profile to backend
+    async function submitProfile() {
+      const submitBtn = document.getElementById('submitBtn');
+      const formData = getFormData();
+
+      // Show loading state
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Submitting<span class="spinner"></span>';
+
+      try {
+        // Replace with your actual backend API endpoint
+        const response = await fetch('http://localhost:5000/complete-profile', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + (localStorage.getItem('authToken') || '')
+          },
+          body: JSON.stringify(formData)
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to save profile');
+        }
+
+        // Mark onboarding as complete
+        localStorage.setItem('profileComplete', 'true');
+
+        // Show success
+        currentStep = 'success';
+        showStep('success');
+
+      } catch (error) {
+        showError('Error saving profile: ' + error.message);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Complete Profile';
+      }
+    }
+
+    // Go to dashboard
+    function goToDashboard() {
+      window.location.href = '../public/tryal.html';
+    }
+
+    // Initialize
+    updateProgress();
+  </script>
+</body>
+</html>
