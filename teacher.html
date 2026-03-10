@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find Teachers - SkillX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>:root{
+--bg-main:#EAEFEF;
+--bg-soft:#BFC9D1;
+--text-dark:#25343F;
+--accent:#FF9B51;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Inter',sans-serif;
+background:var(--bg-main);
+color:var(--text-dark);
+min-height:100vh;
+}
+
+/* HEADER */
+
+.header{
+padding:20px 40px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:white;
+border-bottom:1px solid var(--bg-soft);
+}
+
+.logo{
+font-size:22px;
+font-weight:700;
+color:var(--text-dark);
+letter-spacing:1px;
+cursor:pointer;
+}
+
+.nav-right{
+display:flex;
+gap:12px;
+align-items:center;
+}
+
+.user-badge{
+padding:6px 14px;
+background:var(--bg-soft);
+border-radius:20px;
+font-size:12px;
+}
+
+.btn-logout{
+padding:8px 16px;
+background:transparent;
+border:1px solid var(--accent);
+color:var(--accent);
+border-radius:6px;
+cursor:pointer;
+}
+
+/* MAIN */
+
+.container{
+max-width:1300px;
+margin:auto;
+padding:40px;
+}
+
+/* TITLE */
+
+.page-title{
+margin-bottom:30px;
+}
+
+.page-title h1{
+font-size:36px;
+margin-bottom:6px;
+}
+
+.page-title p{
+font-size:14px;
+color:#555;
+}
+
+/* SEARCH */
+
+.search-section{
+background:white;
+border:1px solid var(--bg-soft);
+border-radius:10px;
+padding:24px;
+margin-bottom:30px;
+}
+
+.search-container{
+display:grid;
+grid-template-columns:2fr 1fr 1fr 1fr auto;
+gap:12px;
+}
+
+.search-input,
+.filter-select{
+padding:10px 12px;
+border:1px solid var(--bg-soft);
+border-radius:6px;
+font-size:13px;
+background:white;
+}
+
+.btn-search{
+padding:10px 18px;
+background:var(--accent);
+border:none;
+border-radius:6px;
+color:white;
+font-weight:600;
+cursor:pointer;
+}
+
+/* FILTER TAGS */
+
+.active-filters{
+margin-top:12px;
+display:flex;
+gap:6px;
+flex-wrap:wrap;
+}
+
+.filter-tag{
+padding:4px 10px;
+background:var(--bg-soft);
+border-radius:20px;
+font-size:11px;
+display:flex;
+gap:6px;
+}
+
+.filter-tag-close{
+cursor:pointer;
+}
+
+/* GRID */
+
+.teachers-grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+gap:20px;
+}
+
+/* CARD */
+
+.teacher-card{
+background:white;
+border:1px solid var(--bg-soft);
+border-radius:10px;
+overflow:hidden;
+cursor:pointer;
+}
+
+/* IMAGE */
+
+.card-image{
+height:180px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:40px;
+background:var(--bg-soft);
+}
+
+.card-image img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+/* CONTENT */
+
+.card-content{
+padding:18px;
+}
+
+.teacher-name{
+font-size:18px;
+font-weight:600;
+margin-bottom:4px;
+}
+
+.teacher-role{
+font-size:12px;
+color:#666;
+margin-bottom:10px;
+}
+
+.teacher-stats{
+display:flex;
+justify-content:space-between;
+margin-bottom:10px;
+padding-bottom:10px;
+border-bottom:1px solid var(--bg-soft);
+}
+
+.stat{
+text-align:center;
+flex:1;
+}
+
+.stat-value{
+font-size:14px;
+font-weight:600;
+color:var(--accent);
+}
+
+.stat-label{
+font-size:10px;
+color:#777;
+}
+
+/* SKILLS */
+
+.skills-list{
+display:flex;
+flex-wrap:wrap;
+gap:5px;
+margin-bottom:10px;
+}
+
+.skill-tag{
+padding:3px 8px;
+background:var(--bg-soft);
+border-radius:4px;
+font-size:10px;
+}
+
+/* CARD BUTTONS */
+
+.card-actions{
+display:flex;
+gap:8px;
+}
+
+.btn-card{
+flex:1;
+padding:8px;
+border-radius:6px;
+font-size:11px;
+cursor:pointer;
+border:1px solid var(--accent);
+}
+
+.btn-card-secondary{
+background:white;
+color:var(--accent);
+}
+
+.btn-card-primary{
+background:var(--accent);
+color:white;
+border:none;
+}
+
+/* EMPTY */
+
+.empty-state{
+grid-column:1/-1;
+text-align:center;
+padding:40px;
+}
+
+.empty-title{
+font-size:20px;
+margin-bottom:6px;
+}
+
+.empty-text{
+font-size:13px;
+color:#666;
+}
+
+/* LOADING */
+
+.loading{
+grid-column:1/-1;
+text-align:center;
+padding:30px;
+}
+
+/* MODAL */
+
+.modal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.4);
+align-items:center;
+justify-content:center;
+}
+
+.modal.active{
+display:flex;
+}
+
+.modal-content{
+background:white;
+border-radius:10px;
+max-width:500px;
+width:90%;
+padding:28px;
+position:relative;
+}
+
+.modal-close{
+position:absolute;
+top:10px;
+right:10px;
+background:none;
+border:none;
+font-size:22px;
+cursor:pointer;
+}
+
+/* MODAL DETAILS */
+
+.teacher-detail-header{
+display:flex;
+gap:16px;
+margin-bottom:20px;
+padding-bottom:16px;
+border-bottom:1px solid var(--bg-soft);
+}
+
+.teacher-detail-avatar{
+width:70px;
+height:70px;
+background:var(--bg-soft);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:28px;
+border-radius:8px;
+}
+
+.detail-section{
+margin-bottom:18px;
+}
+
+.detail-section-title{
+font-weight:600;
+margin-bottom:6px;
+color:var(--accent);
+}
+
+.detail-section-content{
+font-size:13px;
+color:#555;
+}
+
+/* MODAL BUTTONS */
+
+.modal-actions{
+display:flex;
+gap:10px;
+margin-top:20px;
+}
+
+.modal-actions button{
+flex:1;
+padding:10px;
+border-radius:6px;
+cursor:pointer;
+}
+
+.btn-modal-secondary{
+background:white;
+border:1px solid var(--accent);
+color:var(--accent);
+}
+
+.btn-modal-primary{
+background:var(--accent);
+border:none;
+color:white;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+.search-container{
+grid-template-columns:1fr 1fr;
+}
+
+}
+
+@media(max-width:600px){
+
+.container{
+padding:20px;
+}
+
+.search-container{
+grid-template-columns:1fr;
+}
+
+.teachers-grid{
+grid-template-columns:1fr;
+}
+
+}
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="logo" onclick="window.location.href='/dashboard.html'">SKILLX</div>
+    <div class="nav-right">
+      <div class="user-badge" id="userBadge">Loading...</div>
+      <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Page Title -->
+    <div class="page-title">
+      <h1>Find Your Perfect Teacher</h1>
+      <p>Browse and connect with experienced mentors in your field of interest</p>
+    </div>
+
+    <!-- Search & Filter Section -->
+    <div class="search-section">
+      <div class="search-container">
+        <input
+          type="text"
+          class="search-input"
+          id="searchInput"
+          placeholder="Search by name, skill, or topic..."
+          onkeyup="filterTeachers()"
+        />
+        <select class="filter-select" id="subjectFilter" onchange="filterTeachers()">
+          <option value="">All Subjects</option>
+          <option value="dsa">DSA & Coding</option>
+          <option value="web">Web Development</option>
+          <option value="ml">Machine Learning</option>
+          <option value="mobile">Mobile Dev</option>
+          <option value="design">UI/UX Design</option>
+        </select>
+        <select class="filter-select" id="priceFilter" onchange="filterTeachers()">
+          <option value="">Any Price</option>
+          <option value="0-500">₹0-500</option>
+          <option value="500-1000">₹500-1000</option>
+          <option value="1000+">₹1000+</option>
+        </select>
+        <select class="filter-select" id="ratingFilter" onchange="filterTeachers()">
+          <option value="">All Ratings</option>
+          <option value="4.5">⭐ 4.5+</option>
+          <option value="4">⭐ 4+</option>
+          <option value="3">⭐ 3+</option>
+        </select>
+        <button class="btn-search" onclick="filterTeachers()">Search</button>
+      </div>
+
+      <!-- Active Filters -->
+      <div class="active-filters" id="activeFilters"></div>
+    </div>
+
+    <!-- Teachers Grid -->
+    <div class="teachers-grid" id="teachersGrid">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Loading teachers...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Teacher Detail Modal -->
+  <div class="modal" id="teacherModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeTeacherModal()">×</button>
+      <div id="teacherDetailContent"></div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================
+    // DUMMY DATA - 3 TEACHERS
+    // ============================================
+    const dummyTeachers = [
+      {
+        id: 1,
+        userId: 'user_1',
+        name: 'Rahul Singh',
+        role: 'Senior Engineer at Google',
+        avatar: '👨‍💼',
+        bio: 'Passionate about teaching data structures and algorithms. Have helped 200+ students crack interviews.',
+        expertise: ['DSA', 'Coding', 'Interview Prep'],
+        skills: ['JavaScript', 'Python', 'Java', 'Algorithms'],
+        experience: '5+ years',
+        price: 600,
+        rating: 4.9,
+        reviews: 152,
+        availability: 'Mon-Fri 6-9 PM',
+        description: 'Expert in competitive programming and software interviews. Personalized learning path for each student.',
+        subject: 'dsa'
+      },
+      {
+        id: 2,
+        userId: 'user_2',
+        name: 'Priya Sharma',
+        role: 'Full Stack Developer',
+        avatar: '👩‍💻',
+        bio: 'Web development mentor. Specialize in React, Node.js and creating production-ready applications.',
+        expertise: ['Web Dev', 'React', 'Node.js'],
+        skills: ['React', 'Node.js', 'MongoDB', 'Express'],
+        experience: '4 years',
+        price: 500,
+        rating: 4.7,
+        reviews: 98,
+        availability: 'Flexible hours',
+        description: 'Build real projects from scratch. Learn industry best practices and modern development tools.',
+        subject: 'web'
+      },
+      {
+        id: 3,
+        userId: 'user_3',
+        name: 'Amit Patel',
+        role: 'ML Engineer at Startup',
+        avatar: '🧑‍🔬',
+        bio: 'Machine Learning and AI enthusiast. Help beginners understand ML concepts with hands-on projects.',
+        expertise: ['Machine Learning', 'Python', 'Data Science'],
+        skills: ['Python', 'TensorFlow', 'Pandas', 'Scikit-learn'],
+        experience: '3 years',
+        price: 700,
+        rating: 4.6,
+        reviews: 76,
+        availability: 'Weekends available',
+        description: 'From ML basics to advanced projects. Real-world applications and practical coding.',
+        subject: 'ml'
+      }
+    ];
+
+    let currentUser = null;
+    let filteredTeachers = [...dummyTeachers];
+
+    // ============================================
+    // INIT
+    // ============================================
+    window.onload = function() {
+      // Get current user from localStorage
+      currentUser = {
+        name: localStorage.getItem('userName') || 'User',
+        email: localStorage.getItem('userEmail') || 'user@example.com',
+        role: localStorage.getItem('userRole') || 'learner'
+      };
+
+      document.getElementById('userBadge').textContent = `${currentUser.name} (Learner)`;
+      
+      // Load teachers
+      loadTeachers();
+    };
+
+    // Load and display teachers
+    function loadTeachers() {
+      const grid = document.getElementById('teachersGrid');
+      grid.innerHTML = '';
+
+      if (filteredTeachers.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <div class="empty-title">No Teachers Found</div>
+            <div class="empty-text">Try adjusting your filters or search terms</div>
+          </div>
+        `;
+        return;
+      }
+
+      filteredTeachers.forEach(teacher => {
+        const skillsHtml = teacher.skills
+          .slice(0, 3)
+          .map(skill => `<div class="skill-tag">${skill}</div>`)
+          .join('');
+
+        const card = document.createElement('div');
+        card.className = 'teacher-card';
+        card.innerHTML = `
+          <div class="card-image">
+            ${teacher.avatar}
+          </div>
+          <div class="card-content">
+            <div class="teacher-name">${teacher.name}</div>
+            <div class="teacher-role">${teacher.experience}</div>
+            
+            <div class="teacher-stats">
+              <div class="stat">
+                <div class="stat-value">⭐ ${teacher.rating}</div>
+                <div class="stat-label">${teacher.reviews} reviews</div>
+              </div>
+              <div class="stat">
+                <div class="stat-value">₹${teacher.price}</div>
+                <div class="stat-label">per hour</div>
+              </div>
+              <div class="stat">
+                <div class="stat-value">${teacher.expertise.length}</div>
+                <div class="stat-label">expertise</div>
+              </div>
+            </div>
+
+            <div class="teacher-skills">
+              <div class="skills-list">
+                ${skillsHtml}
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <button class="btn-card btn-card-secondary" onclick="viewTeacher(${teacher.id})">View</button>
+              <button class="btn-card btn-card-primary" onclick="bookTeacher(${teacher.id})">Book Now</button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // Filter teachers
+    function filterTeachers() {
+      const searchValue = document.getElementById('searchInput').value.toLowerCase();
+      const subjectValue = document.getElementById('subjectFilter').value;
+      const priceValue = document.getElementById('priceFilter').value;
+      const ratingValue = parseFloat(document.getElementById('ratingFilter').value) || 0;
+
+      filteredTeachers = dummyTeachers.filter(teacher => {
+        // Search filter
+        const matchesSearch =
+          teacher.name.toLowerCase().includes(searchValue) ||
+          teacher.skills.some(skill => skill.toLowerCase().includes(searchValue)) ||
+          teacher.expertise.some(exp => exp.toLowerCase().includes(searchValue));
+
+        // Subject filter
+        const matchesSubject = !subjectValue || teacher.subject === subjectValue;
+
+        // Price filter
+        let matchesPrice = true;
+        if (priceValue) {
+          if (priceValue === '0-500') matchesPrice = teacher.price <= 500;
+          else if (priceValue === '500-1000') matchesPrice = teacher.price >= 500 && teacher.price <= 1000;
+          else if (priceValue === '1000+') matchesPrice = teacher.price >= 1000;
+        }
+
+        // Rating filter
+        const matchesRating = teacher.rating >= ratingValue;
+
+        return matchesSearch && matchesSubject && matchesPrice && matchesRating;
+      });
+
+      updateActiveFilters();
+      loadTeachers();
+    }
+
+    // Update active filters display
+    function updateActiveFilters() {
+      const container = document.getElementById('activeFilters');
+      const filters = [];
+
+      const search = document.getElementById('searchInput').value;
+      if (search) filters.push(`Search: "${search}"`);
+
+      const subject = document.getElementById('subjectFilter').value;
+      if (subject) filters.push(`Subject: ${subject}`);
+
+      const price = document.getElementById('priceFilter').value;
+      if (price) filters.push(`Price: ${price}`);
+
+      const rating = document.getElementById('ratingFilter').value;
+      if (rating) filters.push(`Rating: ⭐${rating}+`);
+
+      if (filters.length === 0) {
+        container.innerHTML = '';
+        return;
+      }
+
+      container.innerHTML = filters
+        .map((filter, index) => `
+          <div class="filter-tag">
+            ${filter}
+            <span class="filter-tag-close" onclick="clearFilter(${index})">✕</span>
+          </div>
+        `)
+        .join('');
+    }
+
+    // Clear specific filter
+    function clearFilter(index) {
+      // Reset all filters for simplicity (can be improved)
+      document.getElementById('searchInput').value = '';
+      document.getElementById('subjectFilter').value = '';
+      document.getElementById('priceFilter').value = '';
+      document.getElementById('ratingFilter').value = '';
+      filterTeachers();
+    }
+
+    // View teacher details
+    function viewTeacher(teacherId) {
+      const teacher = dummyTeachers.find(t => t.id === teacherId);
+      if (!teacher) return;
+
+      const modal = document.getElementById('teacherModal');
+      const content = document.getElementById('teacherDetailContent');
+
+      const skillsHtml = teacher.skills
+        .map(skill => `<div class="skill-tag">${skill}</div>`)
+        .join('');
+
+      content.innerHTML = `
+        <div class="teacher-detail-header">
+          <div class="teacher-detail-avatar">${teacher.avatar}</div>
+          <div class="teacher-detail-info">
+            <h2>${teacher.name}</h2>
+            <p>${teacher.role}</p>
+            <div class="teacher-detail-rating">
+              <span>⭐ ${teacher.rating}</span>
+              <span>•</span>
+              <span>${teacher.reviews} reviews</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <div class="detail-section-title">About</div>
+          <div class="detail-section-content">${teacher.bio}</div>
+        </div>
+
+        <div class="detail-section">
+          <div class="detail-section-title">Expertise</div>
+          <div class="detail-section-content">
+            ${teacher.expertise.join(', ')}
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <div class="detail-section-title">Skills</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+            ${skillsHtml}
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <div class="detail-section-title">Details</div>
+          <div class="detail-section-content">
+            <p><strong>Experience:</strong> ${teacher.experience}</p>
+            <p style="margin-top: 8px;"><strong>Price:</strong> ₹${teacher.price}/hour</p>
+            <p style="margin-top: 8px;"><strong>Availability:</strong> ${teacher.availability}</p>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <div class="detail-section-title">Description</div>
+          <div class="detail-section-content">${teacher.description}</div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-modal-secondary" onclick="closeTeacherModal()">Close</button>
+          <button class="btn-modal-primary" onclick="bookTeacher(${teacher.id})">Book Session</button>
+        </div>
+      `;
+
+      modal.classList.add('active');
+    }
+
+    // Close modal
+    function closeTeacherModal() {
+      document.getElementById('teacherModal').classList.remove('active');
+    }
+
+    // Book teacher
+    function bookTeacher(teacherId) {
+      const teacher = dummyTeachers.find(t => t.id === teacherId);
+      if (!teacher) return;
+
+      // Save selected teacher
+      localStorage.setItem('selectedTeacher', JSON.stringify(teacher));
+      localStorage.setItem('currentUser', currentUser.name);
+
+      alert(`🎉 Redirecting to booking for ${teacher.name}...`);
+      window.location.href = '/booking.html';
+    }
+
+    // Logout
+    function logout() {
+      localStorage.clear();
+      window.location.href = '/login.html';
+    }
+
+    // Close modal on background click
+    document.getElementById('teacherModal')?.addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeTeacherModal();
+      }
+    });
+  </script>
+</body>
+</html>
