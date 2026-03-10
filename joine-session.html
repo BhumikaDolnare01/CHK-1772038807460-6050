@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Join Session</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+:root{
+  --bg:#EAEFEF;
+  --card:#ffffff;
+  --border:#BFC9D1;
+  --text:#25343F;
+  --accent:#FF9B51;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:var(--bg);
+  font-family:'DM Sans',sans-serif;
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  padding:24px;
+}
+
+/* PAGE */
+
+.page{
+  width:100%;
+  max-width:1200px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+/* HEADER */
+
+.header-bar{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:12px 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.header-title{
+  font-size:18px;
+  font-weight:700;
+}
+
+.header-meta{
+  display:flex;
+  gap:12px;
+}
+
+.live-pill{
+  font-size:12px;
+  padding:4px 10px;
+  border-radius:20px;
+  background:#ffe5d5;
+  color:var(--accent);
+}
+
+.timer-pill{
+  font-size:13px;
+  padding:4px 10px;
+  border-radius:20px;
+  border:1px solid var(--border);
+}
+
+/* GRID */
+
+.main-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+
+/* PANELS */
+
+.panel{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.panel-header{
+  padding:10px 14px;
+  border-bottom:1px solid var(--border);
+  font-size:12px;
+  font-weight:600;
+}
+
+.panel-title{
+  color:var(--text);
+}
+
+/* VIDEO */
+
+.video-wrap{
+  position:relative;
+  aspect-ratio:16/9;
+  background:#ddd;
+}
+
+#jitsiFrame{
+  width:100%;
+  height:100%;
+  border:none;
+}
+
+.fav-overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  font-size:40px;
+}
+
+.fav-name{
+  font-size:14px;
+  color:#666;
+}
+
+/* SCREEN SHARE */
+
+.screen-body{
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.screen-preview{
+  background:#f5f5f5;
+  border:1px solid var(--border);
+  border-radius:8px;
+  min-height:180px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.screen-placeholder{
+  text-align:center;
+  font-size:14px;
+  color:#777;
+}
+
+.screen-btns{
+  display:flex;
+  gap:8px;
+}
+
+.sbtn{
+  flex:1;
+  padding:8px;
+  border-radius:6px;
+  border:1px solid var(--border);
+  background:white;
+  cursor:pointer;
+}
+
+.sbtn:hover{
+  background:#f5f5f5;
+}
+
+.sbtn-colab{
+  padding:8px;
+  border-radius:6px;
+  border:1px solid var(--border);
+  background:white;
+  cursor:pointer;
+}
+
+/* COLAB INPUT */
+
+.colab-input-row{
+  display:flex;
+  gap:8px;
+}
+
+.colab-url-input{
+  flex:1;
+  padding:8px;
+  border-radius:6px;
+  border:1px solid var(--border);
+}
+
+/* NOTES */
+
+.notes-body{
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.notes-toolbar{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+
+.ntool{
+  padding:4px 8px;
+  font-size:12px;
+  border:1px solid var(--border);
+  background:white;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.notes-area{
+  min-height:180px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:10px;
+  font-family:'DM Mono',monospace;
+}
+
+.notes-footer{
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#666;
+}
+
+/* PARTICIPANTS */
+
+.ctrl-body{
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.participant-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px;
+  border:1px solid var(--border);
+  border-radius:8px;
+}
+
+.part-avatar{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:#f1f1f1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.part-name{
+  font-size:14px;
+  font-weight:600;
+}
+
+.part-role{
+  font-size:12px;
+  color:#666;
+}
+
+/* SESSION INFO */
+
+.sess-info-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.info-tile{
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:8px;
+}
+
+.info-tile-label{
+  font-size:10px;
+  color:#777;
+}
+
+.info-tile-val{
+  font-size:14px;
+  font-weight:600;
+}
+
+/* BUTTONS */
+
+.action-btns{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.btn-end{
+  padding:10px;
+  border-radius:6px;
+  border:none;
+  background:#ffdddd;
+  color:#b30000;
+  cursor:pointer;
+}
+
+.btn-submit{
+  padding:10px;
+  border-radius:6px;
+  border:none;
+  background:var(--accent);
+  color:white;
+  cursor:pointer;
+}
+
+/* MODAL */
+
+.ov{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  align-items:center;
+  justify-content:center;
+}
+
+.ov.show{
+  display:flex;
+}
+
+.modal{
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  width:320px;
+}
+
+.mod-t{
+  font-weight:700;
+  margin-bottom:6px;
+}
+
+.mod-s{
+  font-size:13px;
+  margin-bottom:14px;
+}
+
+.btn{
+  padding:8px 12px;
+  border-radius:6px;
+  border:1px solid var(--border);
+  background:white;
+  cursor:pointer;
+}
+
+.btn-primary{
+  background:var(--accent);
+  color:white;
+  border:none;
+}
+
+/* SUCCESS */
+
+.succ-card{
+  background:white;
+  padding:24px;
+  border-radius:10px;
+  text-align:center;
+  width:320px;
+}
+
+.rpill{
+  padding:4px 10px;
+  border-radius:20px;
+  background:#f3f3f3;
+  font-size:12px;
+}
+
+/* MOBILE */
+
+@media(max-width:820px){
+
+  .main-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+</style>
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="stars" id="stars"></div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header-bar">
+    <div class="header-title" id="pgTitle">React Hooks Session</div>
+    <div class="header-meta">
+      <div class="live-pill"><div class="live-dot"></div>LIVE</div>
+      <div class="timer-pill">⏱ <span id="timerVal">00:00</span></div>
+    </div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="main-grid">
+
+    <!-- VIDEO -->
+    <div class="panel video-panel">
+      <div class="panel-header">
+        <span class="panel-title">📹 Video Call</span>
+        <div class="panel-actions">
+          <span style="font-size:.72rem;color:var(--mu);">Powered by Jitsi</span>
+        </div>
+      </div>
+      <div class="video-wrap">
+        <iframe id="jitsiFrame" allow="camera;microphone;fullscreen;display-capture;autoplay" allowfullscreen></iframe>
+        <div class="fav-overlay" id="fav">
+          <span id="sessEmoji">👨‍💻</span>
+          <span class="fav-name" id="favName">Waiting...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN SHARE / COLAB -->
+    <div class="panel screen-panel">
+      <div class="panel-header">
+        <span class="panel-title">🖥️ Screen Share & Colab</span>
+      </div>
+      <div class="screen-body">
+        <div class="screen-preview" id="screenPreview">
+          <video id="screenVideo" autoplay playsinline></video>
+          <iframe id="colabEmbed" class="colab-embed" allowfullscreen></iframe>
+          <div class="screen-placeholder" id="screenPlaceholder">
+            <div class="icon">🖥️</div>
+            <p>Share your screen or open a Google Colab notebook here</p>
+          </div>
+        </div>
+        <div class="colab-input-row">
+          <input class="colab-url-input" id="colabUrl" placeholder="Paste Google Colab URL…" />
+          <button class="sbtn-colab" onclick="openColab()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Open Colab
+          </button>
+        </div>
+        <div class="screen-btns">
+          <button class="sbtn" id="btnShare" onclick="toggleShare()">📡 Share My Screen</button>
+          <button class="sbtn" id="btnStop" onclick="stopShare()" style="display:none">⏹ Stop Sharing</button>
+          <button class="sbtn" onclick="openColabNew()">
+            + New Colab
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SHARED NOTES -->
+    <div class="panel notes-panel">
+      <div class="panel-header">
+        <span class="panel-title">📝 Shared Notes</span>
+        <div class="shared-badge"><div class="shared-dot"></div>Live Sync</div>
+      </div>
+      <div class="notes-body">
+        <div class="notes-toolbar">
+          <button class="ntool" onclick="insertNote('## ')">H2</button>
+          <button class="ntool" onclick="insertNote('### ')">H3</button>
+          <button class="ntool" onclick="insertNote('• ')">• List</button>
+          <button class="ntool" onclick="insertNote('```\n\n```')">Code</button>
+          <button class="ntool" onclick="insertNote('🔗 ')">Link</button>
+          <button class="ntool" onclick="insertNote('⚡ TODO: ')">TODO</button>
+          <button class="ntool" id="previewBtn" onclick="togglePreview()">Preview</button>
+        </div>
+        <textarea class="notes-area" id="notesArea"
+          placeholder="Both you and your mentor can type here…&#10;&#10;Try:&#10;## Key Concepts&#10;• useState manages local state&#10;• useEffect runs on mount/update&#10;```&#10;const [count, setCount] = useState(0)&#10;```"></textarea>
+        <div id="notesPreview" style="display:none;flex:1;padding:.9rem 1rem;background:rgba(20,13,5,.6);border:1px solid rgba(201,168,76,.15);border-radius:12px;min-height:180px;overflow-y:auto;font-size:.85rem;line-height:1.8;color:var(--tx);"></div>
+        <div class="notes-footer">
+          <span class="char-count" id="charCount">0 chars</span>
+          <div class="typing-indicator" id="typingInd">
+            <div class="typing-dots"><span></span><span></span><span></span></div>
+            Mentor is typing…
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SESSION CONTROLS -->
+    <div class="panel ctrl-panel">
+      <div class="panel-header">
+        <span class="panel-title">👥 Participants & Controls</span>
+      </div>
+      <div class="ctrl-body">
+
+        <!-- Participants -->
+        <div class="participant-row">
+          <div class="part-avatar" id="youAvatar">🎓</div>
+          <div class="part-info">
+            <div class="part-name" id="youName">You</div>
+            <div class="part-role">Learner</div>
+          </div>
+          <div class="part-status">
+            <div class="status-dot online"></div>
+            <span style="font-size:.72rem;color:var(--gn);font-weight:600;">Online</span>
+          </div>
+        </div>
+        <div class="participant-row">
+          <div class="part-avatar" id="partnerAvatar">👨‍💻</div>
+          <div class="part-info">
+            <div class="part-name" id="partnerNameEl">Rahul Mehta</div>
+            <div class="part-role">Mentor</div>
+          </div>
+          <div class="part-status">
+            <div class="status-dot online"></div>
+            <span style="font-size:.72rem;color:var(--gn);font-weight:600;">Online</span>
+          </div>
+        </div>
+
+        <!-- Session info -->
+        <div class="sess-info-grid">
+          <div class="info-tile">
+            <div class="info-tile-label">Skill</div>
+            <div class="info-tile-val" id="skillTile" style="font-size:.82rem;">React Hooks</div>
+          </div>
+          <div class="info-tile">
+            <div class="info-tile-label">Duration</div>
+            <div class="info-tile-val" id="durTile">1 hr</div>
+          </div>
+          <div class="info-tile">
+            <div class="info-tile-label">Credits</div>
+            <div class="info-tile-val">1 💰</div>
+          </div>
+          <!-- <div class="info-tile">
+            <div class="info-tile-label">XP Reward</div>
+            <div class="info-tile-val">+50 ⚡</div>
+          </div> -->
+        </div>
+
+        <!-- Actions -->
+        <div class="action-btns">
+          <button class="btn-end" id="btnEnd" onclick="openEnd()">⏹ End Session</button>
+          <button class="btn-submit" onclick="openSubmit()">✅ Submit & Complete</button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- END CONFIRM -->
+<div class="ov" id="ovEnd">
+  <div class="modal">
+    <div class="mod-t">End Session?</div>
+    <div class="mod-s">This stops the live video. You can still edit notes and submit for credit.</div>
+    <div class="macts">
+      <button class="btn btn-primary" style="flex:1" onclick="endSession()">Yes, End It</button>
+      <button class="btn btn-ghost" onclick="closeOv('ovEnd')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUBMIT CONFIRM -->
+<div class="ov" id="ovSubmit">
+  <div class="modal">
+    <div class="mod-t">Complete Session?</div>
+    <div class="mod-s">Credits will be deducted and XP awarded. Notes will be visible to both parties.</div>
+    <div class="macts">
+      <button class="btn btn-primary" style="flex:1" onclick="completeSess()">Confirm & Complete</button>
+      <button class="btn btn-ghost" onclick="closeOv('ovSubmit')">Back</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="ov" id="ovSuccess">
+  <div class="succ-card">
+    <div class="succ-ico">🏆</div>
+    <div class="succ-t">Session Completed!</div>
+    <div class="succ-s">Credits transferred. XP & streak updated for both parties.</div>
+    <div class="rewards" id="rewardsRow">
+      <span class="rpill">⚡ +50 XP</span>
+      <span class="rpill">🔥 Streak +1</span>
+      <span class="rpill">💰 1 Credit</span>
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="window.location.href='my-sessions.html'">View My Sessions →</button>
+  </div>
+</div>
+
+<script>
+/* ── Starfield ── */
+(()=>{
+  const c=document.getElementById('stars');
+  [{w:1,h:1,lo:.1,hi:.5,n:40},{w:1.5,h:1.5,lo:.2,hi:.6,n:22},{w:2,h:2,lo:.15,hi:.5,n:14},{w:3,h:3,lo:.1,hi:.45,n:7}]
+  .forEach(({w,h,lo,hi,n})=>{
+    for(let i=0;i<n;i++){
+      const s=document.createElement('span');
+      s.style.cssText=`width:${w}px;height:${h}px;left:${(Math.random()*100).toFixed(1)}%;top:${(Math.random()*100).toFixed(1)}%;--dur:${(2.5+Math.random()*3).toFixed(1)}s;--delay:${(Math.random()*4).toFixed(1)}s;--lo:${lo};--hi:${hi};`;
+      c.appendChild(s);
+    }
+  });
+})();
+
+/* ── Built-in APP state (no state.js needed) ── */
+const APP = {
+  getUser:()=>({name:'Alex',emoji:'🎓'}),
+  getSession:(id)=>null,
+  completeSession:(id,notes)=>({xp:50})
+};
+
+/* ── Session load ── */
+const P=new URLSearchParams(window.location.search);
+const SID=P.get('id')||'demo1';
+const sess=APP.getSession(SID)||{
+  id:SID,mentorName:'Rahul Mehta',mentorEmoji:'👨‍💻',
+  learnerName:'Alex',learnerEmoji:'🎓',
+  role:'learner',skill:'React Hooks',
+  date:'2026-03-15',time:'4:00 PM',hours:1,
+  status:'confirmed',xp:0,notes:[],rating:0
+};
+const user=APP.getUser();
+const isLearner=sess.role==='learner';
+const partnerName=isLearner?sess.mentorName:(sess.learnerName||'Learner');
+const partnerEmoji=isLearner?(sess.mentorEmoji||'👨‍💻'):(sess.learnerEmoji||'🧑‍🎓');
+
+/* Populate */
+document.getElementById('pgTitle').textContent=`${sess.skill} Session`;
+document.getElementById('skillTile').textContent=sess.skill;
+document.getElementById('durTile').textContent=`${sess.hours} hr${sess.hours>1?'s':''}`;
+document.getElementById('sessEmoji').textContent=partnerEmoji;
+document.getElementById('favName').textContent=partnerName;
+document.getElementById('partnerNameEl').textContent=partnerName;
+document.getElementById('partnerAvatar').textContent=partnerEmoji;
+document.getElementById('youName').textContent=user.name||'You';
+document.getElementById('youAvatar').textContent=user.emoji||'🎓';
+
+/* Jitsi */
+const room='mentorapp-'+SID;
+document.getElementById('jitsiFrame').src=
+  `https://meet.jit.si/${room}#userInfo.displayName=${encodeURIComponent(user.name||'User')}&config.startWithAudioMuted=false`;
+document.getElementById('jitsiFrame').onload=()=>{
+  document.getElementById('fav').style.display='none';
+};
+
+/* ── Timer ── */
+let secs=0,timerActive=true;
+const ti=setInterval(()=>{
+  if(!timerActive)return;
+  secs++;
+  document.getElementById('timerVal').textContent=
+    `${String(Math.floor(secs/60)).padStart(2,'0')}:${String(secs%60).padStart(2,'0')}`;
+},1000);
+
+/* ── Screen Share ── */
+let screenStream=null;
+async function toggleShare(){
+  if(!navigator.mediaDevices?.getDisplayMedia){showToast('Screen sharing not supported in this browser.');return;}
+  try{
+    screenStream=await navigator.mediaDevices.getDisplayMedia({video:true,audio:true});
+    const vid=document.getElementById('screenVideo');
+    vid.srcObject=screenStream;
+    vid.style.display='block';
+    document.getElementById('screenPlaceholder').style.display='none';
+    document.getElementById('colabEmbed').style.display='none';
+    document.getElementById('btnShare').style.display='none';
+    document.getElementById('btnStop').style.display='flex';
+    screenStream.getTracks()[0].onended=stopShare;
+    showToast('Screen sharing started!');
+  }catch(e){showToast('Screen share cancelled.');}
+}
+function stopShare(){
+  if(screenStream)screenStream.getTracks().forEach(t=>t.stop());
+  screenStream=null;
+  const vid=document.getElementById('screenVideo');
+  vid.srcObject=null;vid.style.display='none';
+  document.getElementById('btnShare').style.display='flex';
+  document.getElementById('btnStop').style.display='none';
+  checkPlaceholder();
+}
+
+/* ── Google Colab ── */
+function openColab(){
+  let url=document.getElementById('colabUrl').value.trim();
+  if(!url){showToast('Please paste a Google Colab URL first.');return;}
+  // Convert regular colab URL to embed-friendly
+  if(url.includes('colab.research.google.com')&&!url.includes('embed')){
+    // Colab doesn't support direct iframe embed — open in new tab
+    window.open(url,'_blank');
+    showToast('Colab opened in a new tab. Use screen share to show it here!');
+    return;
+  }
+  // For any other URL (e.g. nbviewer, custom), try embedding
+  const embed=document.getElementById('colabEmbed');
+  embed.src=url;
+  embed.style.display='block';
+  document.getElementById('screenPlaceholder').style.display='none';
+  document.getElementById('screenVideo').style.display='none';
+}
+function openColabNew(){
+  window.open('https://colab.research.google.com/#create=true','_blank');
+  showToast('New Colab notebook opened in a new tab!');
+}
+function checkPlaceholder(){
+  const embed=document.getElementById('colabEmbed');
+  const vid=document.getElementById('screenVideo');
+  const hidden=embed.style.display==='block'||vid.style.display==='block';
+  document.getElementById('screenPlaceholder').style.display=hidden?'none':'flex';
+}
+
+/* ── Shared Notes ── */
+const notesArea=document.getElementById('notesArea');
+const charCount=document.getElementById('charCount');
+const STORAGE_KEY='session_notes_'+SID;
+
+// Load saved notes
+try{
+  const saved=localStorage.getItem(STORAGE_KEY);
+  if(saved)notesArea.value=saved;
+}catch(e){}
+
+// Auto-save + char count
+let saveTimer,typingTimer;
+notesArea.addEventListener('input',()=>{
+  charCount.textContent=notesArea.value.length+' chars';
+  // Auto-save
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{
+    try{localStorage.setItem(STORAGE_KEY,notesArea.value);}catch(e){}
+  },800);
+  // Simulate partner typing feedback (in real app this would be websocket)
+  showTypingIndicator();
+});
+
+function showTypingIndicator(){
+  clearTimeout(typingTimer);
+  document.getElementById('typingInd').style.opacity='1';
+  typingTimer=setTimeout(()=>{document.getElementById('typingInd').style.opacity='0';},2000);
+}
+
+function insertNote(text){
+  const ta=notesArea;
+  const start=ta.selectionStart,end=ta.selectionEnd;
+  const before=ta.value.substring(0,start);
+  const after=ta.value.substring(end);
+  // Add newline before if not at start
+  const prefix=(before.length>0&&!before.endsWith('\n'))?'\n':'';
+  ta.value=before+prefix+text+after;
+  ta.selectionStart=ta.selectionEnd=start+prefix.length+text.length;
+  ta.focus();
+  ta.dispatchEvent(new Event('input'));
+}
+
+let previewOn=false;
+function togglePreview(){
+  previewOn=!previewOn;
+  const ta=document.getElementById('notesArea');
+  const pv=document.getElementById('notesPreview');
+  const btn=document.getElementById('previewBtn');
+  if(previewOn){
+    pv.innerHTML=renderNotes(ta.value);
+    ta.style.display='none';pv.style.display='block';
+    btn.classList.add('active');btn.textContent='Edit';
+  }else{
+    ta.style.display='block';pv.style.display='none';
+    btn.classList.remove('active');btn.textContent='Preview';
+  }
+}
+function renderNotes(text){
+  if(!text)return '<span style="color:var(--mu)">No notes yet.</span>';
+  return text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/^## (.+)$/gm,'<h2 style="color:var(--gold);font-size:1rem;margin:.6rem 0 .2rem;font-family:Playfair Display,serif">$1</h2>')
+    .replace(/^### (.+)$/gm,'<h3 style="color:var(--cr);font-size:.9rem;margin:.4rem 0 .1rem">$1</h3>')
+    .replace(/`([^`]+)`/g,'<code style="background:rgba(201,168,76,.1);padding:.1em .4em;border-radius:4px;font-family:DM Mono,monospace;font-size:.82em;color:var(--gold2)">$1</code>')
+    .replace(/```([\s\S]*?)```/g,'<pre style="background:rgba(0,0,0,.4);border:1px solid rgba(201,168,76,.15);border-radius:8px;padding:.7rem .9rem;margin:.4rem 0;font-family:DM Mono,monospace;font-size:.8rem;overflow-x:auto;color:var(--cr)">$1</pre>')
+    .replace(/^• (.+)$/gm,'<div style="display:flex;gap:.5rem;margin:.15rem 0"><span style="color:var(--gold)">•</span><span>$1</span></div>')
+    .replace(/\n/g,'<br>');
+}
+
+/* ── End / Submit ── */
+function openEnd(){document.getElementById('ovEnd').classList.add('show');}
+function endSession(){
+  timerActive=false;
+  closeOv('ovEnd');
+  document.getElementById('btnEnd').disabled=true;
+  document.querySelector('.live-dot').style.animation='none';
+  document.querySelector('.live-dot').style.background='#6b7280';
+  document.querySelector('.live-pill').style.background='rgba(60,60,60,.4)';
+  document.querySelector('.live-pill').style.color='#9ca3af';
+  showToast('Session ended. Add notes then submit.');
+}
+function openSubmit(){
+  const notes=notesArea.value.trim();
+  if(!notes){showToast('Please add at least one note before submitting.');return;}
+  document.getElementById('ovSubmit').classList.add('show');
+}
+function completeSess(){
+  clearInterval(ti);
+  const raw=notesArea.value;
+  const notes=raw.split('\n').map(l=>l.replace(/^[•\-\*]\s*/,'')).filter(Boolean);
+  const done=APP.completeSession(sess.id,notes);
+  const xp=done?done.xp:sess.hours*50;
+  document.getElementById('rewardsRow').innerHTML=
+    `<span class="rpill">⚡ +${xp} XP</span><span class="rpill">🔥 Streak +1</span><span class="rpill">💰 ${sess.hours} Credit${sess.hours>1?'s':''}</span>`;
+  closeOv('ovSubmit');
+  document.getElementById('ovSuccess').classList.add('show');
+  try{localStorage.removeItem(STORAGE_KEY);}catch(e){}
+}
+function closeOv(id){document.getElementById(id).classList.remove('show');}
+
+function copyLink(){
+  const url=window.location.href;
+  navigator.clipboard.writeText(url).then(()=>showToast('Link copied! Open in another tab to test.'));
+}
+function showToast(msg){
+  const t=document.createElement('div');t.className='toast';t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300);},3200);
+}
+</script>
+</body>
+</html>

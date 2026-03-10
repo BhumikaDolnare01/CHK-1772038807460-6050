@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Session</title>
+<style>:root {
+  --bg: #EAEEEE;
+  --surface: #ffffff;
+  --surface2: #f4f6f7;
+  --border: #BFC9D1;
+  --primary: #25343F;
+  --accent: #FF9B51;
+  --text: #25343F;
+  --muted: #6c7a86;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:var(--bg);
+  font-family:Arial, sans-serif;
+  color:var(--text);
+  padding:2rem;
+}
+
+/* HEADER */
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:1.5rem;
+}
+
+h1{
+  font-size:1.8rem;
+  font-weight:700;
+}
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:0.4rem;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:0.4rem 0.8rem;
+  font-size:0.85rem;
+  color:var(--muted);
+}
+
+.online-dot-header{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#4ade80;
+}
+
+/* SEARCH */
+
+.search-wrap{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:0.7rem 1rem;
+  display:flex;
+  align-items:center;
+  gap:0.6rem;
+  margin-bottom:1.5rem;
+}
+
+.search-icon{
+  color:var(--muted);
+}
+
+.search-wrap input{
+  flex:1;
+  border:none;
+  outline:none;
+  font-size:0.9rem;
+  background:none;
+  color:var(--text);
+}
+
+.search-wrap input::placeholder{
+  color:var(--muted);
+}
+
+.clear-btn{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  width:28px;
+  height:28px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.clear-btn:hover{
+  border-color:var(--accent);
+}
+
+/* FILTER TAGS */
+
+.filters{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.5rem;
+  margin-bottom:1.5rem;
+}
+
+.filter-tag{
+  padding:0.35rem 0.8rem;
+  border-radius:20px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  font-size:0.8rem;
+  color:var(--muted);
+  cursor:pointer;
+}
+
+.filter-tag.active{
+  border-color:var(--accent);
+  color:var(--accent);
+}
+
+/* GRID */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:1rem;
+}
+
+/* MENTOR CARD */
+
+.mentor-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:1rem;
+}
+
+/* CARD TOP */
+
+.card-top{
+  display:flex;
+  gap:0.8rem;
+  align-items:center;
+  margin-bottom:0.8rem;
+}
+
+.avatar-wrap{
+  position:relative;
+}
+
+.avatar-emoji{
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  background:var(--surface2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.5rem;
+}
+
+.online-badge{
+  position:absolute;
+  bottom:0;
+  right:0;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:#4ade80;
+  border:2px solid white;
+}
+
+.mentor-info{
+  flex:1;
+}
+
+.mentor-name{
+  font-weight:700;
+  font-size:1rem;
+}
+
+.mentor-role{
+  font-size:0.8rem;
+  color:var(--muted);
+}
+
+.mentor-exp{
+  font-size:0.75rem;
+  color:var(--muted);
+}
+
+/* RATING */
+
+.rating{
+  display:flex;
+  align-items:center;
+  gap:0.2rem;
+}
+
+.star-filled{
+  color:var(--accent);
+}
+
+.star-empty{
+  color:#ccc;
+}
+
+.rating-val{
+  font-size:0.9rem;
+  font-weight:600;
+}
+
+/* SKILLS */
+
+.skills-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.4rem;
+  margin-bottom:0.8rem;
+}
+
+.skill-tag{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  padding:0.2rem 0.6rem;
+  border-radius:12px;
+  font-size:0.75rem;
+}
+
+/* DIVIDER */
+
+.card-divider{
+  border:none;
+  border-top:1px solid var(--border);
+  margin:0.6rem 0;
+}
+
+/* BOTTOM */
+
+.card-bottom{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.online-status{
+  font-size:0.8rem;
+  color:var(--muted);
+  display:flex;
+  align-items:center;
+  gap:0.4rem;
+}
+
+.online-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#4ade80;
+}
+
+/* BUTTON */
+
+.btn-book{
+  background:var(--accent);
+  color:white;
+  border:none;
+  padding:0.45rem 1rem;
+  border-radius:6px;
+  font-size:0.8rem;
+  cursor:pointer;
+}
+
+.btn-book:hover{
+  opacity:0.9;
+}
+
+/* NO RESULTS */
+
+.no-results{
+  grid-column:span 2;
+  text-align:center;
+  padding:2rem;
+  color:var(--muted); 
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .no-results{
+    grid-column:span 1;
+  }
+
+  h1{
+    font-size:1.5rem;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Book a Session</h1>
+  <div class="header-right">
+    <div class="online-dot"></div>
+    <span>4 mentors online</span>
+  </div>
+</div>
+
+<div class="search-wrap">
+  <span>🔍</span>
+  <input type="text" id="searchInput" placeholder="Search by skill, name or expertise..." oninput="filterCards()">
+</div>
+
+<div class="filters">
+  <div class="filter-tag active" onclick="setFilter(this, 'all')">All</div>
+  <div class="filter-tag" onclick="setFilter(this, 'react')">React</div>
+  <div class="filter-tag" onclick="setFilter(this, 'next.js')">Next.js</div>
+  <div class="filter-tag" onclick="setFilter(this, 'redux')">Redux</div>
+  <div class="filter-tag" onclick="setFilter(this, 'full stack')">Full Stack</div>
+  <div class="filter-tag" onclick="setFilter(this, 'frontend')">Frontend</div>
+</div>
+
+<div class="grid" id="mentorGrid"></div>
+
+<script>
+  let activeFilter = 'all';
+  
+  const mentors = [
+    { name: 'Rahul Mehta', role: 'React & Next.js Expert', exp: '6+ Years Experience', rating: 4.9, emoji: '👨‍💻', skills: ['react', 'next.js'] },
+    { name: 'Anita Sharma', role: 'React & Redux Specialist', exp: '5+ Years Experience', rating: 4.7, emoji: '👩‍💼', skills: ['react', 'redux'] },
+    { name: 'Divya Kapoor', role: 'Full Stack React Developer', exp: '4+ Years Experience', rating: 4.8, emoji: '👩‍🎨', skills: ['react', 'full stack'] },
+    { name: 'Priya Ahuja', role: 'React & Frontend Coach', exp: '7+ Years Experience', rating: 4.9, emoji: '👩‍🏫', skills: ['react', 'frontend'] }
+  ];
+
+  function renderMentors() {
+    const grid = document.getElementById('mentorGrid');
+    grid.innerHTML = '';
+    let visible = 0;
+
+    mentors.forEach(mentor => {
+      const skillsStr = mentor.skills.join(' ').toLowerCase();
+      const mentorName = mentor.name.toLowerCase();
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      
+      const matchFilter = activeFilter === 'all' || skillsStr.includes(activeFilter);
+      const matchSearch = !query || mentorName.includes(query) || skillsStr.includes(query);
+      
+      if (matchFilter && matchSearch) {
+        visible++;
+        const skillsHtml = mentor.skills.slice(0, 2).map(s => `<span class="skill-tag">⚛ ${s}</span>`).join('');
+        
+        const card = document.createElement('div');
+        card.className = 'mentor-card';
+        card.innerHTML = `
+          <div class="card-top">
+            <div class="avatar">${mentor.emoji}</div>
+            <div class="mentor-info">
+              <div class="mentor-name">${mentor.name}</div>
+              <div class="mentor-role">${mentor.role}</div>
+              <div class="mentor-exp">${mentor.exp}</div>
+            </div>
+            <div class="rating">
+              <span class="star">★</span>
+              <span class="rating-val">${mentor.rating}</span>
+            </div>
+          </div>
+          <div class="skills-row">${skillsHtml}</div>
+          <div class="card-bottom">
+            <div class="online-status"><div class="online-dot"></div> Online now</div>
+            <button class="btn-book" onclick="goToBook('${mentor.name}', '${mentor.role}', '${mentor.exp}', '${mentor.rating}', '${mentor.emoji}')">Book Session</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      }
+    });
+
+    if (visible === 0) {
+      grid.innerHTML = '<div class="no-results">No mentors found.</div>';
+    }
+  }
+
+  function setFilter(el, filter) {
+    document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    activeFilter = filter;
+    renderMentors();
+  }
+
+  function filterCards() {
+    renderMentors();
+  }
+
+  function goToBook(name, role, exp, rating, emoji) {
+    const params = new URLSearchParams({ name, role, exp, rating, emoji });
+    window.location.href = 'book-session-detail.html?' + params.toString();
+  }
+
+  renderMentors();
+</script>
+</body>
+</html>

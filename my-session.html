@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>My Sessions</title>
+<script src="state.js"></script>
+<style>
+:root{
+  --bg:#EAEFEF;
+  --sf:#ffffff;
+  --sf2:#f6f8f9;
+  --sf3:#edf1f3;
+
+  --bd:#BFC9D1;
+  --bd2:#d7dee3;
+
+  --gold:#FF9B51;
+  --gold2:#ffb37c;
+
+  --tx:#25343F;
+  --mu:#6b7c85;
+
+  --gn:#4ade80;
+  --rd:#f87171;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:var(--bg);
+  font-family:Segoe UI, Arial, sans-serif;
+  color:var(--tx);
+  padding:40px;
+}
+
+/* PAGE */
+.page{
+  max-width:1000px;
+  margin:auto;
+}
+
+/* HEADER */
+.hdr{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:30px;
+}
+
+.pg-title{
+  font-size:28px;
+  font-weight:700;
+}
+
+.hdr-right{
+  display:flex;
+  gap:15px;
+  align-items:center;
+}
+
+/* NAV */
+.nav-links{
+  display:flex;
+  gap:8px;
+}
+
+.nav-links a{
+  text-decoration:none;
+  color:var(--mu);
+  padding:6px 12px;
+  border-radius:6px;
+  border:1px solid transparent;
+  font-size:13px;
+}
+
+.nav-links a:hover,
+.nav-links a.act{
+  border:1px solid var(--bd);
+  color:var(--tx);
+}
+
+/* ROLE TOGGLE */
+
+.rtog{
+  display:flex;
+  border:1px solid var(--bd);
+  border-radius:8px;
+}
+
+.rbtn{
+  padding:6px 14px;
+  border:none;
+  background:none;
+  cursor:pointer;
+  font-size:13px;
+  color:var(--mu);
+}
+
+.rbtn.on{
+  background:var(--gold);
+  color:white;
+}
+
+/* PANEL */
+
+.panel{
+  background:var(--sf);
+  border:1px solid var(--bd);
+  border-radius:12px;
+}
+
+/* TABS */
+
+.tabs{
+  display:flex;
+  border-bottom:1px solid var(--bd2);
+}
+
+.tab{
+  padding:10px 16px;
+  border:none;
+  background:none;
+  cursor:pointer;
+  font-size:14px;
+  color:var(--mu);
+}
+
+.tab.on{
+  color:var(--gold);
+  font-weight:600;
+}
+
+.tc{
+  font-size:12px;
+  margin-left:4px;
+}
+
+/* SESSION LIST */
+
+.slist{
+  padding:20px;
+}
+
+/* CARD */
+
+.sc{
+  padding:18px;
+  border:1px solid var(--bd2);
+  border-radius:10px;
+  background:var(--sf2);
+  margin-bottom:12px;
+}
+
+.sc:hover{
+  background:var(--sf3);
+}
+
+/* CARD LAYOUT */
+
+.sc-inner{
+  display:flex;
+  gap:15px;
+}
+
+.sc-av{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:var(--bd2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+}
+
+.sc-inf{
+  flex:1;
+}
+
+.sc-title{
+  font-weight:600;
+  margin-bottom:4px;
+}
+
+.sc-role{
+  font-size:13px;
+  color:var(--mu);
+}
+
+.sc-when{
+  font-size:13px;
+  color:var(--mu);
+  margin-top:4px;
+}
+
+.pipe{
+  margin:0 6px;
+}
+
+.sc-badge{
+  font-size:12px;
+  margin-top:6px;
+  color:var(--gold);
+}
+
+/* ACTIONS */
+
+.sc-acts{
+  text-align:right;
+}
+
+.acts-row{
+  display:flex;
+  gap:8px;
+  justify-content:flex-end;
+  margin-top:6px;
+}
+
+/* BUTTONS */
+
+.btn{
+  padding:6px 12px;
+  border-radius:6px;
+  font-size:13px;
+  cursor:pointer;
+  border:1px solid var(--bd);
+  background:white;
+}
+
+.btn:hover{
+  background:#f5f5f5;
+}
+
+.btn-primary{
+  background:var(--gold);
+  color:white;
+  border:none;
+}
+
+.btn-cancel{
+  color:var(--rd);
+}
+
+.btn-green{
+  color:var(--gn);
+}
+
+.btn-red{
+  color:var(--rd);
+}
+
+/* QUIZ */
+
+.quiz-pill{
+  padding:4px 10px;
+  font-size:12px;
+  border-radius:20px;
+  border:1px solid var(--bd);
+  cursor:pointer;
+}
+
+/* STARS */
+
+.star{
+  font-size:16px;
+  color:#ccc;
+  cursor:pointer;
+}
+
+.star.on{
+  color:var(--gold);
+}
+
+/* EMPTY */
+
+.empty{
+  text-align:center;
+  padding:40px;
+  color:var(--mu);
+}
+
+/* MODAL */
+
+.ov{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.5);
+  align-items:center;
+  justify-content:center;
+}
+
+.ov.show{
+  display:flex;
+}
+
+.modal{
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  width:360px;
+}
+
+.mod-t{
+  font-weight:600;
+  margin-bottom:6px;
+}
+
+.mod-s{
+  font-size:13px;
+  color:var(--mu);
+  margin-bottom:10px;
+}
+
+.modal textarea{
+  width:100%;
+  padding:8px;
+  border:1px solid var(--bd);
+  border-radius:6px;
+  font-size:13px;
+}
+
+.macts{
+  display:flex;
+  gap:8px;
+  margin-top:10px;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  top:20px;
+  right:20px;
+  background:white;
+  border:1px solid var(--bd);
+  padding:10px 14px;
+  border-radius:8px;
+  font-size:13px;
+}
+</style>
+</head>
+<body>
+
+<!-- BACKGROUND LAYERS -->
+<div class="bg-layer"></div>
+<div class="stars" id="stars"></div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="pg-title">My Sessions</div>
+    <div class="hdr-right">
+      <div class="nav-links">
+        <a href="book-session.html">Book</a>
+        <a href="my-sessions.html" class="act">Sessions</a>
+        <a href="dashboard.html">Progress</a>
+      </div>
+      <div class="rtog">
+        <button class="rbtn" id="bMentor"  onclick="setRole('mentor')">⚙ Mentor</button>
+        <button class="rbtn on" id="bLearner" onclick="setRole('learner')">👤 Learner</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL -->
+  <div class="panel">
+    <div class="tabs">
+      <button class="tab on" id="t-upcoming"  onclick="setTab('upcoming')">Upcoming  <span class="tc" id="c-upcoming">0</span></button>
+      <button class="tab"    id="t-completed" onclick="setTab('completed')">Completed <span class="tc" id="c-completed">0</span></button>
+      <button class="tab"    id="t-cancelled" onclick="setTab('cancelled')">Cancelled <span class="tc" id="c-cancelled">0</span></button>
+      <button class="tab"    id="t-requests"  onclick="setTab('requests')" style="display:none">Requests <span class="tc" id="c-requests">0</span></button>
+    </div>
+    <div class="slist" id="slist"></div>
+  </div>
+
+</div>
+
+<!-- RATING MODAL -->
+<div class="ov" id="ovRating">
+  <div class="modal" style="text-align:center">
+    <div class="mod-t">⭐ Rate Your Session</div>
+    <div class="mod-s">How was your session with <span id="rName" style="color:var(--gold);font-weight:800">—</span>?</div>
+    <div class="bstars">
+      <span class="bstar" onclick="pickR(1)">★</span>
+      <span class="bstar" onclick="pickR(2)">★</span>
+      <span class="bstar" onclick="pickR(3)">★</span>
+      <span class="bstar" onclick="pickR(4)">★</span>
+      <span class="bstar" onclick="pickR(5)">★</span>
+    </div>
+    <textarea id="rTxt" placeholder="Share your experience (optional)..."></textarea>
+    <div class="macts">
+      <button class="btn btn-primary" style="flex:1" onclick="submitR()">Submit Rating</button>
+      <button class="btn btn-cancel" onclick="closeOv('ovRating')">Skip</button>
+    </div>
+  </div>
+</div>
+
+<!-- CANCEL MODAL -->
+<div class="ov" id="ovCancel">
+  <div class="modal">
+    <div class="mod-t">Cancel Session?</div>
+    <div class="mod-s">Are you sure you want to cancel this session? This action cannot be undone.</div>
+    <div class="macts">
+      <button class="btn btn-red" style="flex:1" onclick="doCancel()">Yes, Cancel Session</button>
+      <button class="btn btn-ghost" onclick="closeOv('ovCancel')">Go Back</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Starfield generator ── */
+(function(){
+  const c=document.getElementById('stars');
+  const data=[
+    {w:1,  h:1,  lo:.1, hi:.5, count:40},
+    {w:1.5,h:1.5,lo:.2, hi:.6, count:20},
+    {w:2,  h:2,  lo:.15,hi:.5, count:12},
+    {w:3,  h:3,  lo:.1, hi:.4, count:6},
+  ];
+  data.forEach(({w,h,lo,hi,count})=>{
+    for(let i=0;i<count;i++){
+      const s=document.createElement('span');
+      const dur=(2.5+Math.random()*3).toFixed(1);
+      const delay=(Math.random()*4).toFixed(1);
+      s.style.cssText=`width:${w}px;height:${h}px;left:${(Math.random()*100).toFixed(1)}%;top:${(Math.random()*100).toFixed(1)}%;--dur:${dur}s;--delay:${delay}s;--lo:${lo};--hi:${hi};`;
+      c.appendChild(s);
+    }
+  });
+})();
+
+/* ── App state ── */
+let role='learner', tab='upcoming', rId=null, rSel=0, cancelId=null;
+
+function setRole(r){
+  role=r;
+  document.getElementById('bLearner').classList.toggle('on',r==='learner');
+  document.getElementById('bMentor').classList.toggle('on', r==='mentor');
+  document.getElementById('t-requests').style.display=r==='mentor'?'':'none';
+  setTab(r==='mentor'?'requests':'upcoming');
+}
+
+function setTab(t){
+  tab=t;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  const el=document.getElementById('t-'+t); if(el)el.classList.add('on');
+  render();
+}
+
+function render(){
+  updateCounts();
+  const all=APP.getSessions(); let list=[];
+  if(role==='learner'){
+    if(tab==='upcoming')  list=all.filter(s=>s.role==='learner'&&['confirmed','pending'].includes(s.status));
+    if(tab==='completed') list=all.filter(s=>s.role==='learner'&&s.status==='completed');
+    if(tab==='cancelled') list=all.filter(s=>s.role==='learner'&&['rejected','expired','cancelled'].includes(s.status));
+  } else {
+    if(tab==='requests')  list=all.filter(s=>s.role==='mentor'&&s.status==='pending');
+    if(tab==='upcoming')  list=all.filter(s=>s.role==='mentor'&&s.status==='confirmed');
+    if(tab==='completed') list=all.filter(s=>s.role==='mentor'&&s.status==='completed');
+    if(tab==='cancelled') list=all.filter(s=>s.role==='mentor'&&['rejected','expired','cancelled'].includes(s.status));
+  }
+  const el=document.getElementById('slist'); el.innerHTML='';
+  if(!list.length){
+    el.innerHTML='<div class="empty"><div class="empty-ico">📭</div>No sessions here yet.</div>';
+    return;
+  }
+  list.forEach((s,i)=>{
+    if(i>0){ const div=document.createElement('hr'); div.className='sc-sep'; el.appendChild(div); }
+    el.appendChild(mkCard(s));
+  });
+}
+
+function updateCounts(){
+  const all=APP.getSessions();
+  const lu=role==='learner'
+    ? all.filter(s=>s.role==='learner'&&['confirmed','pending'].includes(s.status)).length
+    : all.filter(s=>s.role==='mentor'&&s.status==='confirmed').length;
+  const lc=all.filter(s=>s.role===role&&s.status==='completed').length;
+  const lx=all.filter(s=>s.role==='learner'&&['rejected','expired','cancelled'].includes(s.status)).length;
+  const lr=all.filter(s=>s.role==='mentor'&&s.status==='pending').length;
+  document.getElementById('c-upcoming').textContent=lu;
+  document.getElementById('c-completed').textContent=lc;
+  document.getElementById('c-cancelled').textContent=lx;
+  document.getElementById('c-requests').textContent=lr;
+}
+
+function mkCard(s){
+  const em  = s.role==='learner'?(s.mentorEmoji||'👨‍💻'):(s.learnerEmoji||'🧑‍🎓');
+  const name= s.role==='learner'?s.mentorName:(s.learnerName||'Learner');
+  const title=`${s.skill} Session with ${name}`;
+  const rl  = s.role==='learner'?'Learner':'Mentor';
+
+  // ── RIGHT-SIDE ACTIONS ──
+  let topActs='', botActs='';
+
+  if(role==='learner'){
+    if(s.status==='confirmed'){
+      topActs=`<button class="btn btn-primary" onclick="joinS('${s.id}')">Join</button>
+               <button class="btn btn-cancel" onclick="openCancel('${s.id}')">Cancel</button>`;
+    }
+    if(s.status==='pending'){
+      topActs=`<span style="font-size:.82rem;color:var(--mu);font-style:italic">⏳ Awaiting confirmation</span>`;
+      botActs=`<button class="btn btn-cancel" onclick="openCancel('${s.id}')">Cancel</button>`;
+    }
+    if(s.status==='completed'){
+      const cr=(s.hours||1)*40;
+      topActs=`<span class="credits-earned"><span class="tick">✓</span> ${cr} Credits Earned</span>`;
+      if(s.notes&&s.notes.length){
+        topActs=`<span class="quiz-pill" onclick="genQuiz('${s.id}')">👤 Quiz Available</span>` + topActs;
+      }
+      // stars + leave rating
+      let starsHtml='<div class="stars-row">';
+      for(let i=1;i<=5;i++) starsHtml+=`<span class="star${i<=(s.rating||0)?' on':''}" onclick="${!s.rating?`doRate('${s.id}',${i})`:''}" >★</span>`;
+      starsHtml+='</div>';
+      botActs= starsHtml + (s.rating?'':` <button class="btn" onclick="openRating('${s.id}')">Leave Rating</button>`);
+    }
+    if(['rejected','expired','cancelled'].includes(s.status)){
+      topActs=`<span style="font-size:.82rem;color:var(--rd)">Session ${s.status}.<br><a href="book-session.html" style="color:var(--gold);text-decoration:none">Rebook →</a></span>`;
+    }
+  } else {
+    if(s.status==='pending'){
+      topActs=`<button class="btn btn-green" onclick="accS('${s.id}')">✔ Accept</button>
+               <button class="btn btn-red" onclick="rejS('${s.id}')">✘ Reject</button>`;
+    }
+    if(s.status==='confirmed'){
+      topActs=`<button class="btn btn-primary" onclick="joinS('${s.id}')">Join</button>
+               <button class="btn btn-cancel" onclick="openCancel('${s.id}')">Cancel</button>`;
+    }
+    if(s.status==='completed'){
+      const cr=(s.hours||1)*40;
+      topActs=`<span class="credits-earned"><span class="tick">✓</span> ${cr} Credits Earned</span>`;
+      if(s.notes&&s.notes.length){
+        topActs=`<span class="quiz-pill" onclick="genQuiz('${s.id}')">👤 Quiz Available</span>` + topActs;
+      }
+      botActs=s.rating?'':`<button class="btn" onclick="openRating('${s.id}')">Leave Rating</button>`;
+    }
+  }
+
+  const statusColor = s.status==='confirmed'?'var(--gold)':s.status==='pending'?'#c8a04a':'var(--mu)';
+  const statusTxt   = s.status==='confirmed'?'Confirmed':s.status==='pending'?'Pending':s.status;
+
+  const c=document.createElement('div'); c.className='sc';
+  c.innerHTML=`
+    <div class="sc-inner">
+      <div class="sc-av">${em}</div>
+      <div class="sc-inf">
+        <div class="sc-title">${title}</div>
+        <div class="sc-role">Role: ${rl}</div>
+        <div class="sc-when">
+          <span>${fmtDate(s.date)}</span>
+          <span class="pipe">|</span>
+          <span>${s.time||'—'}</span>
+        </div>
+        ${['confirmed','pending'].includes(s.status)?`<div class="sc-badge"><span class="ico">✦</span><span style="color:${statusColor}">${statusTxt}</span></div>`:''}
+      </div>
+      <div class="sc-acts">
+        <div class="acts-row">${topActs}</div>
+        ${botActs?`<div class="acts-row">${botActs}</div>`:''}
+      </div>
+    </div>`;
+  return c;
+}
+
+function joinS(id){ window.location.href='join-session.html?id='+id; }
+
+function openCancel(id){ cancelId=id; document.getElementById('ovCancel').classList.add('show'); }
+function doCancel(){
+  const a=APP.getSessions(); const s=a.find(x=>x.id===cancelId);
+  if(s){ s.status='cancelled'; APP.saveSessions(a); }
+  closeOv('ovCancel'); render(); showToast('Session cancelled.');
+}
+function accS(id){ const a=APP.getSessions();const s=a.find(x=>x.id===id);if(s){s.status='confirmed';APP.saveSessions(a);}render();showToast('✅ Session confirmed!'); }
+function rejS(id){ const a=APP.getSessions();const s=a.find(x=>x.id===id);if(s){s.status='rejected';APP.saveSessions(a);}render();showToast('❌ Session rejected.'); }
+
+function openRating(id){
+  rId=id; rSel=0;
+  const s=APP.getSession(id);
+  document.getElementById('rName').textContent=s?(s.role==='learner'?s.mentorName:s.learnerName||'Learner'):'—';
+  document.querySelectorAll('.bstar').forEach(x=>x.classList.remove('on'));
+  document.getElementById('rTxt').value='';
+  document.getElementById('ovRating').classList.add('show');
+}
+function doRate(id,n){ openRating(id); setTimeout(()=>pickR(n),50); }
+function pickR(n){ rSel=n; document.querySelectorAll('.bstar').forEach((x,i)=>x.classList.toggle('on',i<n)); }
+function submitR(){
+  if(!rId)return;
+  const a=APP.getSessions(); const s=a.find(x=>x.id===rId);
+  if(s){ s.rating=rSel||5; APP.saveSessions(a); }
+  closeOv('ovRating'); render(); showToast('⭐ Rating submitted!');
+}
+function genQuiz(id){ showToast('⚡ Generating quiz…'); setTimeout(()=>showToast('✅ Quiz ready! (feature coming soon)'),2200); }
+function closeOv(id){ document.getElementById(id).classList.remove('show'); }
+
+function fmtDate(d){
+  if(!d)return'—';
+  const p=d.split('-');
+  const mo=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  return `${parseInt(p[2])} ${mo[parseInt(p[1])-1]}`;
+}
+function showToast(msg){
+  const t=document.createElement('div'); t.className='toast'; t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(()=>t.remove(),300); },3000);
+}
+
+render();
+</script>
+</body>
+</html>
