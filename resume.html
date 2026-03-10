@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume Analyzer — Prepwise</title>
+  <link rel="stylesheet" href="theme.css"/>
+  <style>
+
+:root{
+  --bg-base:#EAEFEF;
+  --bg-surface:#ffffff;
+  --bg-elevated:#f7f9fa;
+  --bg-border:#BFC9D1;
+
+  --text-primary:#25343F;
+  --text-body:#25343F;
+  --text-muted:#6c7a83;
+
+  --accent:#FF9B51;
+
+  --radius-md:10px;
+  --radius-lg:14px;
+  --radius-xl:18px;
+  --radius-pill:40px;
+
+  --duration-base:.15s;
+
+  --font-display:Inter,system-ui;
+}
+
+body{
+  background:var(--bg-base);
+  font-family:var(--font-display);
+  color:var(--text-body);
+}
+
+/* NAV */
+
+nav{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:100;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:18px 50px;
+
+  background:white;
+  border-bottom:1px solid var(--bg-border);
+}
+
+.nav-logo{
+  font-size:1.4rem;
+  font-weight:600;
+  color:var(--text-primary);
+}
+
+.nav-logo span{
+  color:var(--accent);
+}
+
+.nav-back{
+  font-size:.8rem;
+  text-decoration:none;
+  color:var(--text-muted);
+}
+
+.nav-back:hover{
+  color:var(--text-primary);
+}
+
+/* PAGE */
+
+.page-wrap{
+  min-height:100vh;
+  padding:120px 24px 80px;
+  max-width:960px;
+  margin:auto;
+  background:var(--bg-base);
+}
+
+/* UPLOAD */
+
+.upload-zone{
+  border:2px dashed var(--bg-border);
+  border-radius:var(--radius-xl);
+  padding:60px 40px;
+  text-align:center;
+  cursor:pointer;
+  background:white;
+}
+
+.upload-zone:hover{
+  border-color:var(--accent);
+}
+
+.upload-icon{
+  font-size:2.5rem;
+  margin-bottom:14px;
+}
+
+.upload-zone h3{
+  font-weight:500;
+  margin-bottom:6px;
+}
+
+.upload-zone p{
+  font-size:.85rem;
+  color:var(--text-muted);
+}
+
+.upload-zone input[type=file]{
+  position:absolute;
+  inset:0;
+  opacity:0;
+}
+
+/* FILE SELECTED */
+
+.file-selected{
+  display:none;
+  align-items:center;
+  gap:10px;
+  padding:12px 18px;
+  background:white;
+  border:1px solid var(--bg-border);
+  border-radius:var(--radius-md);
+  margin-top:20px;
+}
+
+.file-selected.show{
+  display:flex;
+}
+
+.file-name{
+  font-size:.85rem;
+  flex:1;
+}
+
+.file-size{
+  font-size:.75rem;
+  color:var(--text-muted);
+}
+
+/* LOADER */
+
+.loader{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  gap:16px;
+  padding:60px;
+  text-align:center;
+}
+
+.loader.show{
+  display:flex;
+}
+
+.spinner{
+  width:40px;
+  height:40px;
+  border:3px solid var(--bg-border);
+  border-top-color:var(--accent);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg);}
+}
+
+/* RESULTS */
+
+.results{
+  display:none;
+}
+
+.results.show{
+  display:block;
+}
+
+/* SCORE HERO */
+
+.score-hero{
+  background:white;
+  border:1px solid var(--bg-border);
+  border-radius:var(--radius-xl);
+  padding:34px;
+  display:flex;
+  align-items:center;
+  gap:28px;
+  margin-bottom:30px;
+  flex-wrap:wrap;
+}
+
+/* SCORE RING */
+
+.score-ring-wrap{
+  width:110px;
+  height:110px;
+  position:relative;
+}
+
+.score-ring-svg{
+  transform:rotate(-90deg);
+}
+
+.sr-bg{
+  fill:none;
+  stroke:var(--bg-border);
+  stroke-width:6;
+}
+
+.sr-fill{
+  fill:none;
+  stroke:var(--accent);
+  stroke-width:6;
+  stroke-linecap:round;
+  stroke-dasharray:282.74;
+  stroke-dashoffset:282.74;
+  transition:stroke-dashoffset 1s ease;
+}
+
+.sr-center{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+}
+
+.sr-num{
+  font-size:1.8rem;
+  font-weight:600;
+}
+
+.sr-den{
+  font-size:.7rem;
+  color:var(--text-muted);
+}
+
+/* SCORE INFO */
+
+.score-info h2{
+  font-size:1.6rem;
+  margin-bottom:6px;
+}
+
+.score-meta{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+
+/* GRID */
+
+.info-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:18px;
+  margin-bottom:24px;
+}
+
+.info-card{
+  background:white;
+  border:1px solid var(--bg-border);
+  border-radius:var(--radius-lg);
+  padding:22px 24px;
+}
+
+.info-card-title{
+  font-size:.7rem;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:14px;
+}
+
+/* INFO ROW */
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:6px 0;
+  border-bottom:1px solid var(--bg-border);
+  font-size:.85rem;
+}
+
+.info-row:last-child{
+  border:none;
+}
+
+.info-row span:first-child{
+  color:var(--text-muted);
+}
+
+/* TAGS */
+
+.tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.tag{
+  padding:5px 10px;
+  font-size:.75rem;
+  border-radius:var(--radius-pill);
+  border:1px solid var(--bg-border);
+  background:#f7f9fa;
+}
+
+/* LISTS */
+
+.check-list{
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.check-list li{
+  font-size:.88rem;
+  display:flex;
+  gap:8px;
+}
+
+.check-list li::before{
+  content:"•";
+  color:var(--accent);
+}
+
+/* EXPERIENCE */
+
+.exp-item{
+  padding:16px 0;
+  border-bottom:1px solid var(--bg-border);
+}
+
+.exp-item:last-child{
+  border:none;
+}
+
+.exp-role{
+  font-weight:500;
+}
+
+.exp-company{
+  font-size:.85rem;
+  color:var(--accent);
+}
+
+.exp-duration{
+  font-size:.75rem;
+  color:var(--text-muted);
+  margin-bottom:6px;
+}
+
+.exp-highlights{
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.exp-highlights li{
+  font-size:.8rem;
+  color:var(--text-muted);
+}
+
+/* EDUCATION */
+
+.edu-item{
+  padding:14px 0;
+  border-bottom:1px solid var(--bg-border);
+}
+
+.edu-item:last-child{
+  border:none;
+}
+
+.edu-degree{
+  font-weight:500;
+}
+
+.edu-inst{
+  font-size:.82rem;
+  color:var(--text-muted);
+}
+
+.edu-year{
+  font-size:.75rem;
+  color:var(--accent);
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+nav{
+padding:16px 20px;
+}
+
+.score-hero{
+flex-direction:column;
+text-align:center;
+padding:26px 20px;
+}
+
+.info-grid{
+grid-template-columns:1fr;
+}
+
+}
+
+</style>
+</head>
+<script>
+(async function premiumGuard() {
+  const API   = "http://localhost:5000/api";
+  const email = localStorage.getItem("prepwise_email");
+
+  // No email stored — not logged in
+  if (!email) {
+    window.location.href = "payment.html";
+    return;
+  }
+
+  try {
+    const res  = await fetch(API + "/check-premium?email=" + encodeURIComponent(email));
+    const data = await res.json();
+
+    if (!data.verified) {
+      window.location.href = "payment.html";
+    }
+    // if verified — do nothing, page loads normally
+
+  } catch (err) {
+    // If backend is down, allow access (fail open)
+    console.warn("Premium check failed:", err.message);
+  }
+})();
+</script>
+
+<nav>
+  <div class="nav-logo">Nex<span>ora</span></div>
+  <a href="index.html" class="nav-back">← Back to Home</a>
+</nav>
+
+<div class="page-wrap">
+  <div style="margin-bottom:48px">
+    <span class="text-label">AI Tool</span>
+    <h1 style="margin-top:10px;font-size:clamp(2rem,4vw,3rem)">
+      Resume <em style="font-style:italic;color:var(--gold-full)">Analyzer</em>
+    </h1>
+    <p style="color:var(--text-muted);margin-top:10px;font-size:0.9rem">
+      Upload your PDF resume and get a full AI-powered breakdown in seconds.
+    </p>
+  </div>
+
+  <!-- ══ UPLOAD SECTION ══ -->
+  <div id="upload-section">
+    <div class="upload-zone" id="upload-zone"
+      ondragover="onDragOver(event)"
+      ondragleave="onDragLeave(event)"
+      ondrop="onDrop(event)">
+      <input type="file" id="resume-input" accept=".pdf"
+        onchange="onFileSelect(event)"/>
+      <span class="upload-icon">📄</span>
+      <h3>Drop your resume here</h3>
+      <p>PDF only · Max 5MB · Click or drag to upload</p>
+    </div>
+
+    <div class="file-selected" id="file-selected">
+      <span>📎</span>
+      <span class="file-name" id="file-name-display">—</span>
+      <span class="file-size" id="file-size-display">—</span>
+      <button class="btn btn--ghost btn--sm" onclick="clearFile()">Remove</button>
+    </div>
+
+    <button class="btn btn--primary btn--lg"
+      style="width:100%;margin-top:20px"
+      id="analyze-btn"
+      onclick="analyzeResume()"
+      disabled>
+      Analyze Resume →
+    </button>
+  </div>
+
+  <!-- ══ LOADER ══ -->
+  <div class="loader" id="loader">
+    <div class="spinner"></div>
+    <p style="color:var(--text-primary)">Analyzing your resume with AI...</p>
+    <p style="font-size:0.8rem;color:var(--text-muted)">This may take 10–15 seconds</p>
+  </div>
+
+  <!-- ══ RESULTS ══ -->
+  <div class="results" id="results">
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px">
+      <h3>Analysis Complete</h3>
+      <button class="btn btn--ghost btn--sm" onclick="resetAnalyzer()">Analyze Another</button>
+    </div>
+
+    <!-- Score Hero -->
+    <div class="score-hero">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 110 110">
+          <circle class="sr-bg"   cx="55" cy="55" r="45"/>
+          <circle class="sr-fill" id="sr-fill" cx="55" cy="55" r="45"/>
+        </svg>
+        <div class="sr-center">
+          <div class="sr-num" id="sr-num">—</div>
+          <div class="sr-den">/10</div>
+        </div>
+      </div>
+      <div class="score-info">
+        <h2 id="candidate-name">—</h2>
+        <p style="color:var(--text-muted);font-size:0.9rem" id="candidate-summary">—</p>
+        <div class="score-meta">
+          <span class="badge badge--gold" id="exp-badge"></span>
+          <span class="badge"             id="loc-badge"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact + Languages -->
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card-title">Contact Info</div>
+        <div class="info-row"><span>Email</span>   <span id="r-email">—</span></div>
+        <div class="info-row"><span>Phone</span>   <span id="r-phone">—</span></div>
+        <div class="info-row"><span>Location</span><span id="r-location">—</span></div>
+        <div class="info-row"><span>Experience</span><span id="r-exp">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Languages & Certifications</div>
+        <div style="margin-bottom:14px;position:relative;z-index:1">
+          <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:8px">Languages</div>
+          <div class="tags" id="r-languages"></div>
+        </div>
+        <div style="position:relative;z-index:1">
+          <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:8px">Certifications</div>
+          <div class="tags" id="r-certs"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skills -->
+    <div class="info-card" style="margin-bottom:20px">
+      <div class="info-card-title">Skills</div>
+      <div class="tags" id="r-skills"></div>
+    </div>
+
+    <!-- Strengths + Improvements -->
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card-title">Strengths</div>
+        <ul class="check-list" id="r-strengths"></ul>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Areas to Improve</div>
+        <ul class="check-list warn-list" id="r-improvements"></ul>
+      </div>
+    </div>
+
+    <!-- Experience -->
+    <div class="info-card" style="margin-top:20px;margin-bottom:20px">
+      <div class="info-card-title">Experience</div>
+      <div id="r-experience"></div>
+    </div>
+
+    <!-- Education -->
+    <div class="info-card">
+      <div class="info-card-title">Education</div>
+      <div id="r-education"></div>
+    </div>
+
+  </div><!-- end results -->
+</div><!-- end page-wrap -->
+
+<script>
+const API = "http://localhost:5000/api";
+let selectedFile = null;
+
+/* ── DRAG & DROP ── */
+function onDragOver(e) {
+  e.preventDefault();
+  document.getElementById("upload-zone").classList.add("drag-over");
+}
+function onDragLeave() {
+  document.getElementById("upload-zone").classList.remove("drag-over");
+}
+function onDrop(e) {
+  e.preventDefault();
+  document.getElementById("upload-zone").classList.remove("drag-over");
+  const file = e.dataTransfer.files[0];
+  if (file) setFile(file);
+}
+function onFileSelect(e) {
+  const file = e.target.files[0];
+  if (file) setFile(file);
+}
+
+function setFile(file) {
+  if (!file.name.toLowerCase().endsWith(".pdf")) {
+    alert("Please upload a PDF file only.");
+    return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    alert("File too large. Maximum size is 5MB.");
+    return;
+  }
+  selectedFile = file;
+  document.getElementById("file-name-display").textContent = file.name;
+  document.getElementById("file-size-display").textContent =
+    (file.size / 1024).toFixed(1) + " KB";
+  document.getElementById("file-selected").classList.add("show");
+  document.getElementById("analyze-btn").disabled = false;
+}
+
+function clearFile() {
+  selectedFile = null;
+  document.getElementById("resume-input").value  = "";
+  document.getElementById("file-selected").classList.remove("show");
+  document.getElementById("analyze-btn").disabled = true;
+}
+
+/* ── ANALYZE ── */
+async function analyzeResume() {
+  if (!selectedFile) {
+    alert("Please select a PDF file first.");
+    return;
+  }
+
+  // Show loader, hide everything else
+  document.getElementById("upload-section").style.display = "none";
+  document.getElementById("loader").classList.add("show");
+  document.getElementById("results").classList.remove("show");
+
+  const formData = new FormData();
+  formData.append("resume", selectedFile); // "resume" must match backend multer field name
+
+  try {
+    const res = await fetch(API + "/analyze-resume", {
+      method: "POST",
+      body:   formData,
+      // ← NO Content-Type header — browser sets it automatically with boundary
+    });
+
+    const data = await res.json();
+    if (!data.success) throw new Error(data.message);
+
+    document.getElementById("loader").classList.remove("show");
+    document.getElementById("results").classList.add("show");
+    renderResults(data.resumeSummary);
+
+  } catch (err) {
+    document.getElementById("loader").classList.remove("show");
+    document.getElementById("upload-section").style.display = "block";
+    alert("Analysis failed: " + err.message);
+  }
+}
+
+/* ── RENDER RESULTS ── */
+function renderResults(r) {
+  // Score ring animation (r=45 → circumference=282.74)
+  const score  = parseFloat(r.overallScore) || 0;
+  const circ   = 2 * Math.PI * 45;
+  const offset = circ - (score / 10) * circ;
+  document.getElementById("sr-num").textContent = score;
+  setTimeout(() => {
+    document.getElementById("sr-fill").style.strokeDashoffset = offset;
+  }, 120);
+
+  // Hero
+  document.getElementById("candidate-name").textContent    = r.name    || "Candidate";
+  document.getElementById("candidate-summary").textContent = r.summary || "";
+  document.getElementById("r-exp").textContent =
+    r.totalExperienceYears ? r.totalExperienceYears + " years" : "—";
+
+  const expBadge = document.getElementById("exp-badge");
+  const locBadge = document.getElementById("loc-badge");
+  expBadge.textContent = r.totalExperienceYears ? r.totalExperienceYears + " yrs exp" : "";
+  locBadge.textContent = r.location || "";
+
+  // Contact
+  document.getElementById("r-email").textContent    = r.email    || "—";
+  document.getElementById("r-phone").textContent    = r.phone    || "—";
+  document.getElementById("r-location").textContent = r.location || "—";
+
+  // Languages
+  document.getElementById("r-languages").innerHTML =
+    (r.languages && r.languages.length)
+      ? r.languages.map(l => `<span class="tag">${safe(l)}</span>`).join("")
+      : "<span style='color:var(--text-muted);font-size:0.8rem'>—</span>";
+
+  // Certifications
+  document.getElementById("r-certs").innerHTML =
+    (r.certifications && r.certifications.length)
+      ? r.certifications.map(c => `<span class="tag">${safe(c)}</span>`).join("")
+      : "<span style='color:var(--text-muted);font-size:0.8rem'>None listed</span>";
+
+  // Skills
+  document.getElementById("r-skills").innerHTML =
+    (r.skills && r.skills.length)
+      ? r.skills.map(s => `<span class="tag">${safe(s)}</span>`).join("")
+      : "<span style='color:var(--text-muted);font-size:0.8rem'>—</span>";
+
+  // Strengths
+  document.getElementById("r-strengths").innerHTML =
+    (r.strengths && r.strengths.length)
+      ? r.strengths.map(s => `<li>${safe(s)}</li>`).join("")
+      : "<li>—</li>";
+
+  // Improvements
+  document.getElementById("r-improvements").innerHTML =
+    (r.improvements && r.improvements.length)
+      ? r.improvements.map(s => `<li>${safe(s)}</li>`).join("")
+      : "<li>—</li>";
+
+  // Experience
+  document.getElementById("r-experience").innerHTML =
+    (r.experience && r.experience.length)
+      ? r.experience.map(e => `
+          <div class="exp-item">
+            <div class="exp-role">${safe(e.role || "")}</div>
+            <div class="exp-company">${safe(e.company || "")}</div>
+            <div class="exp-duration">${safe(e.duration || "")}</div>
+            ${e.highlights && e.highlights.length ? `
+              <ul class="exp-highlights">
+                ${e.highlights.slice(0,3).map(h => `<li>${safe(h)}</li>`).join("")}
+              </ul>` : ""}
+          </div>`
+        ).join("")
+      : "<p style='color:var(--text-muted);font-size:0.85rem'>No experience found</p>";
+
+  // Education
+  document.getElementById("r-education").innerHTML =
+    (r.education && r.education.length)
+      ? r.education.map(e => `
+          <div class="edu-item">
+            <div class="edu-degree">${safe(e.degree || "")}</div>
+            <div class="edu-inst">${safe(e.institution || "")}</div>
+            <div class="edu-year">${safe(e.year || "")}</div>
+          </div>`
+        ).join("")
+      : "<p style='color:var(--text-muted);font-size:0.85rem'>No education found</p>";
+}
+
+/* ── RESET ── */
+function resetAnalyzer() {
+  selectedFile = null;
+  document.getElementById("resume-input").value = "";
+  document.getElementById("file-selected").classList.remove("show");
+  document.getElementById("analyze-btn").disabled = true;
+  document.getElementById("results").classList.remove("show");
+  document.getElementById("upload-section").style.display = "block";
+}
+
+/* ── HELPER ── */
+function safe(s) {
+  return String(s || "")
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+</script>
+
+</body>
+</html>
