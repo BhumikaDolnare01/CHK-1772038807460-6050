@@ -5,237 +5,311 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SkillX • My Profile</title>
 
-<style>
-
-/* ================= THEME ================= */
-
-:root{
-  --deep-black:#0a0a0a;
-  --dark-gray:#111111;
-  --medium-dark:#1a1a1a;
-  --warm-dark:#2a2520;
-
-  --warm-white:#f5f0e8;
-  --muted-tan:#8a8578;
-  --warm-cream:#d4c9a8;
-
-  --gold-glow:rgba(201,168,76,0.3);
-  --gold-dust:rgba(201,168,76,0.8);
-  --spotlight:rgba(201,168,76,0.08);
+<style>:root{
+--bg:#EAEFEF;
+--card:#ffffff;
+--border:#BFC9D1;
+--text:#25343F;
+--accent:#FF9B51;
+--muted:#6b7780;
 }
 
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Arial, sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
 
 body{
-  background: radial-gradient(circle at center, var(--spotlight), transparent 70%), var(--deep-black);
-  color:var(--warm-white);
-  padding:50px 80px;
+background:var(--bg);
+color:var(--text);
+padding:40px 60px;
+min-height:100vh;
 }
 
-/* ================= GRID LAYOUT ================= */
+/* Layout */
 
 .grid-2{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:60px;
-  margin-bottom:60px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:40px;
+margin-bottom:40px;
 }
 
 @media(max-width:900px){
-  .grid-2{
-    grid-template-columns:1fr;
-  }
+.grid-2{grid-template-columns:1fr;}
+body{padding:25px;}
 }
 
-/* ================= NAV ================= */
+/* Nav */
 
 .nav{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:60px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:40px;
 }
 
 .nav a{
-  text-decoration:none;
-  color:var(--muted-tan);
-  margin-left:25px;
-  font-size:14px;
+text-decoration:none;
+color:var(--muted);
+margin-left:20px;
+font-size:14px;
 }
 
 .nav a:hover{
-  color:var(--warm-white);
+color:var(--text);
 }
 
-/* ================= PROFILE HEADER ================= */
+/* Profile header */
 
 .profile-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:70px;
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+margin-bottom:50px;
+gap:20px;
+flex-wrap:wrap;
 }
 
 .profile-left{
-  display:flex;
-  align-items:center;
-  gap:25px;
+display:flex;
+align-items:center;
+gap:20px;
 }
 
+/* Avatar */
+
 .avatar{
-  width:110px;
-  height:110px;
-  border-radius:50%;
-  background:linear-gradient(135deg,var(--gold-dust),transparent);
-  padding:3px;
-  cursor:pointer;
+width:90px;
+height:90px;
+border-radius:50%;
+border:2px solid var(--border);
+cursor:pointer;
+overflow:hidden;
+background:#f4f6f7;
 }
 
 .avatar-inner{
-  width:100%;
-  height:100%;
-  border-radius:50%;
-  background:var(--dark-gray);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
+width:100%;
+height:100%;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 
-.avatar img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  border-radius:50%;
-  display:none;
+.avatar-inner img{
+width:100%;
+height:100%;
+object-fit:cover;
+border-radius:50%;
+display:none;
+}
+
+/* Pills */
+
+.info-pills{
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+margin-top:8px;
+}
+
+.info-pill{
+background:#f4f6f7;
+border:1px solid var(--border);
+padding:4px 10px;
+border-radius:12px;
+font-size:12px;
+color:var(--muted);
 }
 
 .badge{
-  font-size:14px;
-  color:var(--gold-dust);
-  margin-top:6px;
+font-size:13px;
+color:var(--accent);
+margin-top:6px;
 }
 
-/* ================= SECTIONS ================= */
+/* Sections */
 
 .section{
-  padding-bottom:30px;
-  border-bottom:1px solid var(--warm-dark);
+background:var(--card);
+border:1px solid var(--border);
+border-radius:8px;
+padding:20px;
 }
 
 .section h2{
-  margin-bottom:15px;
-  color:var(--warm-cream);
+margin-bottom:12px;
+font-size:18px;
 }
 
-/* ================= TAGS ================= */
+/* Tags */
 
 .tags{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-bottom:10px;
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+margin-bottom:10px;
 }
 
 .tag{
-  background:var(--medium-dark);
-  padding:6px 14px;
-  border-radius:20px;
-  border:1px solid var(--warm-dark);
-  font-size:13px;
-  cursor:pointer;
+background:#f4f6f7;
+padding:5px 12px;
+border-radius:16px;
+border:1px solid var(--border);
+font-size:13px;
 }
 
-.tag:hover{
-  border-color:var(--gold-dust);
+.tag-empty{
+color:var(--muted);
+font-size:13px;
+font-style:italic;
 }
 
-/* ================= INPUT ================= */
+/* Inputs */
 
-input{
-  background:var(--dark-gray);
-  border:1px solid var(--warm-dark);
-  padding:6px 12px;
-  border-radius:20px;
-  color:var(--warm-white);
-  outline:none;
+input[type=text],
+input[type=tel]{
+background:white;
+border:1px solid var(--border);
+padding:6px 10px;
+border-radius:6px;
+font-size:13px;
+outline:none;
 }
 
-/* ================= DAYS ================= */
+input:focus{
+border-color:var(--accent);
+}
+
+/* Days */
 
 .days{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
+display:flex;
+gap:8px;
+flex-wrap:wrap;
 }
 
 .day{
-  padding:6px 14px;
-  border-radius:20px;
-  border:1px solid var(--warm-dark);
-  cursor:pointer;
-  font-size:13px;
+padding:5px 12px;
+border-radius:16px;
+border:1px solid var(--border);
+cursor:pointer;
+font-size:13px;
+background:#f4f6f7;
 }
 
 .day.active{
-  background:var(--gold-dust);
-  color:black;
+background:var(--accent);
+color:white;
+border-color:var(--accent);
 }
 
-/* ================= BUTTON ================= */
+/* Buttons */
 
 button{
-  background:none;
-  border:1px solid var(--warm-dark);
-  color:var(--warm-cream);
-  padding:8px 18px;
-  border-radius:20px;
-  cursor:pointer;
-  margin-top:15px;
+background:var(--accent);
+border:none;
+color:white;
+padding:8px 16px;
+border-radius:6px;
+cursor:pointer;
+margin-top:12px;
+font-size:13px;
 }
 
 button:hover{
-  border-color:var(--gold-dust);
-  box-shadow:0 0 10px var(--gold-glow);
+opacity:0.9;
 }
+
+/* Stats */
 
 .stats{
-  color:var(--muted-tan);
-  font-size:14px;
-  line-height:1.8;
+color:var(--muted);
+font-size:14px;
+line-height:1.8;
 }
 
+.stats span{
+color:var(--text);
+font-weight:600;
+}
+
+/* Progress */
+
 .progress{
-  height:6px;
-  background:var(--medium-dark);
-  border-radius:5px;
-  margin-top:8px;
-  overflow:hidden;
+height:6px;
+background:#e4e8ea;
+border-radius:4px;
+margin-top:8px;
+overflow:hidden;
 }
 
 .progress-bar{
-  height:100%;
-  width:60%;
-  background:var(--gold-dust);
+height:100%;
+background:var(--accent);
 }
 
+/* Bio */
+
+.bio-box{
+background:#f7f9fa;
+border:1px solid var(--border);
+border-radius:6px;
+padding:12px;
+font-size:13px;
+color:var(--muted);
+line-height:1.6;
+margin-bottom:10px;
+}
+
+/* Loader */
+
+#loadingOverlay{
+position:fixed;
+inset:0;
+background:white;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:999;
+transition:opacity .4s;
+}
+
+#loadingOverlay.hidden{
+opacity:0;
+pointer-events:none;
+}
+
+.spinner{
+width:30px;
+height:30px;
+border:3px solid var(--border);
+border-top-color:var(--accent);
+border-radius:50%;
+animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+to{transform:rotate(360deg);}
+}
 </style>
 </head>
 <body>
+
+<!-- Loading -->
+<div id="loadingOverlay"><div class="spinner"></div></div>
 
 <!-- NAV -->
 <div class="nav">
   <div><b style="color:var(--warm-cream)">SkillX</b></div>
   <div>
-    <a href="dashboard.html">Dashboard</a>
+    <a href="../public/dashboard.html">Dashboard</a>
     <a href="leader.html">Leaderboard</a>
     <a href="wallet.html">Wallet</a>
-    <!-- <a href="analytics.html">Analytics</a> -->
+    <a href="analytics.html">Analytics</a>
   </div>
 </div>
 
@@ -243,29 +317,29 @@ button:hover{
 <div class="profile-top">
   <div class="profile-left">
 
-    <div class="avatar" onclick="document.getElementById('photoInput').click()">
+    <div class="avatar" onclick="document.getElementById('photoInput').click()" title="Change photo">
       <div class="avatar-inner">
-        <img id="profileImage">
+        <img id="profileImage" alt="Profile Photo">
         <svg id="defaultIcon" width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="#d4c9a8" stroke-width="1.5">
           <path d="M12 2L15 8L22 9L17 14L18 21L12 18L6 21L7 14L2 9L9 8L12 2Z"/>
         </svg>
       </div>
     </div>
-
     <input type="file" id="photoInput" accept="image/*" hidden>
 
     <div>
-      <h1>Amruta V</h1>
-      <div id="verifiedBadge" class="badge" style="display:none;">
-        ✔ Verified Premium Mentor
-      </div>
+      <h1 id="profileName" style="font-size:24px;">—</h1>
+      <p id="profileEmail" style="color:#8a8578;font-size:13px;margin-top:3px;"></p>
+      <div id="profileUsername" style="color:var(--gold-dust);font-size:13px;margin-top:2px;"></div>
+
+      <div class="info-pills" id="infoPills"></div>
+
+      <div id="verifiedBadge" class="badge" style="display:none;">✔ Verified Premium Mentor</div>
     </div>
 
   </div>
 
-  <button onclick="window.location.href='premium.html'">
-    Upgrade to Premium
-  </button>
+  <button onclick="window.location.href='premium.html'">Upgrade to Premium</button>
 </div>
 
 <!-- ROW 1 -->
@@ -274,31 +348,24 @@ button:hover{
   <div class="section">
     <h2>Performance</h2>
     <div class="stats">
-      XP: <span id="xpValue">1240</span><br>
-      Monthly Points: 320<br>
-      Credits Balance: <span id="creditsValue">18</span><br>
-      Current Streak: 5 Days
+      XP: <span id="xpValue">—</span><br>
+      Monthly Points: <span id="monthlyPoints">320</span><br>
+      Credits Balance: <span id="creditsValue">—</span><br>
+      Current Streak: <span id="streakValue">—</span> Days
     </div>
-
     <div class="progress">
-      <div class="progress-bar"></div>
+      <div class="progress-bar" id="xpBar" style="width:0%"></div>
     </div>
-
-    <button onclick="window.location.href='leader.html'">
-      View Leaderboard
-    </button>
+    <button onclick="window.location.href='leader.html'">View Leaderboard</button>
   </div>
 
   <div class="section">
     <h2>My Sessions</h2>
     <div class="stats">
-      Upcoming: <span id="upcomingCount">0</span><br>
-      Completed: <span id="completedCount">0</span>
+      Upcoming: <span id="upcomingCount">—</span><br>
+      Completed: <span id="completedCount">—</span>
     </div>
-
-    <button onclick="window.location.href='sessions.html'">
-      View All Sessions
-    </button>
+    <button onclick="window.location.href='sessions.html'">View All Sessions</button>
   </div>
 
 </div>
@@ -307,15 +374,22 @@ button:hover{
 <div class="grid-2">
 
   <div class="section">
-    <h2>Skills I Teach</h2>
+    <h2>Bio</h2>
+    <div class="bio-box" id="bioBox" style="display:none;"></div>
+
+    <h2 style="margin-top:20px;">Skills I Teach</h2>
     <div class="tags" id="teachTags"></div>
-    <input type="text" id="teachInput" placeholder="Add skill & press Enter">
+    <div style="display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap;">
+      <input type="text" id="teachInput" placeholder="Add skill & press Enter">
+    </div>
   </div>
 
   <div class="section">
-    <h2>Skills I’m Learning</h2>
+    <h2>Skills I'm Learning</h2>
     <div class="tags" id="learnTags"></div>
-    <input type="text" id="learnInput" placeholder="Add skill & press Enter">
+
+    <h2 style="margin-top:20px;">Experience</h2>
+    <div class="stats" id="expBox"></div>
   </div>
 
 </div>
@@ -325,7 +399,7 @@ button:hover{
 
   <div class="section">
     <h2>Availability</h2>
-    <div class="days">
+    <div class="days" id="daysContainer">
       <div class="day">Mon</div>
       <div class="day">Tue</div>
       <div class="day">Wed</div>
@@ -340,143 +414,246 @@ button:hover{
     <h2>Lecture History</h2>
     <div class="stats">
       Taught: <span id="taughtCount">0</span><br>
-      Attended: <span id="attendedCount">0</span>
+      Attended: <span id="attendedCount">—</span>
     </div>
-
-    <button onclick="window.location.href='lectures.html'">
-      View Full History
-    </button>
+    <button onclick="window.location.href='lectures.html'">View Full History</button>
   </div>
 
 </div>
 
 <script>
+const BASE_URL = "http://localhost:5000";
 
-/* PREMIUM */
-let isPremiumUser = localStorage.getItem("isPremiumUser") === "true";
-if(isPremiumUser){
-  document.getElementById("verifiedBadge").style.display="block";
+// Interest label map
+const interestMap = {
+  dsa: "DSA & Coding",
+  web: "Web Development",
+  ml: "Machine Learning",
+  mobile: "Mobile Development",
+  design: "UI/UX Design",
+  devops: "DevOps & Cloud",
+  other: "Other"
+};
+
+function setProfileImage(src) {
+  if (!src) return;
+  const img = document.getElementById("profileImage");
+  const icon = document.getElementById("defaultIcon");
+  img.src = src;
+  img.style.display = "block";
+  icon.style.display = "none";
 }
 
-/* PROFILE IMAGE */
-const photoInput = document.getElementById("photoInput");
+function renderTags(containerId, items) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
+  if (!items || items.length === 0) {
+    container.innerHTML = '<span class="tag-empty">None added yet</span>';
+    return;
+  }
+  items.forEach(skill => {
+    const t = document.createElement("div");
+    t.className = "tag";
+    t.textContent = skill.trim();
+    container.appendChild(t);
+  });
+}
+
+async function loadProfile() {
+  const token     = localStorage.getItem("token");
+  const userEmail = localStorage.getItem("userEmail");
+
+  if (!token && !userEmail) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  try {
+    let userData;
+
+    if (token) {
+      const res = await fetch(`${BASE_URL}/me`, {
+        headers: { "Authorization": token }
+      });
+      userData = await res.json();
+    } else {
+      const res = await fetch(`${BASE_URL}/profile/${userEmail}`);
+      userData = await res.json();
+    }
+
+    if (!userData || userData.message === "User not found") {
+      console.error("User not found");
+      hideLoader();
+      return;
+    }
+
+    document.getElementById("profileName").textContent = userData.name || "User";
+
+    if (userData.username) {
+      document.getElementById("profileUsername").textContent = "@" + userData.username;
+    }
+
+    document.getElementById("profileEmail").textContent = userData.email || "";
+
+    const pills = document.getElementById("infoPills");
+    pills.innerHTML = "";
+    if (userData.location) {
+      pills.innerHTML += `<span class="info-pill">📍 ${userData.location}</span>`;
+    }
+    if (userData.role) {
+      pills.innerHTML += `<span class="info-pill">💼 ${userData.role}</span>`;
+    }
+    if (userData.company) {
+      pills.innerHTML += `<span class="info-pill">🏢 ${userData.company}</span>`;
+    }
+    if (userData.phone) {
+      pills.innerHTML += `<span class="info-pill">📞 ${userData.phone}</span>`;
+    }
+
+    if (userData.bio) {
+      const bioBox = document.getElementById("bioBox");
+      bioBox.textContent = userData.bio;
+      bioBox.style.display = "block";
+    }
+
+    const savedImage = localStorage.getItem("profileImage");
+    if (savedImage) {
+      setProfileImage(savedImage);
+    } else if (userData.photoURL) {
+      setProfileImage(userData.photoURL);
+    }
+
+    const xp = userData.xp ?? 0;
+    document.getElementById("xpValue").textContent    = xp;
+    document.getElementById("creditsValue").textContent = userData.credits ?? 0;
+    document.getElementById("streakValue").textContent  = userData.streak ?? 0;
+    // XP bar: assume 2000 XP = 100%
+    document.getElementById("xpBar").style.width = Math.min((xp / 2000) * 100, 100) + "%";
+
+    if (userData.skills) {
+      const skillsArr = userData.skills.split(",").map(s => s.trim()).filter(Boolean);
+      renderTags("teachTags", skillsArr);
+      // Save for add-tag feature
+      window._teachSkills = skillsArr;
+    } else {
+      renderTags("teachTags", []);
+      window._teachSkills = [];
+    }
+
+    if (userData.interests) {
+      const label = interestMap[userData.interests] || userData.interests;
+      renderTags("learnTags", [label]);
+    } else {
+      renderTags("learnTags", []);
+    }
+
+    const expBox = document.getElementById("expBox");
+    let expHTML = "";
+    if (userData.experience) expHTML += `Experience: <span>${userData.experience} yrs</span><br>`;
+    if (userData.role)       expHTML += `Role: <span>${userData.role}</span><br>`;
+    if (userData.company)    expHTML += `Company: <span>${userData.company}</span><br>`;
+    expBox.innerHTML = expHTML || '<span style="font-style:italic;">Not filled yet</span>';
+
+    if (token) {
+      try {
+        const sessRes  = await fetch(`${BASE_URL}/sessions/my`, {
+          headers: { "Authorization": token }
+        });
+        const sessions = await sessRes.json();
+        const now      = new Date();
+        const upcoming  = sessions.filter(s => new Date(s.sessionDT) > now).length;
+        const completed = sessions.filter(s => new Date(s.sessionDT) <= now).length;
+
+        document.getElementById("upcomingCount").textContent  = upcoming;
+        document.getElementById("completedCount").textContent = completed;
+        document.getElementById("attendedCount").textContent  = completed;
+      } catch(e) {
+        console.warn("Sessions fetch failed:", e);
+      }
+    }
+
+  } catch (err) {
+    console.error("Failed to load profile:", err);
+  } finally {
+    hideLoader();
+  }
+}
+
+function hideLoader() {
+  const overlay = document.getElementById("loadingOverlay");
+  overlay.classList.add("hidden");
+  setTimeout(() => overlay.remove(), 500);
+}
+
+document.getElementById("teachInput").addEventListener("keydown", async function(e) {
+  if (e.key !== "Enter") return;
+  const val = this.value.trim();
+  if (!val) return;
+
+  window._teachSkills = window._teachSkills || [];
+  if (window._teachSkills.includes(val)) {
+    this.value = "";
+    return;
+  }
+  window._teachSkills.push(val);
+  renderTags("teachTags", window._teachSkills);
+  this.value = "";
+
+  // Save to backend
+  const token = localStorage.getItem("token");
+  const email = localStorage.getItem("userEmail");
+  if (token || email) {
+    try {
+      await fetch(`${BASE_URL}/complete-profile`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { "Authorization": token } : {})
+        },
+        body: JSON.stringify({
+          email:  email,
+          skills: window._teachSkills.join(", ")
+        })
+      });
+    } catch(err) {
+      console.warn("Could not save skill:", err);
+    }
+  }
+});
+
+const photoInput   = document.getElementById("photoInput");
 const profileImage = document.getElementById("profileImage");
-const defaultIcon = document.getElementById("defaultIcon");
+const defaultIcon  = document.getElementById("defaultIcon");
 
-let savedImage = localStorage.getItem("profileImage");
-if(savedImage){
-  profileImage.src = savedImage;
-  profileImage.style.display="block";
-  defaultIcon.style.display="none";
-}
-
-photoInput.addEventListener("change", function(){
+photoInput.addEventListener("change", function() {
   const file = this.files[0];
-  if(file){
-    const reader = new FileReader();
-    reader.onload = function(e){
-      profileImage.src = e.target.result;
-      profileImage.style.display="block";
-      defaultIcon.style.display="none";
-      localStorage.setItem("profileImage", e.target.result);
-    }
-    reader.readAsDataURL(file);
-  }
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    setProfileImage(e.target.result);
+    localStorage.setItem("profileImage", e.target.result);
+  };
+  reader.readAsDataURL(file);
 });
 
-/* SKILLS */
-let teachSkills = JSON.parse(localStorage.getItem("teachSkills")) || [];
-let learnSkills = JSON.parse(localStorage.getItem("learnSkills")) || [];
-
-function renderSkills(){
-  teachTags.innerHTML="";
-  learnTags.innerHTML="";
-
-  teachSkills.forEach((s,i)=>{
-    let tag=document.createElement("div");
-    tag.className="tag";
-    tag.innerText=s;
-    tag.onclick=function(){
-      teachSkills.splice(i,1);
-      saveSkills();
-    }
-    teachTags.appendChild(tag);
-  });
-
-  learnSkills.forEach((s,i)=>{
-    let tag=document.createElement("div");
-    tag.className="tag";
-    tag.innerText=s;
-    tag.onclick=function(){
-      learnSkills.splice(i,1);
-      saveSkills();
-    }
-    learnTags.appendChild(tag);
-  });
-}
-
-function saveSkills(){
-  localStorage.setItem("teachSkills",JSON.stringify(teachSkills));
-  localStorage.setItem("learnSkills",JSON.stringify(learnSkills));
-  renderSkills();
-}
-
-teachInput.addEventListener("keypress",function(e){
-  if(e.key==="Enter" && this.value.trim()!==""){
-    teachSkills.push(this.value.trim());
-    this.value="";
-    saveSkills();
-  }
-});
-
-learnInput.addEventListener("keypress",function(e){
-  if(e.key==="Enter" && this.value.trim()!==""){
-    learnSkills.push(this.value.trim());
-    this.value="";
-    saveSkills();
-  }
-});
-
-renderSkills();
-
-/* AVAILABILITY */
-let savedDays = JSON.parse(localStorage.getItem("availabilityDays")) || [];
-document.querySelectorAll(".day").forEach(day=>{
-  if(savedDays.includes(day.innerText)){
-    day.classList.add("active");
-  }
-
-  day.addEventListener("click",function(){
+let savedDays = JSON.parse(localStorage.getItem("availabilityDays") || "[]");
+document.querySelectorAll(".day").forEach(day => {
+  if (savedDays.includes(day.innerText)) day.classList.add("active");
+  day.addEventListener("click", function() {
     this.classList.toggle("active");
-    let dayName=this.innerText;
-
-    if(savedDays.includes(dayName)){
-      savedDays=savedDays.filter(d=>d!==dayName);
-    }else{
-      savedDays.push(dayName);
-    }
-
-    localStorage.setItem("availabilityDays",JSON.stringify(savedDays));
+    const dayName = this.innerText;
+    savedDays = savedDays.includes(dayName)
+      ? savedDays.filter(d => d !== dayName)
+      : [...savedDays, dayName];
+    localStorage.setItem("availabilityDays", JSON.stringify(savedDays));
   });
 });
 
-/* SESSION + LECTURE SUMMARY */
+if (localStorage.getItem("isPremiumUser") === "true") {
+  document.getElementById("verifiedBadge").style.display = "block";
+}
 
-let sessions = JSON.parse(localStorage.getItem("sessionsData")) || [];
-let lectures = JSON.parse(localStorage.getItem("lectureHistory")) || [];
-
-document.getElementById("upcomingCount").innerText =
-  sessions.filter(s=>s.type==="upcoming").length;
-
-document.getElementById("completedCount").innerText =
-  sessions.filter(s=>s.type==="completed").length;
-
-document.getElementById("taughtCount").innerText =
-  lectures.filter(l=>l.role==="taught").length;
-
-document.getElementById("attendedCount").innerText =
-  lectures.filter(l=>l.role==="attended").length;
-
+loadProfile();
 </script>
 
 </body>
