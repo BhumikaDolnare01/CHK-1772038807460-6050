@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexora — AI-Powered Career Platform</title>
+  <link rel="stylesheet" href="theme.css" />
+<style>
+
+:root{
+  --bg-base:#EAEFEF;
+  --bg-surface:#ffffff;
+  --bg-elevated:#f6f8f9;
+  --bg-border:#BFC9D1;
+
+  --text-primary:#25343F;
+  --text-body:#25343F;
+  --text-muted:#6c7a83;
+
+  --accent:#FF9B51;
+
+  --radius-md:10px;
+  --radius-lg:14px;
+  --radius-xl:18px;
+
+  --duration-base:.15s;
+
+  --font-display:Inter,system-ui;
+  --font-body:Inter,system-ui;
+}
+
+/* NAV */
+
+nav{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:100;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:18px 50px;
+
+  background:white;
+  border-bottom:1px solid var(--bg-border);
+}
+
+.nav-logo{
+  font-family:var(--font-display);
+  font-size:1.4rem;
+  color:var(--text-primary);
+}
+
+.nav-logo span{
+  color:var(--accent);
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:30px;
+  list-style:none;
+}
+
+.nav-links a{
+  font-size:.78rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+  text-decoration:none;
+}
+
+.nav-links a:hover{
+  color:var(--text-primary);
+}
+
+/* HERO */
+
+.hero{
+  min-height:100vh;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+
+  padding:120px 24px 80px;
+
+  background:var(--bg-base);
+}
+
+.hero-badge{
+  display:inline-flex;
+
+  padding:6px 14px;
+
+  border-radius:20px;
+
+  border:1px solid var(--bg-border);
+
+  font-size:.72rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+
+  color:var(--accent);
+
+  margin-bottom:28px;
+}
+
+.hero h1{
+  font-size:clamp(2.5rem,6vw,4rem);
+
+  font-weight:500;
+
+  line-height:1.1;
+
+  color:var(--text-primary);
+
+  max-width:820px;
+}
+
+.hero h1 em{
+  color:var(--accent);
+  font-style:normal;
+}
+
+.hero-sub{
+  margin-top:20px;
+
+  font-size:.95rem;
+
+  color:var(--text-muted);
+
+  max-width:520px;
+
+  line-height:1.7;
+}
+
+.hero-actions{
+  display:flex;
+  gap:16px;
+
+  margin-top:36px;
+
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+/* STATS */
+
+.stats{
+  display:flex;
+  justify-content:center;
+  gap:60px;
+
+  padding:50px 24px;
+
+  border-top:1px solid var(--bg-border);
+  border-bottom:1px solid var(--bg-border);
+
+  background:white;
+
+  flex-wrap:wrap;
+}
+
+.stat-item{
+  text-align:center;
+}
+
+.stat-number{
+  font-family:var(--font-display);
+  font-size:2.4rem;
+  color:var(--text-primary);
+}
+
+.stat-number span{
+  color:var(--accent);
+}
+
+.stat-label{
+  font-size:.7rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+  margin-top:6px;
+}
+
+/* FEATURES */
+
+.features{
+  padding:80px 60px;
+
+  max-width:1100px;
+  margin:auto;
+}
+
+.section-header{
+  text-align:center;
+  margin-bottom:50px;
+}
+
+.section-header p{
+  color:var(--text-muted);
+  font-size:.9rem;
+  max-width:480px;
+  margin:auto;
+}
+
+.features-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+}
+
+.feature-card{
+  background:white;
+
+  border:1px solid var(--bg-border);
+
+  border-radius:var(--radius-lg);
+
+  padding:28px;
+
+  transition:.2s;
+}
+
+.feature-card:hover{
+  border-color:var(--accent);
+  transform:translateY(-3px);
+}
+
+.feature-icon{
+  font-size:1.7rem;
+  margin-bottom:14px;
+}
+
+.feature-card h3{
+  font-size:1.1rem;
+  margin-bottom:8px;
+}
+
+.feature-card p{
+  font-size:.85rem;
+  color:var(--text-muted);
+  line-height:1.6;
+}
+
+.feature-link{
+  display:inline-block;
+  margin-top:14px;
+
+  font-size:.75rem;
+  text-transform:uppercase;
+
+  color:var(--accent);
+  text-decoration:none;
+}
+
+/* PRICING */
+
+.pricing-teaser{
+  padding:80px 24px;
+
+  text-align:center;
+
+  background:white;
+
+  border-top:1px solid var(--bg-border);
+}
+
+.price-tag{
+  display:flex;
+  align-items:baseline;
+  justify-content:center;
+
+  gap:6px;
+
+  margin:30px 0;
+}
+
+.price-currency{
+  font-size:1.5rem;
+  color:var(--accent);
+}
+
+.price-amount{
+  font-family:var(--font-display);
+  font-size:4rem;
+  color:var(--text-primary);
+}
+
+.price-period{
+  font-size:.9rem;
+  color:var(--text-muted);
+}
+
+.price-features{
+  list-style:none;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:10px;
+
+  max-width:320px;
+  margin:auto;
+
+  margin-bottom:30px;
+}
+
+.price-features li{
+  font-size:.85rem;
+}
+
+.price-features li::before{
+  content:"• ";
+  color:var(--accent);
+}
+
+/* FOOTER */
+
+footer{
+  background:white;
+
+  border-top:1px solid var(--bg-border);
+
+  padding:36px 60px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  flex-wrap:wrap;
+}
+
+.footer-logo{
+  font-family:var(--font-display);
+  font-size:1.2rem;
+  color:var(--text-muted);
+}
+
+.footer-logo span{
+  color:var(--accent);
+}
+
+footer p{
+  font-size:.75rem;
+  color:var(--text-muted);
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+nav{
+padding:16px 24px;
+}
+
+.nav-links{
+display:none;
+}
+
+.features{
+padding:60px 24px;
+}
+
+.stats{
+gap:30px;
+}
+
+footer{
+padding:30px 24px;
+flex-direction:column;
+text-align:center;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Nex<span>ora</span></div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="quiz.html">Quiz</a></li>
+      <li><a href="resume.html">Resume</a></li>
+      <li><a href="hrchat.html">HR Chat</a></li>
+      <li><a href="payment.html">Pricing</a></li>
+    </ul>
+    <a href="payment.html" class="btn btn--primary btn--sm">Get Access</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">AI-Powered Career Prep</div>
+    <h1>Your Career, <em>Elevated</em><br/>by Intelligence</h1>
+    <p class="hero-sub">
+      Practice interviews with AI, analyze your resume, generate smart quizzes —
+      everything you need to land your dream role.
+    </p>
+    <div class="hero-actions">
+      <a href="payment.html" class="btn btn--primary btn--lg">Start for $9</a>
+      <a href="resume.html" class="btn btn--secondary btn--lg">Analyze Resume</a>
+    </div>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      Scroll
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat-item">
+      <div class="stat-number">10<span>k+</span></div>
+      <div class="stat-label">Resumes Analyzed</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">50<span>k+</span></div>
+      <div class="stat-label">Quizzes Generated</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">94<span>%</span></div>
+      <div class="stat-label">Success Rate</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">$<span>9</span></div>
+      <div class="stat-label">One-Time Access</div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="section-header">
+      <span class="text-label">What You Get</span>
+      <h2 style="margin-top:12px">Four Tools.<br/>One Platform.</h2>
+      <p>Everything built on GPT-4o to give you a real edge in your career.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">🧠</span>
+        <h3>AI Quiz Generator</h3>
+        <p>Generate 10 MCQs on any topic and difficulty. Perfect for certifications, interviews, and self-assessment.</p>
+        <a href="quiz.html" class="feature-link">Try it →</a>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📄</span>
+        <h3>Resume Analyzer</h3>
+        <p>Upload your PDF resume and get a full structured breakdown — skills, gaps, score, and improvement areas.</p>
+        <a href="resume.html" class="feature-link">Analyze →</a>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🎤</span>
+        <h3>HR Interview Chat</h3>
+        <p>Practice with an AI HR interviewer that knows your resume and asks targeted follow-up questions.</p>
+        <a href="hrchat.html" class="feature-link">Practice →</a>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📚</span>
+        <h3>Lecture Quiz</h3>
+        <p>Paste any lecture or study material and instantly generate 5–10 MCQs based strictly on that content.</p>
+        <a href="quiz.html" class="feature-link">Generate →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING TEASER -->
+  <section class="pricing-teaser">
+    <span class="text-label">Simple Pricing</span>
+    <h2 style="margin-top:12px">One Price.<br/>Everything Unlocked.</h2>
+    <div class="price-tag">
+      <span class="price-currency">$</span>
+      <span class="price-amount">9</span>
+      <span class="price-period">/ lifetime</span>
+    </div>
+    <ul class="price-features">
+      <li>Unlimited AI Quiz Generation</li>
+      <li>Resume Analysis with Score</li>
+      <li>Unlimited HR Chat Sessions</li>
+      <li>Lecture-to-Quiz Conversion</li>
+      <li>GPT-4o Powered Responses</li>
+    </ul>
+    <a href="payment.html" class="btn btn--primary btn--lg glow--pulse">Get Lifetime Access</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Prep<span>wise</span></div>
+    <p>© 2026 Prepwise. All rights reserved.</p>
+    <p style="color: var(--text-muted); font-size:0.72rem;">Built with GPT-4o · Razorpay · MongoDB</p>
+  </footer>
+
+</body>
+</html>
