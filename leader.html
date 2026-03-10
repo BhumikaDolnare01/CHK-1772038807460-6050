@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkillX Elite Rankings</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+<style>:root{
+--bg:#EAEFEF;
+--card:#ffffff;
+--border:#BFC9D1;
+--text:#25343F;
+--accent:#FF9B51;
+--muted:#6b7780;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+overflow-x:hidden;
+}
+
+/* particles canvas (keep but subtle) */
+canvas{
+position:fixed;
+top:0;
+left:0;
+pointer-events:none;
+opacity:.15;
+z-index:0;
+}
+
+.container{
+position:relative;
+z-index:2;
+max-width:1000px;
+margin:auto;
+padding:70px 20px;
+}
+
+/* HEADER */
+
+header{
+text-align:center;
+margin-bottom:60px;
+}
+
+h1{
+font-family:'Playfair Display',serif;
+font-size:2.4rem;
+font-weight:800;
+}
+
+.highlight{
+color:var(--accent);
+}
+
+/* Tabs */
+
+.tabs{
+margin-top:25px;
+display:inline-flex;
+background:white;
+border:1px solid var(--border);
+border-radius:25px;
+padding:4px;
+}
+
+.tabs button{
+background:transparent;
+border:none;
+padding:10px 22px;
+border-radius:20px;
+cursor:pointer;
+font-weight:600;
+font-size:13px;
+color:var(--muted);
+}
+
+.tabs button.active{
+background:var(--accent);
+color:white;
+}
+
+/* PODIUM */
+
+.podium{
+display:grid;
+grid-template-columns:1fr 1.3fr 1fr;
+gap:25px;
+align-items:end;
+margin-bottom:50px;
+}
+
+.card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:10px;
+padding:30px 20px;
+text-align:center;
+transition:.2s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+/* Avatar */
+
+.avatar-container{
+margin-bottom:15px;
+}
+
+.avatar-container img{
+border-radius:50%;
+object-fit:cover;
+border:2px solid var(--border);
+}
+
+.rank-1 img{
+width:100px;
+height:100px;
+}
+
+.rank-2 img,
+.rank-3 img{
+width:80px;
+height:80px;
+}
+
+h3{
+font-weight:600;
+margin-bottom:8px;
+font-size:16px;
+}
+
+.pts{
+font-size:1.4rem;
+font-weight:700;
+color:var(--accent);
+}
+
+/* LIST */
+
+.list-container{
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.list-item{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:8px;
+padding:14px 18px;
+display:flex;
+align-items:center;
+}
+
+.list-item:hover{
+background:#f7f9fa;
+}
+
+.number{
+width:50px;
+color:var(--muted);
+font-weight:600;
+}
+
+.small-avatar{
+width:40px;
+height:40px;
+border-radius:50%;
+margin-right:14px;
+border:2px solid var(--border);
+}
+
+.name{
+flex-grow:1;
+color:var(--text);
+font-weight:500;
+}
+
+.points{
+font-weight:700;
+color:var(--accent);
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+.podium{
+grid-template-columns:1fr;
+}
+
+h1{
+font-size:2rem;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="container">
+
+<header>
+<h1>The <span class="highlight">SkillX</span> Circle</h1>
+
+<div class="tabs">
+<button data-type="weekly">Weekly</button>
+<button data-type="monthly" class="active">Monthly</button>
+<button data-type="all">All-Time</button>
+</div>
+</header>
+
+<section class="podium" id="podium"></section>
+<section class="list-container" id="list"></section>
+
+</div>
+
+
+
+<script>
+const API = 'http://localhost:5000';
+const podium = document.getElementById('podium');
+const list = document.getElementById('list');
+const me = JSON.parse(localStorage.getItem('skillx_user') || '{}');
+
+function getAvatar(user, size) {
+  size = size || '80px';
+  if (user.photo) {
+    return '<img src="' + user.photo + '" style="width:' + size + ';height:' + size + ';border-radius:50%;object-fit:cover;border:3px solid var(--warm-cream);">';
+  }
+  const initial = (user.name || 'U').charAt(0).toUpperCase();
+  return '<div style="width:' + size + ';height:' + size + ';border-radius:50%;background:linear-gradient(135deg,#2a2520,#3a3020);border:3px solid var(--warm-cream);display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#c9a84c;margin:auto;">' + initial + '</div>';
+}
+
+function render(users) {
+  podium.innerHTML = '';
+  list.innerHTML = '';
+
+  if (!users || users.length === 0) {
+    podium.innerHTML = '<div style="color:#8a8578;text-align:center;padding:2rem;grid-column:span 3">No users yet — be the first! 🏆</div>';
+    return;
+  }
+
+  const isMe = function(u) { return u.email === me.email; };
+
+  // Top 3 — Podium
+  users.slice(0, 3).forEach(function(u, i) {
+    const card = document.createElement('div');
+    card.className = 'card rank-' + (i + 1);
+    if (isMe(u)) card.style.border = '2px solid #c9a84c';
+    card.innerHTML =
+      '<div class="avatar-container">' + getAvatar(u, i === 0 ? '120px' : '95px') + '</div>' +
+      '<h3>' + u.name + (isMe(u) ? ' ⭐' : '') + '</h3>' +
+      '<div class="pts">' + (u.xp || 0).toLocaleString() + ' XP</div>' +
+      '<div style="font-size:0.8rem;color:#8a8578;margin-top:6px">✦ ' + (u.credits || 0) + ' credits</div>';
+    podium.appendChild(card);
+  });
+
+  // Rest — List
+  users.slice(3).forEach(function(u, i) {
+    const item = document.createElement('div');
+    item.className = 'list-item';
+    if (isMe(u)) item.style.border = '1px solid #c9a84c';
+    item.innerHTML =
+      '<div class="number">#' + (i + 4) + '</div>' +
+      getAvatar(u, '48px') +
+      '<div class="name" style="flex:1;margin-left:12px">' + u.name + (isMe(u) ? ' ⭐ You' : '') + '</div>' +
+      '<div class="points">' + (u.xp || 0).toLocaleString() + ' XP</div>';
+    list.appendChild(item);
+  });
+}
+
+async function loadLeaderboard() {
+  podium.innerHTML = '<div style="color:#8a8578;text-align:center;padding:2rem;grid-column:span 3">Loading...</div>';
+  try {
+    const res = await fetch(API + '/leaderboard');
+    const users = await res.json();
+    render(users);
+  } catch (err) {
+    podium.innerHTML = '<div style="color:#e87070;text-align:center;padding:2rem;grid-column:span 3">Server se connect nahi ho pa raha. Is server running? 🔴</div>';
+  }
+}
+
+loadLeaderboard();
+
+document.querySelectorAll('.tabs button').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tabs button').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    loadLeaderboard();
+  });
+});
+
+/* Gold Dust Particle Effect */
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+for(let i=0;i<80;i++){
+  particles.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*2+1,
+    d:Math.random()*0.5
+  });
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle="rgba(201,168,76,0.6)";
+  particles.forEach(p=>{
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fill();
+  });
+  update();
+}
+
+function update(){
+  particles.forEach(p=>{
+    p.y+=p.d;
+    if(p.y>canvas.height){
+      p.y=0;
+      p.x=Math.random()*canvas.width;
+    }
+  });
+}
+
+setInterval(draw,30);
+</script>
+
+</body>
