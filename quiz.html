@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz Generator — Prepwise</title>
+  <link rel="stylesheet" href="theme.css" />
+  <style>
+
+:root{
+  --bg-base:#EAEFEF;
+  --bg-surface:#ffffff;
+  --bg-elevated:#f7f9fa;
+  --bg-border:#BFC9D1;
+
+  --text-primary:#25343F;
+  --text-body:#25343F;
+  --text-muted:#6c7a83;
+
+  --accent:#FF9B51;
+
+  --radius-sm:6px;
+  --radius-md:10px;
+  --radius-lg:14px;
+  --radius-pill:40px;
+
+  --duration-base:0.15s;
+
+  --font-body:Inter,system-ui;
+  --font-display:Inter,system-ui;
+  --font-mono:monospace;
+}
+
+body{
+  background:var(--bg-base);
+  font-family:var(--font-body);
+  color:var(--text-body);
+}
+
+/* NAV */
+
+nav{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:100;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:18px 50px;
+
+  background:white;
+  border-bottom:1px solid var(--bg-border);
+}
+
+.nav-logo{
+  font-size:1.4rem;
+  font-weight:600;
+  color:var(--text-primary);
+}
+
+.nav-logo span{
+  color:var(--accent);
+}
+
+.nav-back{
+  font-size:0.8rem;
+  text-decoration:none;
+  color:var(--text-muted);
+}
+
+.nav-back:hover{
+  color:var(--text-primary);
+}
+
+/* PAGE */
+
+.page-wrap{
+  min-height:100vh;
+  padding:120px 24px 80px;
+  max-width:860px;
+  margin:auto;
+  background:var(--bg-base);
+}
+
+.page-header h1{
+  font-size:2.4rem;
+}
+
+.page-header p{
+  color:var(--text-muted);
+  margin-top:8px;
+  font-size:0.9rem;
+}
+
+/* TABS */
+
+.tabs{
+  display:flex;
+  gap:6px;
+  background:var(--bg-surface);
+  border:1px solid var(--bg-border);
+  border-radius:var(--radius-md);
+  padding:6px;
+  margin-bottom:30px;
+}
+
+.tab{
+  padding:8px 20px;
+  border:none;
+  background:transparent;
+  border-radius:var(--radius-sm);
+  font-size:0.75rem;
+  cursor:pointer;
+  color:var(--text-muted);
+}
+
+.tab.active{
+  background:white;
+  border:1px solid var(--accent);
+  color:var(--text-primary);
+}
+
+/* FORM */
+
+.quiz-form{
+  background:white;
+  border:1px solid var(--bg-border);
+  border-radius:var(--radius-lg);
+  padding:30px;
+  margin-bottom:40px;
+}
+
+.form-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+  margin-bottom:20px;
+}
+
+.form-group{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.quiz-form textarea{
+  resize:vertical;
+  min-height:140px;
+  margin-bottom:20px;
+}
+
+/* BUTTONS */
+
+.btn{
+  padding:10px 18px;
+  border-radius:8px;
+  border:1px solid var(--bg-border);
+  font-size:0.85rem;
+  cursor:pointer;
+  background:white;
+}
+
+.btn--primary{
+  background:var(--accent);
+  color:white;
+  border:none;
+}
+
+.btn--secondary{
+  background:white;
+}
+
+.btn--ghost{
+  background:transparent;
+}
+
+/* LOADER */
+
+.loader{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  gap:16px;
+  padding:60px;
+}
+
+.loader.show{
+  display:flex;
+}
+
+.spinner{
+  width:36px;
+  height:36px;
+  border:3px solid var(--bg-border);
+  border-top-color:var(--accent);
+  border-radius:50%;
+  animation:spin 0.7s linear infinite;
+}
+
+@keyframes spin{
+  to{ transform:rotate(360deg); }
+}
+
+/* QUIZ */
+
+.quiz-screen{
+  display:none;
+}
+
+.quiz-screen.show{
+  display:block;
+}
+
+.quiz-topbar{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+
+.q-counter{
+  font-size:0.85rem;
+  color:var(--text-muted);
+}
+
+.live-score{
+  font-size:0.75rem;
+  color:var(--accent);
+}
+
+/* PROGRESS */
+
+.progress-track{
+  height:4px;
+  background:var(--bg-border);
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:24px;
+}
+
+.progress-fill{
+  height:100%;
+  background:var(--accent);
+  width:0%;
+}
+
+/* QUESTION */
+
+.question-card{
+  background:white;
+  border:1px solid var(--bg-border);
+  border-radius:var(--radius-lg);
+  padding:26px;
+  margin-bottom:16px;
+}
+
+.q-number{
+  font-size:0.7rem;
+  color:var(--accent);
+  margin-bottom:10px;
+}
+
+.q-text{
+  font-size:1rem;
+  margin-bottom:20px;
+  line-height:1.6;
+}
+
+/* OPTIONS */
+
+.options-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.opt-btn{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 16px;
+  border:1px solid var(--bg-border);
+  border-radius:var(--radius-md);
+  background:white;
+  cursor:pointer;
+  font-size:0.9rem;
+}
+
+.opt-btn:hover:not([disabled]){
+  border-color:var(--accent);
+  background:#fff7f2;
+}
+
+.opt-key{
+  width:26px;
+  height:26px;
+  border-radius:6px;
+  background:var(--bg-border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:0.75rem;
+}
+
+.opt-text{
+  flex:1;
+}
+
+/* ANSWER STATES */
+
+.opt-btn.is-correct{
+  border-color:#6fb38b;
+  background:#eaf7ef;
+}
+
+.opt-btn.is-wrong{
+  border-color:#c56c6c;
+  background:#f9eaea;
+}
+
+.opt-btn.is-reveal{
+  border-color:#6fb38b;
+  background:#f2faf5;
+}
+
+/* FEEDBACK */
+
+.feedback-strip{
+  display:none;
+  padding:12px 16px;
+  border-radius:var(--radius-md);
+  font-size:0.85rem;
+  margin-bottom:10px;
+}
+
+.feedback-strip.show{
+  display:flex;
+}
+
+.feedback-strip.ok{
+  background:#eaf7ef;
+}
+
+.feedback-strip.fail{
+  background:#f8eaea;
+}
+
+/* SCORE */
+
+.score-screen{
+  display:none;
+}
+
+.score-screen.show{
+  display:block;
+}
+
+.score-card{
+  background:white;
+  border:1px solid var(--bg-border);
+  border-radius:var(--radius-lg);
+  padding:36px;
+  text-align:center;
+  margin-bottom:24px;
+}
+
+.score-ring-wrap{
+  width:120px;
+  height:120px;
+  margin:auto;
+  position:relative;
+}
+
+.score-ring-svg{
+  width:120px;
+  height:120px;
+  transform:rotate(-90deg);
+}
+
+.sr-bg{
+  fill:none;
+  stroke:var(--bg-border);
+  stroke-width:6;
+}
+
+.sr-fill{
+  fill:none;
+  stroke:var(--accent);
+  stroke-width:6;
+  stroke-linecap:round;
+  stroke-dasharray:339.3;
+  stroke-dashoffset:339.3;
+  transition:stroke-dashoffset 1s ease;
+}
+
+.sr-center{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+.sr-pct{
+  font-size:2.2rem;
+  font-weight:600;
+}
+
+.sr-lbl{
+  font-size:0.7rem;
+  color:var(--text-muted);
+}
+
+.stat-strip{
+  display:flex;
+  border:1px solid var(--bg-border);
+  border-radius:var(--radius-md);
+  overflow:hidden;
+  margin:20px 0;
+}
+
+.stat-cell{
+  flex:1;
+  padding:14px;
+  border-right:1px solid var(--bg-border);
+}
+
+.stat-cell:last-child{
+  border-right:none;
+}
+
+.stat-num{
+  font-size:1.6rem;
+  font-weight:600;
+}
+
+.stat-lbl{
+  font-size:0.7rem;
+  color:var(--text-muted);
+}
+
+.score-actions{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+nav{
+padding:16px 20px;
+}
+
+.quiz-form{
+padding:22px;
+}
+
+.form-row{
+grid-template-columns:1fr;
+}
+
+.question-card{
+padding:20px;
+}
+
+.score-card{
+padding:24px;
+}
+
+}
+
+</style>
+</head>
+<script>
+(async function premiumGuard() {
+  const API   = "http://localhost:5000/api";
+  const email = localStorage.getItem("prepwise_email");
+
+  // No email stored — not logged in
+  if (!email) {
+    window.location.href = "payment.html";
+    return;
+  }
+
+  try {
+    const res  = await fetch(API + "/check-premium?email=" + encodeURIComponent(email));
+    const data = await res.json();
+
+    if (!data.verified) {
+      window.location.href = "payment.html";
+    }
+    // if verified — do nothing, page loads normally
+
+  } catch (err) {
+    // If backend is down, allow access (fail open)
+    console.warn("Premium check failed:", err.message);
+  }
+})();
+</script>
+<body>
+
+<nav>
+  <div class="nav-logo">Nex<span>ora</span></div>
+  <a href="index.html" class="nav-back">← Back to Home</a>
+</nav>
+
+<div class="page-wrap">
+
+  <div class="page-header">
+    <span class="text-label">AI Tool</span>
+    <h1 style="margin-top:10px">Quiz <em style="font-style:italic;color:var(--gold-full)">Generator</em></h1>
+    <p>Generate 10 smart MCQs by topic — or paste your lecture notes for targeted questions.</p>
+  </div>
+
+  <!-- ══ SETUP SCREEN ══ -->
+  <div id="setup-screen">
+    <div class="tabs">
+      <button class="tab active" id="tab-topic"   onclick="switchTab('topic')">By Topic</button>
+      <button class="tab"        id="tab-lecture" onclick="switchTab('lecture')">By Lecture</button>
+    </div>
+
+    <!-- Topic panel -->
+    <div id="panel-topic">
+      <div class="quiz-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="category">Topic / Category</label>
+            <input type="text" id="category" placeholder="e.g. JavaScript, Machine Learning"/>
+          </div>
+          <div class="form-group">
+            <label for="difficulty">Difficulty</label>
+            <select id="difficulty">
+              <option value="easy">Easy</option>
+              <option value="medium" selected>Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn--primary generate-btn" onclick="generateTopicQuiz()">
+          Generate 10 Questions
+        </button>
+      </div>
+    </div>
+
+    <!-- Lecture panel -->
+    <div id="panel-lecture" style="display:none">
+      <div class="quiz-form">
+        <div class="form-group" style="margin-bottom:24px">
+          <label for="lectureText">Paste Lecture Content</label>
+          <textarea id="lectureText" placeholder="Paste your lecture notes, study material..."></textarea>
+        </div>
+        <button class="btn btn--primary generate-btn" onclick="generateLectureQuiz()">
+          Generate Quiz from Lecture
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ LOADER ══ -->
+  <div class="loader" id="loader">
+    <div class="spinner"></div>
+    <p style="color:var(--text-muted)">Generating your questions...</p>
+  </div>
+
+  <!-- ══ QUIZ SCREEN ══ -->
+  <div class="quiz-screen" id="quiz-screen">
+    <div class="quiz-topbar">
+      <div class="q-meta">
+        <span class="q-counter">
+          Question <strong id="q-cur">1</strong> of <strong id="q-tot">10</strong>
+        </span>
+        <span class="live-score" id="live-score">0 correct</span>
+      </div>
+      <button class="btn btn--ghost btn--sm" onclick="resetQuiz()">← New Quiz</button>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <div id="question-area"></div>
+    <div class="feedback-strip" id="feedback-strip">
+      <span id="feedback-text"></span>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn--primary" id="next-btn"
+        style="display:none" onclick="nextQuestion()">
+        Next Question →
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ SCORE SCREEN ══ -->
+  <div class="score-screen" id="score-screen">
+    <div class="score-card">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 120 120">
+          <circle class="sr-bg"   cx="60" cy="60" r="54"/>
+          <circle class="sr-fill" id="sr-fill" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="sr-center">
+          <div class="sr-pct" id="sr-pct">0%</div>
+          <div class="sr-lbl">Score</div>
+        </div>
+      </div>
+      <div class="score-headline" id="score-headline">Well done!</div>
+      <div class="score-desc"     id="score-desc">Here's how you performed</div>
+      <div class="stat-strip">
+        <div class="stat-cell">
+          <div class="stat-num c-green" id="s-correct">0</div>
+          <div class="stat-lbl">Correct</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num c-red" id="s-wrong">0</div>
+          <div class="stat-lbl">Wrong</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num c-gold" id="s-pct">0%</div>
+          <div class="stat-lbl">Percentage</div>
+        </div>
+      </div>
+      <button class="review-toggle-btn" onclick="toggleReview()">▾ Review Answers</button>
+      <div class="review-panel" id="review-panel"></div>
+      <div class="score-actions">
+        <button class="btn btn--primary"   onclick="retakeQuiz()">Retake Quiz</button>
+        <button class="btn btn--secondary" onclick="resetQuiz()">New Quiz</button>
+        <a href="index.html" class="btn btn--ghost">Home</a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end page-wrap -->
+
+<script>
+const API = "http://localhost:5000/api";
+
+let questions    = [];
+let current      = 0;
+let answers      = [];
+let correctCount = 0;
+
+/* ── TABS ── */
+function switchTab(tab) {
+  document.getElementById("panel-topic").style.display   = tab === "topic"   ? "block" : "none";
+  document.getElementById("panel-lecture").style.display = tab === "lecture" ? "block" : "none";
+  document.getElementById("tab-topic").classList.toggle("active",   tab === "topic");
+  document.getElementById("tab-lecture").classList.toggle("active", tab === "lecture");
+}
+
+/* ── GENERATE ── */
+async function generateTopicQuiz() {
+  const category   = document.getElementById("category").value.trim();
+  const difficulty = document.getElementById("difficulty").value;
+  if (!category) return alert("Please enter a topic.");
+  await fetchQuiz("/generate-quiz", { category, difficulty });
+}
+
+async function generateLectureQuiz() {
+  const lectureText = document.getElementById("lectureText").value.trim();
+  if (lectureText.length < 100) return alert("Please enter at least 100 characters.");
+  await fetchQuiz("/generate-lecture-quiz", { lectureText });
+}
+
+async function fetchQuiz(endpoint, body) {
+  showOnly("loader");
+
+  try {
+    const res  = await fetch(API + endpoint, {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.message);
+
+    questions    = data.questions;
+    current      = 0;
+    answers      = [];
+    correctCount = 0;
+
+    document.getElementById("q-tot").textContent = questions.length;
+    updateLiveScore();
+    showOnly("quiz-screen");
+    renderQuestion();
+
+  } catch (err) {
+    alert("Error: " + err.message);
+    showOnly("setup-screen");
+  }
+}
+
+/* ── RENDER QUESTION ── */
+function renderQuestion() {
+  const q   = questions[current];
+  const num = current + 1;
+
+  document.getElementById("q-cur").textContent         = num;
+  document.getElementById("progress-fill").style.width =
+    Math.round((current / questions.length) * 100) + "%";
+
+  // Reset feedback + next btn
+  const fb = document.getElementById("feedback-strip");
+  fb.className = "feedback-strip";
+  document.getElementById("next-btn").style.display = "none";
+
+  // Build options using data-val attribute (safe — no inline JS)
+  document.getElementById("question-area").innerHTML = `
+    <div class="question-card">
+      <div class="q-number">Question ${num}</div>
+      <div class="q-text">${safe(q.question)}</div>
+      <div class="options-list" id="opts-list">
+        ${q.options.map((opt, i) => `
+          <button class="opt-btn" data-val="${safeAttr(opt)}" type="button">
+            <span class="opt-key">${String.fromCharCode(65 + i)}</span>
+            <span class="opt-text">${safe(opt)}</span>
+          </button>`
+        ).join("")}
+      </div>
+    </div>`;
+
+  // Attach listeners after render
+  document.querySelectorAll(".opt-btn").forEach(btn => {
+    btn.addEventListener("click", () => selectAnswer(btn));
+  });
+}
+
+/* ── SELECT ANSWER ── */
+function selectAnswer(btn) {
+  // Lock all options
+  document.querySelectorAll(".opt-btn").forEach(b => {
+    b.disabled = true;
+    b.setAttribute("disabled", "");
+  });
+
+  const selected = btn.dataset.val;
+  const correct  = questions[current].correctAnswer;
+  const isRight  = selected === correct;
+
+  if (isRight) {
+    btn.classList.add("is-correct");
+    btn.querySelector(".opt-key").textContent = "✓";
+    correctCount++;
+  } else {
+    btn.classList.add("is-wrong");
+    btn.querySelector(".opt-key").textContent = "✗";
+    // Show correct answer
+    document.querySelectorAll(".opt-btn").forEach(b => {
+      if (b.dataset.val === correct) {
+        b.classList.add("is-reveal");
+        b.querySelector(".opt-key").textContent = "✓";
+      }
+    });
+  }
+
+  answers.push({ selected, correct, isRight });
+  updateLiveScore();
+
+  // Feedback strip
+  const fb = document.getElementById("feedback-strip");
+  fb.className = "feedback-strip show " + (isRight ? "ok" : "fail");
+  document.getElementById("feedback-text").textContent = isRight
+    ? "✓  Correct! Well done."
+    : "✗  Incorrect. Correct answer: " + correct;
+
+  // Next / Finish button
+  const nb = document.getElementById("next-btn");
+  nb.style.display = "inline-flex";
+  nb.textContent   = current < questions.length - 1
+    ? "Next Question →"
+    : "See Results";
+}
+
+/* ── NEXT ── */
+function nextQuestion() {
+  current++;
+  current >= questions.length ? showScore() : renderQuestion();
+}
+
+/* ── SCORE ── */
+function showScore() {
+  showOnly("score-screen");
+
+  const total   = questions.length;
+  const correct = correctCount;
+  const pct     = Math.round((correct / total) * 100);
+
+  // Animate ring (r=54 → circumference=339.3)
+  const circ   = 2 * Math.PI * 54;
+  const offset = circ - (pct / 100) * circ;
+  setTimeout(() => {
+    document.getElementById("sr-fill").style.strokeDasharray  = circ;
+    document.getElementById("sr-fill").style.strokeDashoffset = offset;
+  }, 100);
+
+  document.getElementById("sr-pct").textContent    = pct + "%";
+  document.getElementById("s-correct").textContent = correct;
+  document.getElementById("s-wrong").textContent   = total - correct;
+  document.getElementById("s-pct").textContent     = pct + "%";
+
+  const msgs = [
+    [90, "Outstanding! 🏆", "Near-perfect score. Excellent work!"],
+    [70, "Great Work! 🎉",  "Strong performance. Keep it up."],
+    [50, "Good Effort 👍",  "Solid attempt. Practice more!"],
+    [0,  "Keep Going 💪",   "Review the answers and try again."],
+  ];
+  const [, headline, desc] = msgs.find(([t]) => pct >= t);
+  document.getElementById("score-headline").textContent = headline;
+  document.getElementById("score-desc").textContent     = desc;
+
+  // Review list
+  document.getElementById("review-panel").innerHTML =
+    answers.map((a, i) => `
+      <div class="review-item">
+        <div class="review-q">${i + 1}. ${safe(questions[i].question)}</div>
+        <div class="review-ans">
+          <span class="rdot ${a.isRight ? "rdot-ok" : "rdot-fail"}"></span>
+          ${a.isRight
+            ? `<span style="color:#7ecf97">${safe(a.selected)}</span>`
+            : `<span style="color:#cf7e7e">${safe(a.selected)}</span>
+               <span style="color:var(--text-muted)"> · Correct: <strong>${safe(a.correct)}</strong></span>`
+          }
+        </div>
+      </div>`
+    ).join("");
+}
+
+function toggleReview() {
+  const p   = document.getElementById("review-panel");
+  const btn = document.querySelector(".review-toggle-btn");
+  p.classList.toggle("open");
+  btn.textContent = p.classList.contains("open") ? "▴ Hide Answers" : "▾ Review Answers";
+}
+
+/* ── RETAKE / RESET ── */
+function retakeQuiz() {
+  current = 0; answers = []; correctCount = 0;
+  updateLiveScore();
+  showOnly("quiz-screen");
+  renderQuestion();
+}
+
+function resetQuiz() {
+  questions = []; current = 0; answers = []; correctCount = 0;
+  showOnly("setup-screen");
+}
+
+/* ── HELPERS ── */
+function updateLiveScore() {
+  document.getElementById("live-score").textContent = correctCount + " correct";
+}
+
+function showOnly(id) {
+  ["setup-screen","loader","quiz-screen","score-screen"].forEach(sid => {
+    const el = document.getElementById(sid);
+    if (sid === id) {
+      el.style.display = "";
+      el.classList.add("show");
+    } else {
+      el.style.display = "none";
+      el.classList.remove("show");
+    }
+  });
+}
+
+function safe(s) {
+  return String(s || "")
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+function safeAttr(s) {
+  return String(s || "").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
+</script>
+
+</body>
+</html>
