@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HR Chat — Nexora</title>
+  <link rel="stylesheet" href="theme.css"/>
+ <style>
+
+:root{
+  --bg-base:#EAEFEF;
+  --bg-surface:#ffffff;
+  --bg-elevated:#f6f8f9;
+  --bg-border:#BFC9D1;
+
+  --text-primary:#25343F;
+  --text-body:#25343F;
+  --text-muted:#6c7a83;
+
+  --accent:#FF9B51;
+
+  --radius-md:10px;
+  --radius-lg:14px;
+
+  --duration-base:.15s;
+
+  --font-display:Inter,system-ui;
+  --font-body:Inter,system-ui;
+  --font-mono:monospace;
+}
+
+/* PAGE */
+
+body{
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg-base);
+  color:var(--text-body);
+  font-family:var(--font-body);
+}
+
+/* NAVBAR */
+
+nav{
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:16px 40px;
+
+  background:white;
+  border-bottom:1px solid var(--bg-border);
+}
+
+.nav-logo{
+  font-family:var(--font-display);
+  font-size:1.4rem;
+  color:var(--text-primary);
+}
+
+.nav-logo span{
+  color:var(--accent);
+}
+
+.nav-back{
+  font-size:.75rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+  text-decoration:none;
+}
+
+.nav-back:hover{
+  color:var(--text-primary);
+}
+
+/* LAYOUT */
+
+.chat-layout{
+  flex:1;
+  display:flex;
+  overflow:hidden;
+  background:var(--bg-base);
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  width:280px;
+  flex-shrink:0;
+
+  background:white;
+  border-right:1px solid var(--bg-border);
+
+  padding:24px 20px;
+
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+
+  overflow-y:auto;
+}
+
+.sidebar-title{
+  font-size:.68rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--accent);
+}
+
+/* CONTEXT BOX */
+
+.context-box{
+  background:var(--bg-elevated);
+  border:1px solid var(--bg-border);
+  border-radius:var(--radius-md);
+
+  padding:14px;
+
+  font-size:.8rem;
+  color:var(--text-body);
+
+  line-height:1.6;
+
+  min-height:100px;
+  max-height:160px;
+
+  overflow-y:auto;
+  resize:none;
+  width:100%;
+}
+
+.context-box:focus{
+  outline:none;
+  border-color:var(--accent);
+}
+
+/* STATUS */
+
+.status-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+
+  background:var(--accent);
+
+  display:inline-block;
+  margin-right:6px;
+}
+
+.session-info{
+  font-size:.78rem;
+  color:var(--text-muted);
+}
+
+/* CHAT AREA */
+
+.chat-area{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+/* MESSAGES */
+
+.messages{
+  flex:1;
+  overflow-y:auto;
+
+  padding:28px 32px;
+
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+.message{
+  display:flex;
+  gap:14px;
+  max-width:75%;
+}
+
+.message.user{
+  align-self:flex-end;
+  flex-direction:row-reverse;
+}
+
+.message.assistant{
+  align-self:flex-start;
+}
+
+/* AVATAR */
+
+.avatar{
+  width:36px;
+  height:36px;
+
+  flex-shrink:0;
+
+  border-radius:50%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:.9rem;
+}
+
+.avatar.ai{
+  background:var(--bg-elevated);
+  border:1px solid var(--bg-border);
+}
+
+.avatar.user-av{
+  background:var(--bg-elevated);
+  border:1px solid var(--bg-border);
+}
+
+/* BUBBLE */
+
+.bubble{
+  padding:14px 18px;
+  border-radius:var(--radius-lg);
+
+  font-size:.88rem;
+  line-height:1.7;
+}
+
+.message.assistant .bubble{
+  background:white;
+  border:1px solid var(--bg-border);
+  color:var(--text-body);
+  border-top-left-radius:4px;
+}
+
+.message.user .bubble{
+  background:var(--accent);
+  border:1px solid var(--accent);
+  color:white;
+  border-top-right-radius:4px;
+}
+
+/* TYPING */
+
+.typing{
+  display:none;
+  align-self:flex-start;
+  align-items:center;
+  gap:14px;
+}
+
+.typing.show{
+  display:flex;
+}
+
+.typing-dots{
+  display:flex;
+  gap:5px;
+}
+
+.typing-dots span{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--text-muted);
+  animation:typingBounce 1.2s infinite;
+}
+
+.typing-dots span:nth-child(2){ animation-delay:.2s }
+.typing-dots span:nth-child(3){ animation-delay:.4s }
+
+@keyframes typingBounce{
+  0%,60%,100%{ transform:translateY(0); opacity:.4 }
+  30%{ transform:translateY(-6px); opacity:1 }
+}
+
+/* INPUT AREA */
+
+.input-area{
+  flex-shrink:0;
+
+  padding:16px 32px 24px;
+
+  background:white;
+  border-top:1px solid var(--bg-border);
+}
+
+.input-row{
+  display:flex;
+  gap:12px;
+  align-items:flex-end;
+}
+
+.input-row textarea{
+  flex:1;
+  resize:none;
+
+  min-height:48px;
+  max-height:120px;
+
+  border-radius:var(--radius-md);
+
+  border:1px solid var(--bg-border);
+
+  font-family:var(--font-body);
+  font-size:.9rem;
+
+  padding:10px 12px;
+}
+
+.input-row textarea:focus{
+  outline:none;
+  border-color:var(--accent);
+}
+
+/* SEND BUTTON */
+
+.send-btn{
+  width:48px;
+  height:48px;
+
+  border:none;
+  border-radius:var(--radius-md);
+
+  background:var(--accent);
+  color:white;
+
+  font-size:1rem;
+
+  cursor:pointer;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.send-btn:hover{
+  opacity:.9;
+}
+
+.send-btn:disabled{
+  opacity:.4;
+  cursor:not-allowed;
+}
+
+/* WELCOME */
+
+.welcome{
+  flex:1;
+
+  display:flex;
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+
+  padding:40px;
+  gap:16px;
+}
+
+.welcome-icon{
+  font-size:3rem;
+}
+
+.welcome h2{
+  font-weight:500;
+}
+
+.welcome p{
+  color:var(--text-muted);
+  font-size:.9rem;
+  max-width:340px;
+}
+
+/* VOICE BAR */
+
+.voice-bar{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  padding:10px 16px;
+
+  background:var(--bg-elevated);
+  border:1px solid var(--bg-border);
+
+  border-radius:var(--radius-md);
+
+  margin-bottom:10px;
+}
+
+/* MIC BUTTON */
+
+.mic-btn{
+  width:44px;
+  height:44px;
+
+  border-radius:50%;
+
+  background:white;
+  border:1px solid var(--bg-border);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  cursor:pointer;
+}
+
+.mic-btn:hover{
+  border-color:var(--accent);
+}
+
+.mic-btn.listening{
+  border-color:var(--accent);
+}
+
+.mic-btn.speaking{
+  border-color:#5a9e6f;
+}
+
+/* WAVEFORM */
+
+.waveform{
+  display:none;
+  align-items:center;
+  gap:3px;
+  height:24px;
+}
+
+.waveform.show{
+  display:flex;
+}
+
+.wave-bar{
+  width:3px;
+  border-radius:99px;
+
+  background:var(--accent);
+
+  animation:wave .8s ease infinite;
+}
+
+.wave-bar:nth-child(1){height:6px}
+.wave-bar:nth-child(2){height:14px}
+.wave-bar:nth-child(3){height:20px}
+.wave-bar:nth-child(4){height:14px}
+.wave-bar:nth-child(5){height:6px}
+
+@keyframes wave{
+  0%,100%{ transform:scaleY(.5); opacity:.5 }
+  50%{ transform:scaleY(1.2); opacity:1 }
+}
+
+/* STATUS */
+
+.voice-status{
+  font-size:.72rem;
+  color:var(--text-muted);
+  font-family:var(--font-mono);
+  flex:1;
+}
+
+.voice-status.active{
+  color:var(--accent);
+}
+
+.voice-status.speaking{
+  color:#5a9e6f;
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+.sidebar{ display:none }
+
+nav{ padding:14px 20px }
+
+.messages{ padding:16px }
+
+.input-area{ padding:12px 16px 20px }
+
+.message{ max-width:90% }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<script>
+(async function premiumGuard() {
+  const API   = "http://localhost:5000/api";
+  const email = localStorage.getItem("prepwise_email");
+  if (!email) { window.location.href = "payment.html"; return; }
+  try {
+    const res  = await fetch(API + "/check-premium?email=" + encodeURIComponent(email));
+    const data = await res.json();
+    if (!data.verified) window.location.href = "payment.html";
+  } catch (err) {
+    console.warn("Premium check failed:", err.message);
+  }
+})();
+</script>
+
+<nav>
+  <div class="nav-logo">Nex<span>ora</span></div>
+  <div style="display:flex;align-items:center;gap:16px">
+    <span class="session-info">
+      <span class="status-dot"></span>AI Interviewer Active
+    </span>
+    <a href="index.html" class="nav-back">← Home</a>
+  </div>
+</nav>
+
+<div class="chat-layout">
+
+  <!-- ── SIDEBAR ── -->
+  <div class="sidebar">
+    <div>
+      <div class="sidebar-title">Resume Context</div>
+      <p style="font-size:0.75rem;color:var(--text-muted);margin-bottom:10px">
+        Paste your resume summary for personalized questions
+      </p>
+      <textarea class="context-box" id="resume-context"
+        placeholder="e.g. John Doe, 4 years React/Node.js, worked at TCS and Infosys, B.Tech CSE from VNIT...">
+      </textarea>
+      <button class="btn btn--secondary btn--sm"
+        style="width:100%;margin-top:10px" onclick="applyContext()">
+        Apply Context
+      </button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div>
+      <div class="sidebar-title">Session</div>
+      <div style="font-size:0.8rem;color:var(--text-muted);line-height:1.8">
+        <div>Messages: <span id="msg-count" style="color:var(--text-primary)">0</span></div>
+        <div>Context: <span id="context-status" style="color:var(--text-muted)">None</span></div>
+      </div>
+      <button class="btn btn--ghost btn--sm"
+        style="width:100%;margin-top:12px" onclick="clearChat()">
+        Clear Chat
+      </button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div>
+      <div class="sidebar-title">Tips</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:0.78rem;color:var(--text-muted)">
+        <li>✦ Answer like you're in a real interview</li>
+        <li>✦ Use STAR method for experience questions</li>
+        <li>✦ Ask the AI for feedback anytime</li>
+        <li>✦ Add resume context for personalized Q&A</li>
+        <li>✦ Click 🎤 mic to speak your answer</li>
+        <li>✦ AI will speak back automatically</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── CHAT AREA ── -->
+  <div class="chat-area">
+
+    <!-- Messages -->
+    <div class="messages" id="messages">
+      <div class="welcome" id="welcome-screen">
+        <div class="welcome-icon">🎤</div>
+        <h2>Ready for your Interview?</h2>
+        <p>Say hello or type to start your AI-powered HR mock interview session.</p>
+        <button class="btn btn--primary" onclick="startInterview()">
+          Start Interview
+        </button>
+      </div>
+      <div class="typing" id="typing">
+        <div class="avatar ai">🤖</div>
+        <div class="typing-dots">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input Area -->
+    <div class="input-area">
+
+      <!-- Voice Bar -->
+      <div class="voice-bar">
+        <button class="mic-btn" id="mic-btn" onclick="toggleMic()" title="Click to speak">
+          🎤
+        </button>
+        <div class="waveform" id="waveform">
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+        </div>
+        <span class="voice-status" id="voice-status">Click mic to speak</span>
+        <label class="voice-toggle" title="Toggle AI voice">
+          <input type="checkbox" id="ai-voice-toggle" checked onchange="toggleAIVoice()"/>
+          <div class="toggle-pill"></div>
+          🔊 AI Voice
+        </label>
+      </div>
+
+      <!-- Text input row -->
+      <div class="input-row">
+        <textarea id="chat-input"
+          placeholder="Type your answer or use mic above..."
+          rows="1"
+          onkeydown="handleKey(event)">
+        </textarea>
+        <button class="send-btn" id="send-btn" onclick="sendMessage()">▶</button>
+      </div>
+
+    </div><!-- end input-area -->
+
+  </div><!-- end chat-area -->
+
+</div><!-- end chat-layout -->
+
+<script src="js/hrchat.js"></script>
+</body>
+</html>
