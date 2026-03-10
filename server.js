@@ -16,16 +16,10 @@ app.use(express.static("public"));
 
 const JWT_SECRET = "skillx_secret_2024";
 
-// ===============================
-// MongoDB Connection
-// ===============================
 mongoose.connect("mongodb+srv://anjaliamane22_db_user:AsEK4iTPP8SD8dTM@cluster0.l3pw9wx.mongodb.net/?appName=Cluster0")
   .then(() => console.log("✅ MongoDB Connected"))
   .catch(err => console.log("❌ MongoDB Error:", err));
 
-// ===============================
-// Email Configuration
-// ===============================
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -34,9 +28,6 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// ===============================
-// User Schema
-// ===============================
 const UserSchema = new mongoose.Schema({
 
 name: String,
@@ -69,11 +60,6 @@ createdAt: { type: Date, default: Date.now }
 const User = mongoose.model("User", UserSchema);
 
 
-
-
-// ===============================
-// Session Schema
-// ===============================
 const SessionSchema = new mongoose.Schema({
   mentorName: String,
   mentorEmoji: String,
@@ -92,9 +78,6 @@ const SessionSchema = new mongoose.Schema({
 
 const Session = mongoose.model('Session', SessionSchema);
 
-// ===============================
-// Token Verify Middleware
-// ===============================
 const verifyToken = (req, res, next) => {
   const token = req.headers["authorization"];
   if (!token) return res.status(403).json({ message: "No token provided" });
@@ -106,9 +89,6 @@ const verifyToken = (req, res, next) => {
   });
 };
 
-// ===============================
-// REGISTER API (Email/Password)
-// ===============================
 app.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -149,9 +129,6 @@ app.post("/register", async (req, res) => {
   }
 });
 
-// ===============================
-// LOGIN API (Email/Password)
-// ===============================
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -198,9 +175,6 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// ===============================
-// FIREBASE SYNC (Google Login) ✅ NEW
-// ===============================
 app.post("/firebase-sync", async (req, res) => {
   const { uid, name, email, photoURL } = req.body;
 
@@ -253,9 +227,6 @@ app.post("/firebase-sync", async (req, res) => {
   }
 });
 
-// ===============================
-// GET USER PROFILE
-// ===============================
 app.get("/me", verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.userId).select("-password");
@@ -266,10 +237,6 @@ app.get("/me", verifyToken, async (req, res) => {
   }
 });
 
-
-// ===============================
-// BOOK SESSION API
-// ===============================
 app.post('/sessions/book', async (req, res) => {
   try {
     const { mentorName, mentorEmoji, skill, date, time, duration, credits, roomId, sessionDT, studentEmail } = req.body;
@@ -348,9 +315,7 @@ app.post('/sessions/book', async (req, res) => {
   }
 });
 
-// ===============================
-// GET MY SESSIONS
-// ===============================
+
 app.get('/sessions/my', async (req, res) => {
   try {
     const token = req.headers['authorization'];
@@ -371,9 +336,7 @@ app.get('/sessions/my', async (req, res) => {
   }
 });
 
-// ===============================
-// GET ALL SESSIONS
-// ===============================
+
 app.get('/sessions/all', async (req, res) => {
   try {
     const sessions = await Session.find().sort({ createdAt: -1 }).limit(100);
@@ -383,9 +346,6 @@ app.get('/sessions/all', async (req, res) => {
   }
 });
 
-// ===============================
-// LEADERBOARD API
-// ===============================
 app.get('/leaderboard', async (req, res) => {
   try {
     const users = await User.find()
@@ -399,10 +359,6 @@ app.get('/leaderboard', async (req, res) => {
   }
 });
 
-
-// ===============================
-// COMPLETE PROFILE API
-// ===============================
 app.post("/complete-profile", async (req, res) => {
 
 try {
@@ -467,9 +423,6 @@ error: error.message
 
 });
 
-// ===============================
-// START SERVER
-// ===============================
 app.listen(5000, () => {
   console.log("\n🚀 SkillX Server running on http://localhost:5000");
   console.log("✅ MongoDB Connected");
