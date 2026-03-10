@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Session – Nexora</title>
+<style>:root{
+  --bg:#EAEFEF;
+  --card:#ffffff;
+  --border:#BFC9D1;
+  --text:#25343F;
+  --accent:#FF9B51;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:var(--bg);
+  font-family:Arial,sans-serif;
+  color:var(--text);
+  min-height:100vh;
+  padding:24px;
+}
+
+/* HEADER */
+
+.page-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.back-btn{
+  background:white;
+  border:1px solid var(--border);
+  width:36px;
+  height:36px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.back-btn:hover{
+  background:#f5f5f5;
+}
+
+h1{
+  font-size:22px;
+  font-weight:700;
+}
+
+/* MENTOR CARD */
+
+.mentor-banner{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:18px;
+  margin-bottom:18px;
+}
+
+.mentor-row{
+  display:flex;
+  gap:16px;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+.avatar-emoji{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  background:#f2f2f2;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+}
+
+.mentor-name{
+  font-size:18px;
+  font-weight:700;
+}
+
+.mentor-sub{
+  display:flex;
+  gap:10px;
+  font-size:14px;
+  color:#666;
+}
+
+.mentor-exp{
+  font-size:13px;
+  color:#777;
+}
+
+.rating-inline{
+  color:var(--accent);
+  font-weight:600;
+}
+
+.skills-row{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+
+.skill-tag{
+  background:#f3f3f3;
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:4px 10px;
+  font-size:12px;
+}
+
+/* MAIN GRID */
+
+.main-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+
+/* PANELS */
+
+.panel{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px;
+}
+
+.section-label{
+  font-size:13px;
+  font-weight:600;
+  margin-bottom:10px;
+}
+
+/* DATE INPUT */
+
+.date-input-wrap{
+  display:flex;
+  align-items:center;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:8px 10px;
+  margin-bottom:12px;
+  background:white;
+}
+
+.date-input-wrap input{
+  border:none;
+  outline:none;
+  flex:1;
+  font-size:14px;
+}
+
+.cal-icon{
+  font-size:16px;
+}
+
+/* CALENDAR */
+
+.calendar{
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px;
+}
+
+.cal-nav{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:8px;
+}
+
+.cal-nav button{
+  background:none;
+  border:none;
+  cursor:pointer;
+  font-size:18px;
+}
+
+.cal-month{
+  font-weight:600;
+}
+
+.cal-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:4px;
+  text-align:center;
+}
+
+.cal-day-header{
+  font-size:12px;
+  color:#777;
+}
+
+.cal-day{
+  padding:6px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.cal-day:hover{
+  background:#f0f0f0;
+}
+
+.cal-day.today{
+  color:var(--accent);
+  font-weight:700;
+}
+
+.cal-day.selected{
+  background:var(--accent);
+  color:white;
+}
+
+.cal-day.past{
+  color:#bbb;
+}
+
+.cal-day.empty{
+  visibility:hidden;
+}
+
+/* RIGHT PANEL */
+
+.right-panel{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.option-label{
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:8px;
+}
+
+.option-row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.opt-btn{
+  padding:8px 12px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:white;
+  cursor:pointer;
+}
+
+.opt-btn:hover{
+  background:#f5f5f5;
+}
+
+.opt-btn.active{
+  background:var(--accent);
+  color:white;
+  border-color:var(--accent);
+}
+
+/* HOUR STEPPER */
+
+.hour-stepper{
+  display:flex;
+  border:1px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+  width:180px;
+}
+
+.stepper-btn{
+  width:45px;
+  border:none;
+  background:white;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.stepper-display{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  border-left:1px solid var(--border);
+  border-right:1px solid var(--border);
+}
+
+.stepper-val{
+  font-size:18px;
+  font-weight:700;
+}
+
+.stepper-unit{
+  font-size:13px;
+}
+
+.hour-info{
+  font-size:13px;
+  color:#666;
+}
+
+/* CREDITS */
+
+.credits-box{
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:12px;
+  background:#fafafa;
+}
+
+.credit-row{
+  display:flex;
+  justify-content:space-between;
+  font-size:14px;
+  margin:4px 0;
+}
+
+.credit-divider{
+  border:none;
+  border-top:1px solid var(--border);
+  margin:6px 0;
+}
+
+.highlight span:last-child{
+  font-weight:700;
+}
+
+.after span:last-child{
+  font-weight:700;
+}
+
+/* CONFIRM BUTTON */
+
+.btn-confirm{
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  background:var(--accent);
+  color:white;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.btn-confirm:hover{
+  opacity:0.9;
+}
+
+/* OVERLAY */
+
+.overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.4);
+  align-items:center;
+  justify-content:center;
+}
+
+.overlay.show{
+  display:flex;
+}
+
+.success-card{
+  background:white;
+  border-radius:12px;
+  padding:24px;
+  width:320px;
+  text-align:center;
+}
+
+.success-icon{
+  font-size:40px;
+  margin-bottom:10px;
+}
+
+.success-title{
+  font-size:20px;
+  font-weight:700;
+  margin-bottom:6px;
+}
+
+.success-sub{
+  font-size:14px;
+  color:#666;
+  margin-bottom:16px;
+}
+
+.success-details{
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:10px;
+  font-size:13px;
+  margin-bottom:16px;
+  text-align:left;
+}
+
+.btn-done{
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  background:var(--accent);
+  color:white;
+  cursor:pointer;
+}
+
+/* MOBILE */
+
+@media(max-width:720px){
+
+  .main-grid{
+    grid-template-columns:1fr;
+  }
+
+  h1{
+    font-size:18px;
+  }
+
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <button class="back-btn" onclick="history.back()">←</button>
+  <h1>Book a Session</h1>
+</div>
+
+<div class="mentor-banner">
+  <div class="mentor-row">
+    <div class="avatar-emoji" id="mentorEmoji">👨‍💻</div>
+    <div>
+      <div class="mentor-name" id="mentorName">Rahul Mehta</div>
+      <div class="mentor-sub">
+        <span id="mentorRole">React & Next.js Expert</span>
+        <div class="rating-inline">★ <span id="mentorRating">4.9</span></div>
+      </div>
+      <div class="mentor-exp" id="mentorExp">6+ Years Experience</div>
+    </div>
+  </div>
+  <div class="skills-row" id="skillsRow">
+    <span class="skill-tag">⚛ React</span>
+    <span class="skill-tag">▲ Next.js</span>
+  </div>
+</div>
+
+<div class="main-grid">
+  <div class="panel">
+    <div class="section-label">Select Date</div>
+    <div class="date-input-wrap">
+      <input type="text" id="dateDisplay" readonly>
+      <span style="color:var(--muted);">📅</span>
+    </div>
+    <div class="calendar">
+      <div class="cal-nav">
+        <button onclick="changeMonth(-1)">‹</button>
+        <span class="cal-month" id="calMonthLabel"></span>
+        <button onclick="changeMonth(1)">›</button>
+      </div>
+      <div class="cal-grid" id="calGrid">
+        <div class="cal-day-header">M</div><div class="cal-day-header">T</div>
+        <div class="cal-day-header">W</div><div class="cal-day-header">T</div>
+        <div class="cal-day-header">F</div><div class="cal-day-header">S</div>
+        <div class="cal-day-header">S</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <div>
+      <div class="option-label">Select Time Slot</div>
+      <div class="option-row" id="timeSlots">
+        <button class="opt-btn" onclick="pick(this)">10:00 AM</button>
+        <button class="opt-btn" onclick="pick(this)">12:00 PM</button>
+        <button class="opt-btn active" onclick="pick(this)">4:00 PM</button>
+        <button class="opt-btn" onclick="pick(this)">8:00 PM</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="option-label">Session Duration <span style="font-size:0.78rem;color:var(--muted);font-weight:400;">— 1 credit/hr</span></div>
+      <div class="hour-stepper">
+        <button class="stepper-btn" id="btnMinus" onclick="changeHours(-1)">−</button>
+        <div class="stepper-display">
+          <span class="stepper-val" id="hourVal">1</span>
+          <span class="stepper-unit">hr</span>
+        </div>
+        <button class="stepper-btn" id="btnPlus" onclick="changeHours(1)">+</button>
+      </div>
+      <div class="hour-info" id="hourInfo">1 hour · costs <strong>1 credit</strong></div>
+    </div>
+
+    <div>
+      <div class="option-label">Your Email <span style="font-size:0.78rem;color:var(--muted);font-weight:400;">— for confirmation</span></div>
+      <div class="email-input-wrap" id="emailWrap">
+        <span>✉️</span>
+        <input type="email" id="userEmail" placeholder="yourname@gmail.com">
+      </div>
+    </div>
+
+    <div class="credits-box">
+      <div class="credit-row highlight"><span>Available Credits</span><span id="credAvail">120</span></div>
+      <hr class="credit-divider">
+      <div class="credit-row"><span>Session Cost</span><span id="credCost">1</span></div>
+      <div class="credit-row"><span>After Booking</span><span id="credAfter">119</span></div>
+    </div>
+
+    <button class="btn-confirm" id="confirmBtn" onclick="confirmBooking()">Confirm Booking</button>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="success-card">
+    <div class="success-icon">🎉</div>
+    <div class="success-title">Session Booked!</div>
+    <div class="success-sub">Your session with <strong id="confMentor">Rahul Mehta</strong> has been confirmed.</div>
+    <div class="success-details">
+      <div><span>Date: </span><span id="confDate">—</span></div>
+      <div><span>Time: </span><span id="confTime">4:00 PM</span></div>
+      <div><span>Duration: </span><span id="confDur">1 hr</span></div>
+      <div><span>Credits Used: </span><span id="confCredits">1 credit</span></div>
+    </div>
+    <div class="email-status" id="emailStatus">
+      <span class="spinner"></span>
+      <span id="emailStatusText">Sending confirmation email...</span>
+    </div>
+    <button class="btn-done" onclick="document.getElementById('overlay').classList.remove('show')">Done ✓</button>
+  </div>
+</div>
+
+<script>
+  const API_URL = 'http://localhost:5000';
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  const params = new URLSearchParams(window.location.search);
+  
+  function loadMentorData() {
+    const name = params.get('name') || 'Rahul Mehta';
+    const role = decodeURIComponent(params.get('role') || 'React & Next.js Expert');
+    const exp = decodeURIComponent(params.get('exp') || '6+ Years Experience');
+    const rating = params.get('rating') || '4.9';
+    const emoji = params.get('emoji') || '👨‍💻';
+
+    document.getElementById('mentorName').textContent = name;
+    document.getElementById('mentorRole').textContent = role;
+    document.getElementById('mentorExp').textContent = exp;
+    document.getElementById('mentorRating').textContent = rating;
+    document.getElementById('mentorEmoji').textContent = emoji;
+    document.getElementById('confMentor').textContent = name;
+  }
+
+  const today = new Date();
+  let viewYear = today.getFullYear(), viewMonth = today.getMonth();
+  let selectedDate = new Date(today);
+
+  function renderCalendar() {
+    document.getElementById('calMonthLabel').textContent = MONTHS[viewMonth] + ' ' + viewYear;
+    const grid = document.getElementById('calGrid');
+    while (grid.children.length > 7) grid.removeChild(grid.lastChild);
+    
+    const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+    const days = new Date(viewYear, viewMonth + 1, 0).getDate();
+    const offset = (firstDay + 6) % 7;
+    
+    for (let i = 0; i < offset; i++) { 
+      const e = document.createElement('div'); 
+      e.className='cal-day empty'; 
+      grid.appendChild(e); 
+    }
+    
+    const todayMid = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    for (let d = 1; d <= days; d++) {
+      const e = document.createElement('div'); 
+      e.className='cal-day'; 
+      e.textContent=d;
+      const dt = new Date(viewYear, viewMonth, d);
+      if (dt < todayMid) e.classList.add('past');
+      if (dt.toDateString()===todayMid.toDateString()) e.classList.add('today');
+      if (dt.toDateString()===selectedDate.toDateString()) e.classList.add('selected');
+      e.onclick = () => { 
+        if(e.classList.contains('past')) return; 
+        selectedDate=dt; 
+        updateDate(); 
+        renderCalendar(); 
+      };
+      grid.appendChild(e);
+    }
+  }
+
+  function updateDate() {
+    const y=selectedDate.getFullYear(), mo=selectedDate.getMonth(), d=selectedDate.getDate();
+    document.getElementById('dateDisplay').value = y+'-'+String(mo+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    document.getElementById('confDate').textContent = String(d).padStart(2,'0')+' '+MONTHS[mo]+' '+y;
+  }
+
+  function changeMonth(dir) {
+    viewMonth+=dir;
+    if(viewMonth>11){viewMonth=0;viewYear++;} 
+    if(viewMonth<0){viewMonth=11;viewYear--;}
+    renderCalendar();
+  }
+
+  function pick(btn) {
+    document.querySelectorAll('#timeSlots .opt-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  let hours=1;
+  const MAX_CREDITS=120;
+
+  function changeHours(dir) {
+    hours=Math.min(8,Math.max(1,hours+dir));
+    document.getElementById('hourVal').textContent=hours;
+    document.getElementById('btnMinus').disabled=hours<=1;
+    document.getElementById('btnPlus').disabled=hours>=8;
+    
+    const l=hours===1?'1 hour':hours+' hours';
+    const c=hours===1?'1 credit':hours+' credits';
+    document.getElementById('hourInfo').innerHTML=l+' · costs <strong>'+c+'</strong>';
+    document.getElementById('credCost').textContent=hours;
+    document.getElementById('credAfter').textContent=MAX_CREDITS-hours;
+  }
+
+  async function confirmBooking() {
+    const email = document.getElementById('userEmail').value.trim();
+    if (!email || !email.includes('@')) {
+      alert('Enter valid email!');
+      return;
+    }
+
+    const timeEl = document.querySelector('#timeSlots .active');
+    const time = timeEl ? timeEl.textContent : '4:00 PM';
+    const mentor = document.getElementById('mentorName').textContent;
+    const date = document.getElementById('confDate').textContent;
+    const dur = hours===1?'1 hr':hours+' hrs';
+    const cred = hours===1?'1 credit':hours+' credits';
+
+    document.getElementById('confTime').textContent=time;
+    document.getElementById('confDur').textContent=dur;
+    document.getElementById('confCredits').textContent=cred;
+
+    const btn = document.getElementById('confirmBtn');
+    btn.disabled=true; 
+    btn.innerHTML='<span class="spinner"></span> Booking...';
+
+    const tmap = {'10:00 AM':10,'12:00 PM':12,'4:00 PM':16,'8:00 PM':20};
+    const hr = tmap[time] || 16;
+    const pts = date.split(' ');
+    const sessionDT = new Date(parseInt(pts[2]), MONTHS.indexOf(pts[1]), parseInt(pts[0]), hr, 0, 0);
+
+    const roomId = 'Nexora-' + mentor.toLowerCase().replace(/\s+/g,'-') + '-' + Math.random().toString(36).substr(2,8);
+
+    try {
+      const response = await fetch(API_URL + '/sessions/book', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem('Nexora_token') || ''
+        },
+        body: JSON.stringify({
+          mentorName: mentor,
+          mentorEmoji: document.getElementById('mentorEmoji').textContent,
+          skill: mentor,
+          date: date,
+          time: time,
+          duration: hours,
+          credits: hours,
+          roomId: roomId,
+          sessionDT: sessionDT.toISOString(),
+          studentEmail: email
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success || data.session) {
+        console.log('✅ Session booked!');
+        document.getElementById('overlay').classList.add('show');
+        
+        const statusEl = document.getElementById('emailStatus');
+        statusEl.className='email-status sent';
+        document.getElementById('emailStatusText').textContent='✅ Email sent to '+email;
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      const statusEl = document.getElementById('emailStatus');
+      statusEl.className='email-status error';
+      document.getElementById('emailStatusText').textContent='⚠️ Booking failed';
+    }
+
+    btn.disabled=false; 
+    btn.innerHTML='Confirm Booking';
+  }
+
+  loadMentorData();
+  updateDate();
+  renderCalendar();
+  changeHours(0);
+</script>
+</body>
+</html>
