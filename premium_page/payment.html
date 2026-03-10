@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Get Access — Nexora</title>
+  <link rel="stylesheet" href="theme.css"/>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<style>
+
+:root{
+  --bg-base:#EAEFEF;
+  --bg-surface:#ffffff;
+  --bg-elevated:#f6f8f9;
+  --bg-border:#BFC9D1;
+
+  --text-primary:#25343F;
+  --text-body:#25343F;
+  --text-muted:#6c7a83;
+
+  --accent:#FF9B51;
+
+  --radius-md:10px;
+  --radius-lg:14px;
+  --radius-xl:18px;
+
+  --duration-base:.15s;
+
+  --font-display:Inter,system-ui;
+  --font-body:Inter,system-ui;
+  --font-mono:monospace;
+}
+
+/* NAV */
+
+nav{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:100;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:18px 50px;
+
+  background:white;
+  border-bottom:1px solid var(--bg-border);
+}
+
+.nav-logo{
+  font-family:var(--font-display);
+  font-size:1.4rem;
+  color:var(--text-primary);
+}
+
+.nav-logo span{
+  color:var(--accent);
+}
+
+.nav-back{
+  font-size:.75rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+  text-decoration:none;
+}
+
+.nav-back:hover{
+  color:var(--text-primary);
+}
+
+/* PAGE */
+
+.page-wrap{
+  min-height:100vh;
+
+  padding:120px 24px 80px;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+
+  background:var(--bg-base);
+}
+
+/* CARD */
+
+.pricing-card{
+  width:100%;
+  max-width:480px;
+
+  background:white;
+  border:1px solid var(--bg-border);
+
+  border-radius:var(--radius-xl);
+
+  padding:44px 40px;
+}
+
+/* PLAN */
+
+.plan-label{
+  font-size:.68rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+
+  color:var(--accent);
+
+  margin-bottom:6px;
+}
+
+.plan-name{
+  font-family:var(--font-display);
+  font-size:1.8rem;
+
+  color:var(--text-primary);
+
+  margin-bottom:22px;
+}
+
+/* PRICE */
+
+.price-display{
+  display:flex;
+  align-items:baseline;
+  gap:6px;
+
+  margin-bottom:8px;
+}
+
+.price-display .currency{
+  font-size:1.6rem;
+  color:var(--accent);
+}
+
+.price-display .amount{
+  font-family:var(--font-display);
+  font-size:4rem;
+  color:var(--text-primary);
+}
+
+.price-note{
+  font-size:.8rem;
+  color:var(--text-muted);
+
+  margin-bottom:28px;
+}
+
+.price-note s{
+  opacity:.5;
+}
+
+/* FEATURES */
+
+.feature-list{
+  list-style:none;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:12px;
+
+  margin-bottom:30px;
+}
+
+.feature-list li{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  font-size:.9rem;
+  color:var(--text-body);
+}
+
+.feature-list li .check{
+  width:18px;
+  height:18px;
+
+  border-radius:50%;
+
+  background:var(--accent);
+
+  color:white;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:.65rem;
+}
+
+/* FORM */
+
+.user-form{
+  display:flex;
+  flex-direction:column;
+
+  gap:14px;
+
+  margin-bottom:22px;
+}
+
+/* PAYMENT BUTTON */
+
+.pay-btn{
+  width:100%;
+
+  padding:15px;
+
+  font-size:.85rem;
+  letter-spacing:.1em;
+
+  background:var(--accent);
+  color:white;
+
+  border:none;
+  border-radius:var(--radius-md);
+
+  cursor:pointer;
+}
+
+.pay-btn:hover{
+  opacity:.9;
+}
+
+.pay-btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+/* BADGES */
+
+.secure-badges{
+  display:flex;
+  justify-content:center;
+  gap:18px;
+
+  margin-top:20px;
+
+  flex-wrap:wrap;
+}
+
+.secure-badge{
+  display:flex;
+  align-items:center;
+  gap:6px;
+
+  font-size:.75rem;
+  color:var(--text-muted);
+}
+
+/* SUCCESS */
+
+.success-screen{
+  display:none;
+
+  text-align:center;
+
+  flex-direction:column;
+  align-items:center;
+
+  gap:20px;
+}
+
+.success-screen.show{
+  display:flex;
+}
+
+.success-icon{
+  width:70px;
+  height:70px;
+
+  border-radius:50%;
+
+  background:#e8f5ed;
+  border:2px solid #5a9e6f;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:1.8rem;
+}
+
+/* PAYMENT ID BOX */
+
+.payment-box{
+  background:var(--bg-elevated);
+
+  border:1px solid var(--bg-border);
+
+  border-radius:var(--radius-md);
+
+  padding:16px 20px;
+
+  width:100%;
+}
+
+.payment-box label{
+  font-size:.7rem;
+  color:var(--text-muted);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+
+.payment-box code{
+  font-family:var(--font-mono);
+  font-size:.85rem;
+  color:var(--accent);
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+nav{
+padding:16px 20px;
+}
+
+.pricing-card{
+padding:32px 24px;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Nex<span>ora</span></div>
+  <a href="index.html" class="nav-back">← Back to Home</a>
+</nav>
+
+<div class="page-wrap">
+  <div style="text-align:center;margin-bottom:48px;animation:fadeUp 0.5s var(--ease-soft) both">
+    <span class="text-label">Simple Pricing</span>
+    <h1 style="font-size:clamp(1.8rem,3.5vw,2.8rem);margin-top:10px">
+      One payment.<br/>
+      <em style="font-style:italic;color:var(--gold-full)">Lifetime access.</em>
+    </h1>
+  </div>
+
+  <div class="pricing-card">
+
+    <!-- Payment Form -->
+    <div id="payment-form-view">
+      <div class="plan-label">Lifetime Plan</div>
+      <div class="plan-name">Full Access</div>
+
+      <div class="price-display">
+        <span class="currency">$</span>
+        <span class="amount">9</span>
+      </div>
+      <div class="price-note">One-time payment · <s>₹49</s> Limited time offer</div>
+
+      <ul class="feature-list">
+        <li><span class="check">✦</span>Unlimited AI Quiz Generation</li>
+        <li><span class="check">✦</span>Resume Analysis + Score</li>
+        <li><span class="check">✦</span>Unlimited HR Chat Sessions</li>
+        <li><span class="check">✦</span>Lecture-to-Quiz Converter</li>
+        <li><span class="check">✦</span>AI Powered</li>
+        <li><span class="check">✦</span>Lifetime Updates</li>
+      </ul>
+
+      <div class="divider divider--gold"></div>
+
+      <div class="user-form">
+        <div class="form-group">
+          <label for="pay-name">Your Name</label>
+          <input type="text" id="pay-name" placeholder="John Doe"/>
+        </div>
+        <div class="form-group">
+          <label for="pay-email">Email Address</label>
+          <input type="email" id="pay-email" placeholder="john@example.com"/>
+        </div>
+      </div>
+
+      <button class="btn btn--primary pay-btn" id="pay-btn" onclick="startPayment()">
+        <span class="btn-shine"></span>
+        Pay ₹9 · Get Instant Access
+      </button>
+
+      <div class="secure-badges">
+        <div class="secure-badge">🔒 Secure Checkout</div>
+        <div class="secure-badge">⚡ Instant Access</div>
+        <div class="secure-badge">↩ 7-day Refund</div>
+      </div>
+    </div>
+
+    <!-- Success View -->
+    <div class="success-screen" id="success-view">
+      <div class="success-icon">✓</div>
+      <h2 style="font-weight:300">Payment Successful!</h2>
+      <p style="color:var(--text-muted);font-size:0.9rem">
+        You now have lifetime access to all Prepwise tools.
+      </p>
+      <div style="background:var(--bg-elevated);border:1px solid var(--bg-border);border-radius:var(--radius-md);padding:16px 20px;width:100%">
+        <div style="font-size:0.7rem;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">Payment ID</div>
+        <div style="font-family:var(--font-mono);font-size:0.85rem;color:var(--gold-full)" id="payment-id-display">—</div>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+        <a href="quiz.html"   class="btn btn--primary">Start Quiz</a>
+        <a href="resume.html" class="btn btn--secondary">Analyze Resume</a>
+        <a href="hrchat.html" class="btn btn--ghost">HR Chat</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const API = "http://localhost:5000/api";
+
+async function startPayment() {
+  const name  = document.getElementById("pay-name").value.trim();
+  const email = document.getElementById("pay-email").value.trim();
+
+  if (!name)  return alert("Please enter your name.");
+  if (!email) return alert("Please enter your email.");
+
+  const btn = document.getElementById("pay-btn");
+  btn.disabled = true;
+  btn.textContent = "Processing...";
+
+  try {
+    // Step 1: Create order
+    const res  = await fetch(API + "/create-razorpay-order", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ name, email }),
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.message);
+
+    // Step 2: Open Razorpay
+    const options = {
+      key:         "rzp_test_SNErPgymZXw918",
+      amount:      data.amount,
+      currency:    data.currency,
+      name:        "Prepwise",
+      description: "Lifetime Premium Access",
+      order_id:    data.orderId,
+      prefill:     { name, email },
+      theme:       { color: "#c9a84c" },
+      modal: {
+        ondismiss: function() {
+          btn.disabled = false;
+          btn.innerHTML = '<span class="btn-shine"></span>Pay $9 · Get Instant Access';
+        }
+      },
+      handler: async function(response) {
+  try {
+    const verifyRes = await fetch(API + "/verify-payment", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        razorpay_order_id:   response.razorpay_order_id,
+        razorpay_payment_id: response.razorpay_payment_id,
+        razorpay_signature:  response.razorpay_signature,
+        name:  name,    // ← add this
+        email: email,   // ← add this
+      }),
+    });
+    const verifyData = await verifyRes.json();
+    if (!verifyData.success) throw new Error(verifyData.message);
+
+    // Save email to localStorage so guard can check it
+    localStorage.setItem("prepwise_email",    email);
+    localStorage.setItem("prepwise_verified", "true");
+
+    // Show success
+    document.getElementById("payment-form-view").style.display = "none";
+    document.getElementById("payment-id-display").textContent  = response.razorpay_payment_id;
+    document.getElementById("success-view").classList.add("show");
+
+  } catch (err) {
+    alert("Verification failed: " + err.message);
+  }
+},
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.on("payment.failed", function(response) {
+      alert("Payment failed: " + response.error.description);
+      btn.disabled = false;
+      btn.innerHTML = '<span class="btn-shine"></span>Pay $9 · Get Instant Access';
+    });
+    rzp.open();
+
+  } catch (err) {
+    alert("Payment init failed: " + err.message);
+    btn.disabled = false;
+    btn.innerHTML = '<span class="btn-shine"></span>Pay $9 · Get Instant Access';
+  }
+}
+</script>
+
+</body>
+</html>
