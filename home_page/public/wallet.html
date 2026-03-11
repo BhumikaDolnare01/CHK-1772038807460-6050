@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkillX Wallet</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+--bg:#EAEFEF;
+--text:#25343F;
+--muted:#6b7c86;
+--accent:#FF9B51;
+--card:#ffffff;
+--border:#d6dde2;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'DM Sans',sans-serif;
+background:var(--bg);
+color:var(--text);
+}
+
+/* NAVBAR */
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 40px;
+background:white;
+border-bottom:1px solid var(--border);
+}
+
+.logo{
+font-size:22px;
+font-weight:700;
+color:var(--text);
+}
+
+.nav-links{
+display:flex;
+gap:30px;
+}
+
+.nav-links a{
+text-decoration:none;
+color:var(--text);
+font-weight:600;
+}
+
+/* CONTAINER */
+
+.container{
+max-width:1100px;
+margin:auto;
+padding:40px 20px;
+}
+
+/* WALLET CARD */
+
+.wallet-card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:20px;
+padding:40px;
+margin-bottom:30px;
+}
+
+.wallet-title{
+font-size:14px;
+color:var(--muted);
+}
+
+.wallet-credits{
+font-size:48px;
+font-weight:700;
+margin-top:10px;
+}
+
+.wallet-value{
+color:var(--accent);
+font-weight:600;
+margin-top:5px;
+}
+
+.btn{
+margin-top:20px;
+background:var(--accent);
+border:none;
+padding:12px 24px;
+border-radius:10px;
+color:white;
+font-weight:600;
+cursor:pointer;
+}
+
+/* PROGRESS */
+
+.progress-card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:20px;
+padding:25px;
+margin-bottom:40px;
+}
+
+.progress-bar{
+height:10px;
+background:#dde5ea;
+border-radius:20px;
+overflow:hidden;
+margin-top:10px;
+}
+
+.progress-fill{
+height:10px;
+background:var(--accent);
+width:0%;
+transition:0.5s;
+}
+
+/* REWARD TABLE */
+
+.reward-table{
+width:100%;
+border-collapse:collapse;
+background:white;
+border-radius:15px;
+overflow:hidden;
+}
+
+.reward-table th,
+.reward-table td{
+padding:15px;
+text-align:center;
+border-bottom:1px solid var(--border);
+}
+
+.reward-table th{
+background:#f7fafb;
+font-weight:700;
+}
+
+.stage-active{
+background:#fff2e8;
+font-weight:600;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav>
+
+<div class="logo">Nexora</div>
+
+<div class="nav-links">
+<a href="tryal.html">Home</a>
+<a href="leader.html">Leaderboard</a>
+<a href="pf.html">Profile</a>
+</div>
+
+</nav>
+
+<div class="container">
+
+<!-- WALLET -->
+
+<div class="wallet-card">
+
+<div class="wallet-title">Total Credits</div>
+
+<div class="wallet-credits" id="credits">0</div>
+
+<div class="wallet-value" id="value">₹0 potential reward</div>
+
+<button class="btn" onclick="openEarnings()">View Earnings</button>
+
+</div>
+
+<!-- PROGRESS -->
+
+<div class="progress-card">
+
+<h3>Next Reward Progress</h3>
+
+<div id="progressText"></div>
+
+<div class="progress-bar">
+<div class="progress-fill" id="progressFill"></div>
+</div>
+
+</div>
+
+<!-- REWARD TABLE -->
+
+<h2 style="margin-bottom:20px;">Reward Stages</h2>
+
+<table class="reward-table">
+
+<tr>
+<th>Stage</th>
+<th>Credits</th>
+<th>Reward</th>
+<th>Why</th>
+</tr>
+
+<tr id="s1">
+<td>Stage 1</td>
+<td>25</td>
+<td>₹10</td>
+<td>small reward to motivate</td>
+</tr>
+
+<tr id="s2">
+<td>Stage 2</td>
+<td>50</td>
+<td>₹25</td>
+<td>noticeable increase</td>
+</tr>
+
+<tr id="s3">
+<td>Stage 3</td>
+<td>75</td>
+<td>₹45</td>
+<td>encourages continuing</td>
+</tr>
+
+<tr id="s4">
+<td>Stage 4</td>
+<td>100</td>
+<td>₹70</td>
+<td>biggest reward</td>
+</tr>
+
+</table>
+
+</div>
+
+<script>
+
+/* USER DATA */
+
+let user = JSON.parse(localStorage.getItem("skillx_user")) || {credits:42}
+
+let credits = user.credits || 0
+
+document.getElementById("credits").innerText = credits
+
+/* POTENTIAL VALUE */
+
+let value = 0
+
+if(credits>=100) value=70
+else if(credits>=75) value=45
+else if(credits>=50) value=25
+else if(credits>=25) value=10
+
+document.getElementById("value").innerText = "₹"+value+" claimable reward"
+
+/* HIGHLIGHT STAGES */
+
+if(credits>=25) document.getElementById("s1").classList.add("stage-active")
+if(credits>=50) document.getElementById("s2").classList.add("stage-active")
+if(credits>=75) document.getElementById("s3").classList.add("stage-active")
+if(credits>=100) document.getElementById("s4").classList.add("stage-active")
+
+/* PROGRESS */
+
+let next=25
+
+if(credits>=25) next=50
+if(credits>=50) next=75
+if(credits>=75) next=100
+
+let progress = (credits/next)*100
+if(progress>100) progress=100
+
+document.getElementById("progressFill").style.width = progress+"%"
+
+document.getElementById("progressText").innerText =
+credits+" / "+next+" credits"
+
+/* NAVIGATION */
+
+function openEarnings(){
+window.location.href="earning.html"
+}
+
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkillX Wallet</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+--bg:#EAEFEF;
+--text:#25343F;
+--muted:#6b7c86;
+--accent:#FF9B51;
+--card:#ffffff;
+--border:#d6dde2;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'DM Sans',sans-serif;
+background:var(--bg);
+color:var(--text);
+}
+
+/* NAVBAR */
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 40px;
+background:white;
+border-bottom:1px solid var(--border);
+}
+
+.logo{
+font-size:22px;
+font-weight:700;
+color:var(--text);
+}
+
+.nav-links{
+display:flex;
+gap:30px;
+}
+
+.nav-links a{
+text-decoration:none;
+color:var(--text);
+font-weight:600;
+}
+
+/* CONTAINER */
+
+.container{
+max-width:1100px;
+margin:auto;
+padding:40px 20px;
+}
+
+/* WALLET CARD */
+
+.wallet-card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:20px;
+padding:40px;
+margin-bottom:30px;
+}
+
+.wallet-title{
+font-size:14px;
+color:var(--muted);
+}
+
+.wallet-credits{
+font-size:48px;
+font-weight:700;
+margin-top:10px;
+}
+
+.wallet-value{
+color:var(--accent);
+font-weight:600;
+margin-top:5px;
+}
+
+.btn{
+margin-top:20px;
+background:var(--accent);
+border:none;
+padding:12px 24px;
+border-radius:10px;
+color:white;
+font-weight:600;
+cursor:pointer;
+}
+
+/* PROGRESS */
+
+.progress-card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:20px;
+padding:25px;
+margin-bottom:40px;
+}
+
+.progress-bar{
+height:10px;
+background:#dde5ea;
+border-radius:20px;
+overflow:hidden;
+margin-top:10px;
+}
+
+.progress-fill{
+height:10px;
+background:var(--accent);
+width:0%;
+transition:0.5s;
+}
+
+/* REWARD TABLE */
+
+.reward-table{
+width:100%;
+border-collapse:collapse;
+background:white;
+border-radius:15px;
+overflow:hidden;
+}
+
+.reward-table th,
+.reward-table td{
+padding:15px;
+text-align:center;
+border-bottom:1px solid var(--border);
+}
+
+.reward-table th{
+background:#f7fafb;
+font-weight:700;
+}
+
+.stage-active{
+background:#fff2e8;
+font-weight:600;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav>
+
+<div class="logo">Nexora</div>
+
+<div class="nav-links">
+<a href="tryal.html">Home</a>
+<a href="leader.html">Leaderboard</a>
+<a href="pf.html">Profile</a>
+</div>
+
+</nav>
+
+<div class="container">
+
+<!-- WALLET -->
+
+<div class="wallet-card">
+
+<div class="wallet-title">Total Credits</div>
+
+<div class="wallet-credits" id="credits">0</div>
+
+<div class="wallet-value" id="value">₹0 potential reward</div>
+
+<button class="btn" onclick="openEarnings()">View Earnings</button>
+
+</div>
+
+<!-- PROGRESS -->
+
+<div class="progress-card">
+
+<h3>Next Reward Progress</h3>
+
+<div id="progressText"></div>
+
+<div class="progress-bar">
+<div class="progress-fill" id="progressFill"></div>
+</div>
+
+</div>
+
+<!-- REWARD TABLE -->
+
+<h2 style="margin-bottom:20px;">Reward Stages</h2>
+
+<table class="reward-table">
+
+<tr>
+<th>Stage</th>
+<th>Credits</th>
+<th>Reward</th>
+<th>Why</th>
+</tr>
+
+<tr id="s1">
+<td>Stage 1</td>
+<td>25</td>
+<td>₹10</td>
+<td>small reward to motivate</td>
+</tr>
+
+<tr id="s2">
+<td>Stage 2</td>
+<td>50</td>
+<td>₹25</td>
+<td>noticeable increase</td>
+</tr>
+
+<tr id="s3">
+<td>Stage 3</td>
+<td>75</td>
+<td>₹45</td>
+<td>encourages continuing</td>
+</tr>
+
+<tr id="s4">
+<td>Stage 4</td>
+<td>100</td>
+<td>₹70</td>
+<td>biggest reward</td>
+</tr>
+
+</table>
+
+</div>
+
+<script>
+
+/* USER DATA */
+
+let user = JSON.parse(localStorage.getItem("skillx_user")) || {credits:42}
+
+let credits = user.credits || 0
+
+document.getElementById("credits").innerText = credits
+
+/* POTENTIAL VALUE */
+
+let value = 0
+
+if(credits>=100) value=70
+else if(credits>=75) value=45
+else if(credits>=50) value=25
+else if(credits>=25) value=10
+
+document.getElementById("value").innerText = "₹"+value+" claimable reward"
+
+/* HIGHLIGHT STAGES */
+
+if(credits>=25) document.getElementById("s1").classList.add("stage-active")
+if(credits>=50) document.getElementById("s2").classList.add("stage-active")
+if(credits>=75) document.getElementById("s3").classList.add("stage-active")
+if(credits>=100) document.getElementById("s4").classList.add("stage-active")
+
+/* PROGRESS */
+
+let next=25
+
+if(credits>=25) next=50
+if(credits>=50) next=75
+if(credits>=75) next=100
+
+let progress = (credits/next)*100
+if(progress>100) progress=100
+
+document.getElementById("progressFill").style.width = progress+"%"
+
+document.getElementById("progressText").innerText =
+credits+" / "+next+" credits"
+
+/* NAVIGATION */
+
+function openEarnings(){
+window.location.href="earning.html"
+}
+
+</script>
+
+</body>
+</html>
