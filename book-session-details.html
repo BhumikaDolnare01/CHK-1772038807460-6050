@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Book a Session – SkillX</title>
+<title>Book a Session – Nexora</title>
 <style>:root{
   --bg:#EAEFEF;
   --card:#ffffff;
@@ -14,6 +14,7 @@
 
 *{
   margin:0;
+
   padding:0;
   box-sizing:border-box;
 }
@@ -432,7 +433,7 @@ h1{
 <body>
 
 <div class="page-header">
-  <button class="back-btn" onclick="history.back()">←</button>
+  <a href="book-session.html"><button class="back-btn" onclick="history.back()">←</button></a>
   <h1>Book a Session</h1>
 </div>
 
@@ -440,7 +441,7 @@ h1{
   <div class="mentor-row">
     <div class="avatar-emoji" id="mentorEmoji">👨‍💻</div>
     <div>
-      <div class="mentor-name" id="mentorName">Rahul Mehta</div>
+      <div class="mentor-name" id="mentorName">Anjali Mane</div>
       <div class="mentor-sub">
         <span id="mentorRole">React & Next.js Expert</span>
         <div class="rating-inline">★ <span id="mentorRating">4.9</span></div>
@@ -509,10 +510,10 @@ h1{
     </div>
 
     <div class="credits-box">
-      <div class="credit-row highlight"><span>Available Credits</span><span id="credAvail">120</span></div>
+      <div class="credit-row highlight"><span>Available Credits</span><span id="credAvail">10</span></div>
       <hr class="credit-divider">
       <div class="credit-row"><span>Session Cost</span><span id="credCost">1</span></div>
-      <div class="credit-row"><span>After Booking</span><span id="credAfter">119</span></div>
+      <div class="credit-row"><span>After Booking</span><span id="credAfter">9</span></div>
     </div>
 
     <button class="btn-confirm" id="confirmBtn" onclick="confirmBooking()">Confirm Booking</button>
@@ -616,7 +617,7 @@ h1{
   }
 
   let hours=1;
-  const MAX_CREDITS=120;
+  const MAX_CREDITS=10;
 
   function changeHours(dir) {
     hours=Math.min(8,Math.max(1,hours+dir));
@@ -631,77 +632,68 @@ h1{
     document.getElementById('credAfter').textContent=MAX_CREDITS-hours;
   }
 
-  async function confirmBooking() {
-    const email = document.getElementById('userEmail').value.trim();
-    if (!email || !email.includes('@')) {
-      alert('Enter valid email!');
-      return;
-    }
+async function confirmBooking() {
 
-    const timeEl = document.querySelector('#timeSlots .active');
-    const time = timeEl ? timeEl.textContent : '4:00 PM';
-    const mentor = document.getElementById('mentorName').textContent;
-    const date = document.getElementById('confDate').textContent;
-    const dur = hours===1?'1 hr':hours+' hrs';
-    const cred = hours===1?'1 credit':hours+' credits';
+  const email = document.getElementById('userEmail').value.trim();
 
-    document.getElementById('confTime').textContent=time;
-    document.getElementById('confDur').textContent=dur;
-    document.getElementById('confCredits').textContent=cred;
-
-    const btn = document.getElementById('confirmBtn');
-    btn.disabled=true; 
-    btn.innerHTML='<span class="spinner"></span> Booking...';
-
-    const tmap = {'10:00 AM':10,'12:00 PM':12,'4:00 PM':16,'8:00 PM':20};
-    const hr = tmap[time] || 16;
-    const pts = date.split(' ');
-    const sessionDT = new Date(parseInt(pts[2]), MONTHS.indexOf(pts[1]), parseInt(pts[0]), hr, 0, 0);
-
-    const roomId = 'skillx-' + mentor.toLowerCase().replace(/\s+/g,'-') + '-' + Math.random().toString(36).substr(2,8);
-
-    try {
-      const response = await fetch(API_URL + '/sessions/book', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': localStorage.getItem('skillx_token') || ''
-        },
-        body: JSON.stringify({
-          mentorName: mentor,
-          mentorEmoji: document.getElementById('mentorEmoji').textContent,
-          skill: mentor,
-          date: date,
-          time: time,
-          duration: hours,
-          credits: hours,
-          roomId: roomId,
-          sessionDT: sessionDT.toISOString(),
-          studentEmail: email
-        })
-      });
-
-      const data = await response.json();
-
-      if (data.success || data.session) {
-        console.log('✅ Session booked!');
-        document.getElementById('overlay').classList.add('show');
-        
-        const statusEl = document.getElementById('emailStatus');
-        statusEl.className='email-status sent';
-        document.getElementById('emailStatusText').textContent='✅ Email sent to '+email;
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      const statusEl = document.getElementById('emailStatus');
-      statusEl.className='email-status error';
-      document.getElementById('emailStatusText').textContent='⚠️ Booking failed';
-    }
-
-    btn.disabled=false; 
-    btn.innerHTML='Confirm Booking';
+  if (!email || !email.includes('@')) {
+    alert("Enter valid email");
+    return;
   }
 
+  const timeEl = document.querySelector('#timeSlots .active');
+  const time = timeEl ? timeEl.textContent : '4:00 PM';
+
+  const mentor = document.getElementById('mentorName').textContent;
+  const date = document.getElementById('confDate').textContent;
+
+  const dur = hours === 1 ? '1 hr' : hours + ' hrs';
+  const cred = hours === 1 ? '1 credit' : hours + ' credits';
+
+  document.getElementById('confTime').textContent = time;
+  document.getElementById('confDur').textContent = dur;
+  document.getElementById('confCredits').textContent = cred;
+
+  const btn = document.getElementById('confirmBtn');
+  btn.disabled = true;
+  btn.innerHTML = "Booking...";
+
+  const roomId =
+    "Nexora-" +
+    mentor.toLowerCase().replace(/\s+/g, "-") +
+    "-" +
+    Math.random().toString(36).substring(2, 8);
+
+  try {
+
+    await fetch("http://localhost:5000/sessions/book", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        mentorName: mentor,
+        date: date,
+        time: time,
+        duration: hours,
+        credits: hours,
+        roomId: roomId,
+        studentEmail: email
+      })
+    });
+
+    document.getElementById("overlay").classList.add("show");
+
+  } catch (err) {
+
+    console.error(err);
+    alert("Booking failed");
+
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = "Confirm Booking";
+}
   loadMentorData();
   updateDate();
   renderCalendar();
