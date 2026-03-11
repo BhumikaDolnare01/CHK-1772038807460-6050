@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>SkillX Rewards</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
@@ -217,6 +217,9 @@ grid-template-columns:1fr 1fr;
 </div>
 
 <script>
+    (function(){
+emailjs.init("TaFj87_dKIqChyJdJ");
+})();
 
 let userCredits = 42
 
@@ -240,10 +243,39 @@ stage.querySelector("button").disabled=true
 
 function claim(stage){
 
-alert("Reward for Stage "+stage+" claimed!")
-
+let rewards = {
+1: {credits:25, amount:10},
+2: {credits:50, amount:30},
+3: {credits:75, amount:55},
+4: {credits:100, amount:90}
 }
 
+let reward = rewards[stage]
+
+emailjs.send(
+"service_onlm9bm",
+"template_47y512g",
+{
+user_name: "SkillX User",
+user_email: "user@email.com",
+amount: reward.amount,
+credits: reward.credits
+}
+)
+
+.then(function(){
+
+alert("₹"+reward.amount+" claimed! Email sent successfully.")
+
+})
+
+.catch(function(error){
+
+alert("Reward claimed but email failed.")
+
+})
+
+}
 </script>
 
 </body>
